@@ -2,8 +2,9 @@ import { pixelEngine } from './PixelArtEngine.js';
 
 /**
  * Pokémon FireRed GBA Multi-Section Campus World Map
- * Features dense forest borders, 9 distinct regional sectors, stone plazas,
- * flowerbed gardens, park benches, fountains, and wandering wildlife.
+ * Recreates the complete University of Hyderabad campus with authentic Google Maps topology:
+ * SLS circular ring, CIS/SIP complex, spacious hostel quads, Amphitheatre, Secret Lake,
+ * Globe Rock, Chinna Gudi Temple, Volleyball Court, and Check Dam.
  */
 export class WorldMap {
   constructor(locationsData, npcsData) {
@@ -22,80 +23,115 @@ export class WorldMap {
       { id: 'gundla_kunta', name: 'GUNDLA KUNTA', sub: 'Central Lakefront & Boardwalk', bounds: { x1: 800, y1: 1060, x2: 1350, y2: 1450 } },
       { id: 'peacock_lake', name: 'PEACOCK RESERVE', sub: 'Eastern Wildlife Sanctuary & Nature Trail', bounds: { x1: 1500, y1: 950, x2: 2150, y2: 1450 } },
       { id: 'rock_sanctuary', name: 'ROCK RIDGE', sub: 'Mushroom Rock & Heritage Formations', bounds: { x1: 1850, y1: 900, x2: 2250, y2: 1350 } },
-      { id: 'south_campus', name: 'SOUTH COMMUNE', sub: 'MHK Hostel, CIS & Night Canteen', bounds: { x1: 50, y1: 1450, x2: 900, y2: 2150 } }
+      { id: 'south_campus', name: 'SOUTH CAMPUS', sub: 'SLS, CIS, MHK Hostel & Amphitheatre', bounds: { x1: 50, y1: 1300, x2: 1200, y2: 2180 } }
     ];
 
-    // Lakes
+    // Lakes & Water Bodies
     this.waterBodies = [
       { id: 101, name: 'Gundla Kunta', x: 980, y: 1180, radiusX: 95, radiusY: 75, color: '#3878b8' },
       { id: 102, name: 'Peacock Lake', x: 1680, y: 1080, radiusX: 105, radiusY: 85, color: '#2868a8' },
-      { id: 103, name: 'Chilkala Kunta', x: 1020, y: 1780, radiusX: 85, radiusY: 65, color: '#3070b0' },
+      { id: 103, name: 'Chilkala Kunta', x: 1020, y: 1820, radiusX: 85, radiusY: 65, color: '#3070b0' },
       { id: 104, name: 'Nallagandla Lake', x: 130, y: 950, radiusX: 85, radiusY: 70, color: '#3880c0' },
-      { id: 105, name: 'Kamalavanam Kunta', x: 860, y: 1520, radiusX: 65, radiusY: 55, color: '#205898' }
+      { id: 105, name: 'Kamalavanam Kunta', x: 860, y: 1520, radiusX: 65, radiusY: 55, color: '#205898' },
+      // New South Campus Lakes
+      { id: 112, name: 'Secret Lake', x: 980, y: 1680, radiusX: 75, radiusY: 60, color: '#285890' },
+      { id: 113, name: 'Check Dam UoH', x: 740, y: 1350, radiusX: 55, radiusY: 38, color: '#306898', isDam: true }
     ];
 
-    // Roads & Paved Avenue Segments [x1, y1, x2, y2, width]
+    // Comprehensive Road Network [x1, y1, x2, y2, width]
     this.roads = [
+      // 1. North Boundary & Gate I
       [500, 180, 1850, 180, 24],  // Old Bombay Highway
-      [890, 180, 890, 750, 22],   // Route 1 Spine
-      [890, 750, 1150, 750, 20],  // Central Academic Square
+      [890, 180, 890, 750, 22],   // Route 1 Spine to Central Ring
+
+      // 2. Central Academic Ring
+      [890, 750, 1150, 750, 20],
       [1150, 750, 1150, 950, 20],
       [890, 750, 890, 1050, 20],
       [890, 1050, 1150, 1050, 20],
       [1150, 950, 1150, 1050, 20],
-      [1470, 180, 1470, 550, 20], // East Science Avenue
+
+      // 3. East Science Valley & Gate II
+      [1470, 180, 1470, 550, 20],
       [1470, 550, 1750, 550, 18],
       [1750, 550, 1750, 700, 18],
       [1150, 750, 1470, 550, 18],
       [1150, 750, 1470, 750, 18],
-      [890, 650, 550, 650, 18],   // West Stadium Avenue
+
+      // 4. West Athletics Stadium
+      [890, 650, 550, 650, 18],
       [550, 650, 550, 850, 20],
       [550, 850, 350, 850, 16],
-      [890, 1050, 780, 1250, 18], // South Spine
-      [780, 1250, 620, 1450, 18],
-      [620, 1450, 450, 1700, 20],
-      [450, 1700, 450, 1980, 20],
-      [450, 1980, 260, 2020, 22],
-      [120, 1660, 550, 1660, 18], // South Cross Avenues
-      [450, 1700, 750, 1700, 18],
-      [450, 1900, 750, 1900, 18],
-      [1150, 1050, 1450, 1100, 12], // Nature Trails
+
+      // 5. Central to South Connector Spine
+      [890, 1050, 680, 1250, 20],
+      [680, 1250, 420, 1370, 20],
+
+      // 6. South Campus — School of Life Sciences (SLS) Ring Road
+      [420, 1370, 420, 1500, 20], // SLS Road pass-through
+      [340, 1370, 490, 1370, 16], // North ring tangent
+      [490, 1370, 490, 1500, 16], // East ring tangent
+      [490, 1500, 340, 1500, 16], // South ring tangent
+      [340, 1500, 340, 1370, 16], // West ring tangent
+
+      // 7. North-East South Trails (Globe Rock, Temple, Check Dam, Gate 3 / IDC)
+      [490, 1420, 640, 1420, 16],
+      [640, 1420, 780, 1380, 14],
+      [780, 1380, 1020, 1340, 16],
+
+      // 8. Main SLS Road (Passing SIP, CIS, Nanotech down to Hostels)
+      [420, 1500, 420, 1750, 22],
+      [420, 1750, 420, 2080, 22],
+
+      // 9. Diagonal Avenue to Amphitheatre & Secret Lake
+      [420, 1640, 600, 1640, 18],
+      [600, 1640, 820, 1590, 18], // Diagonal to Amphitheatre
+      [820, 1590, 980, 1660, 14], // Nature trail to Secret Lake
+      [600, 1640, 720, 1750, 14], // Residential loop
+
+      // 10. South Gate (Gate III) Western Avenue
+      [420, 1770, 100, 1770, 20],
+      [200, 1770, 180, 2020, 12], // Trail to The Trio Rock
+
+      // 11. Eastern Nature Trails & Mushroom Rock
+      [1150, 1050, 1450, 1100, 12],
       [1450, 1100, 1680, 1180, 12],
       [1680, 1180, 2000, 1120, 12],
       [1450, 1100, 1520, 1000, 10],
-      [1150, 1050, 1340, 1150, 10],
-      [780, 1250, 950, 1220, 12]
+      [1150, 1050, 1340, 1150, 10]
     ];
 
-    // Decorative Plazas & Stone Courtyards
+    // Stone Courtyards & Plazas
     this.plazas = [
       { x: 840, y: 460, w: 100, h: 50 },  // Admin Quad
       { x: 1080, y: 880, w: 120, h: 70 }, // Library Square
       { x: 1260, y: 680, w: 90, h: 60 },  // Zakir Food Plaza
-      { x: 420, y: 1720, w: 110, h: 80 }  // South Night Hub Plaza
+      { x: 380, y: 1680, w: 95, h: 60 }   // South Complex Night Hub Plaza
     ];
 
-    // Park Benches & Props
+    // Park Benches
     this.benches = [
       { x: 860, y: 530 }, { x: 920, y: 530 },
       { x: 1110, y: 940 }, { x: 1170, y: 940 },
       { x: 1290, y: 760 }, { x: 1330, y: 760 },
-      { x: 440, y: 1800 }, { x: 490, y: 1800 }
+      { x: 410, y: 1750 }, { x: 500, y: 1800 },
+      { x: 550, y: 1910 }, { x: 440, y: 1980 }
     ];
 
-    // Stone Fountains
+    // Fountains
     this.fountains = [
       { x: 890, y: 480 },  // Admin Fountain
       { x: 1140, y: 910 }, // Library Square Fountain
-      { x: 480, y: 1760 }  // South Quad Fountain
+      { x: 415, y: 1445 }  // Central SLS Ring Botanical Fountain
     ];
 
-    // Garden Hedges [x, y, w, h in 16px tiles]
+    // Hedges
     this.hedges = [
       { x: 820, y: 410, tilesX: 3, tilesY: 1 },
       { x: 950, y: 410, tilesX: 3, tilesY: 1 },
       { x: 1060, y: 860, tilesX: 1, tilesY: 4 },
-      { x: 1220, y: 860, tilesX: 1, tilesY: 4 }
+      { x: 1220, y: 860, tilesX: 1, tilesY: 4 },
+      { x: 400, y: 1760, tilesX: 3, tilesY: 1 }
     ];
 
     // Fences
@@ -104,8 +140,8 @@ export class WorldMap {
       { x: 920, y: 200, length: 5 },
       { x: 1430, y: 200, length: 4 },
       { x: 1520, y: 200, length: 4 },
-      { x: 220, y: 2000, length: 4 },
-      { x: 310, y: 2000, length: 4 },
+      { x: 80, y: 1750, length: 4 }, // South Gate Fence
+      { x: 80, y: 1790, length: 4 },
       { x: 510, y: 660, length: 6 }
     ];
 
@@ -115,7 +151,10 @@ export class WorldMap {
       { x: 1180, y: 730, text: 'CENTRAL GROVE — School of Computer Science & Information Sciences' },
       { x: 1180, y: 960, text: 'CENTRAL GROVE — Indira Gandhi Memorial Library' },
       { x: 1490, y: 240, text: 'SCIENCE VALLEY — School of Chemistry & Research Institutes' },
-      { x: 470, y: 1910, text: 'SOUTH COMMUNE — MHK Hostel & Player Dormitories' },
+      { x: 440, y: 1510, text: 'SLS ROAD — School of Life Sciences & Centre for Integrated Studies' },
+      { x: 440, y: 1740, text: 'SOUTH RESIDENTIAL — Tagore House, ISH & MHK Hostel' },
+      { x: 620, y: 1630, text: 'NATURE TRAIL — To Amphitheatre UoH & Secret Lake' },
+      { x: 120, y: 1750, text: 'GATE III — South Gate to Tellapur / Nallagandla' },
       { x: 1980, y: 1090, text: 'NATURAL WONDER — Protected Heritage Mushroom Rock' }
     ];
 
@@ -125,24 +164,25 @@ export class WorldMap {
       { x: 1020, y: 750 }, { x: 1150, y: 750 }, { x: 1150, y: 880 }, { x: 1150, y: 1020 },
       { x: 1470, y: 250 }, { x: 1470, y: 400 }, { x: 1600, y: 550 }, { x: 1750, y: 620 },
       { x: 720, y: 650 }, { x: 550, y: 700 }, { x: 550, y: 820 },
-      { x: 830, y: 1150 }, { x: 700, y: 1350 }, { x: 540, y: 1550 },
-      { x: 450, y: 1720 }, { x: 450, y: 1880 }, { x: 300, y: 1780 }, { x: 260, y: 2000 }
+      { x: 830, y: 1150 }, { x: 700, y: 1350 },
+      // South Campus Street Lamps
+      { x: 420, y: 1410 }, { x: 420, y: 1560 }, { x: 420, y: 1680 },
+      { x: 420, y: 1800 }, { x: 420, y: 1930 }, { x: 420, y: 2050 },
+      { x: 260, y: 1770 }, { x: 620, y: 1630 }, { x: 820, y: 1560 }
     ];
 
-    // Wandering Wildlife Instances
+    // Wandering Wildlife
     this.wildlife = [
       { type: 'peacock', x: 1620, y: 1120, startX: 1620, startY: 1120, vx: 12, timer: 0 },
       { type: 'peacock', x: 1720, y: 1150, startX: 1720, startY: 1150, vx: -10, timer: 0 },
+      { type: 'peacock', x: 960, y: 1650, startX: 960, startY: 1650, vx: 10, timer: 0 }, // Secret lake peacock
       { type: 'deer', x: 1080, y: 1320, startX: 1080, startY: 1320, vx: 8, timer: 0 },
-      { type: 'deer', x: 1480, y: 920, startX: 1480, startY: 920, vx: -8, timer: 0 },
+      { type: 'deer', x: 720, y: 1480, startX: 720, startY: 1480, vx: -8, timer: 0 }, // South deer
       { type: 'butterfly', x: 870, y: 520, startX: 870, startY: 520, vx: 15, timer: 0 },
-      { type: 'butterfly', x: 1120, y: 920, startX: 1120, startY: 920, vx: 15, timer: 0 }
+      { type: 'butterfly', x: 415, y: 1445, startX: 415, startY: 1445, vx: 15, timer: 0 }  // SLS botanical butterfly
     ];
 
-    // Build dense forest wall tree grids
     this.generateDenseWorld();
-
-    // Colliders
     this.colliders = [];
     this.buildColliders();
   }
@@ -151,7 +191,6 @@ export class WorldMap {
     this.denseForestTrees = [];
     this.tallGrassPatches = [];
 
-    // Dense Forest Wall Blocks enclosing routes (like FireRed Kanto maps!)
     const forestBlocks = [
       // North Highway buffer
       { x: 200, y: 80, w: 2000, h: 80 },
@@ -167,8 +206,10 @@ export class WorldMap {
       { x: 920, y: 1280, w: 320, h: 180 },
       // Peacock Reserve Woods
       { x: 1600, y: 920, w: 450, h: 320 },
-      // South-East Chilkala buffer
-      { x: 960, y: 1880, w: 420, h: 180 },
+      // South-West buffer
+      { x: 60, y: 1850, w: 160, h: 300 },
+      // Secret Lake Nature Reserve Woods
+      { x: 890, y: 1580, w: 80, h: 220 },
       // Western Buffer
       { x: 80, y: 700, w: 220, h: 450 }
     ];
@@ -185,14 +226,13 @@ export class WorldMap {
       }
     });
 
-    // Tall grass patches around nature paths and lakes
     const grassAreas = [
       { x: 960, y: 1100, w: 4, h: 3 },
       { x: 1600, y: 1040, w: 5, h: 4 },
       { x: 1740, y: 1180, w: 6, h: 3 },
-      { x: 1480, y: 980, w: 4, h: 3 },
-      { x: 1320, y: 1140, w: 3, h: 3 },
-      { x: 460, y: 1840, w: 4, h: 3 }
+      { x: 940, y: 1650, w: 5, h: 4 }, // Secret lake tall grass
+      { x: 640, y: 1340, w: 4, h: 3 }, // Check dam tall grass
+      { x: 180, y: 1980, w: 5, h: 4 }  // The Trio Rock tall grass
     ];
 
     grassAreas.forEach(a => {
@@ -211,7 +251,7 @@ export class WorldMap {
 
     // Buildings
     this.locations.forEach(loc => {
-      if (loc.isLake || loc.isMajorWonder || loc.isGate) return;
+      if (loc.isLake || loc.isMajorWonder || loc.isGate || loc.isAmphitheatre || loc.isVolleyball || loc.isCheckDam) return;
       this.colliders.push({
         id: loc.id,
         name: loc.name,
@@ -274,7 +314,6 @@ export class WorldMap {
   }
 
   getInteractableAt(playerX, playerY, maxDist = 55) {
-    // 1. Check NPCs
     for (const npc of this.npcs) {
       const dx = playerX - npc.x;
       const dy = playerY - npc.y;
@@ -283,7 +322,6 @@ export class WorldMap {
       }
     }
 
-    // 2. Check Signposts
     for (const sign of this.signposts) {
       const dx = playerX - sign.x;
       const dy = playerY - sign.y;
@@ -300,7 +338,6 @@ export class WorldMap {
       }
     }
 
-    // 3. Check Locations & Interiors
     for (const loc of this.locations) {
       const centerX = loc.x + loc.width / 2;
       const centerY = loc.y + loc.height / 2;
@@ -330,34 +367,34 @@ export class WorldMap {
   draw(ctx, camera, timeSystem, particleSystem) {
     ctx.imageSmoothingEnabled = false;
 
-    // 1. Ground Grass & Flowerbeds
+    // 1. Terrain Grass & Flowerbeds
     this.drawTerrain(ctx, camera);
 
     // 2. Stone Plazas & Courtyards
     this.drawPlazas(ctx, camera);
 
-    // 3. Roads & Cobblestone Avenues
+    // 3. Roads & Avenues
     this.drawRoads(ctx, camera);
 
-    // 4. Tall Grass Wild Patches
+    // 4. Tall Wild Grass
     this.drawTallGrass(ctx, camera);
 
-    // 5. Garden Hedges
+    // 5. Hedges
     this.drawHedges(ctx, camera);
 
-    // 6. Water Bodies with Wave Crests
+    // 6. Water Bodies (Lakes, Check Dam, Secret Lake)
     this.drawWaterBodies(ctx, camera);
 
-    // 7. Ancient Rock Formations & Mushroom Rock
+    // 7. Geological Rocks & Monuments (Mushroom Rock, Globe Rock, Trio Rock)
     this.drawRockFormations(ctx, camera);
 
-    // 8. FireRed Building Facades
+    // 8. Custom Architectural Buildings (SLS Ring, Hostels, CIS, Amphitheatre, Temple, Volleyball)
     this.drawBuildings(ctx, camera);
 
-    // 9. Fences, Benches, Fountains & Signs
+    // 9. Fences, Benches, Fountains, Signs
     this.drawProps(ctx, camera);
 
-    // 10. Dense Layered Trees (Forest Walls)
+    // 10. Dense Trees & Forest Borders
     this.drawDenseForest(ctx, camera);
 
     // 11. Street Lamps
@@ -402,16 +439,13 @@ export class WorldMap {
       const sy = p.y - camera.y;
       if (sx + p.w < -20 || sx > camera.width + 20 || sy + p.h < -20 || sy > camera.height + 20) continue;
 
-      // Stone Courtyard base
       ctx.fillStyle = '#d0b888';
       ctx.fillRect(sx, sy, p.w, p.h);
 
-      // Brick borders
       ctx.strokeStyle = '#a88850';
       ctx.lineWidth = 2;
       ctx.strokeRect(sx, sy, p.w, p.h);
 
-      // Paved Grid
       ctx.strokeStyle = 'rgba(168, 136, 80, 0.4)';
       ctx.lineWidth = 1;
       for (let gx = sx + 16; gx < sx + p.w; gx += 16) {
@@ -435,7 +469,6 @@ export class WorldMap {
       const sx2 = x2 - camera.x;
       const sy2 = y2 - camera.y;
 
-      // Sandy stone curb
       ctx.strokeStyle = '#c8a870';
       ctx.lineWidth = w + 4;
       ctx.beginPath();
@@ -443,7 +476,6 @@ export class WorldMap {
       ctx.lineTo(sx2, sy2);
       ctx.stroke();
 
-      // Cobblestone body
       ctx.strokeStyle = '#e0c890';
       ctx.lineWidth = w;
       ctx.beginPath();
@@ -451,7 +483,6 @@ export class WorldMap {
       ctx.lineTo(sx2, sy2);
       ctx.stroke();
 
-      // Brick pattern dash
       if (w >= 18) {
         ctx.strokeStyle = '#d0b078';
         ctx.lineWidth = 1.5;
@@ -539,7 +570,7 @@ export class WorldMap {
   }
 
   drawRockFormations(ctx, camera) {
-    // Mushroom Rock (#76)
+    // 1. Mushroom Rock (#76)
     const mrLoc = this.locations.find(l => l.id === 76);
     if (mrLoc) {
       const sx = mrLoc.x - camera.x;
@@ -580,7 +611,88 @@ export class WorldMap {
       ctx.restore();
     }
 
-    // Virgin Rock & High Rock
+    // 2. Globe Rock (#115 - Perfectly round Deccan granite sphere)
+    const globeLoc = this.locations.find(l => l.id === 115);
+    if (globeLoc) {
+      const sx = globeLoc.x - camera.x;
+      const sy = globeLoc.y - camera.y;
+
+      ctx.save();
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.35)';
+      ctx.beginPath();
+      ctx.ellipse(sx + 32, sy + 46, 26, 8, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Giant Round Boulder
+      ctx.fillStyle = '#484858';
+      ctx.beginPath();
+      ctx.arc(sx + 32, sy + 26, 24, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = '#787888';
+      ctx.beginPath();
+      ctx.arc(sx + 30, sy + 24, 22, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = '#a8a8b8';
+      ctx.beginPath();
+      ctx.arc(sx + 24, sy + 18, 12, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 8px monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText('Globe Rock', sx + 32, sy + 56);
+      ctx.restore();
+    }
+
+    // 3. The Trio Rock (#116 - 3 leaning monolith rocks)
+    const trioLoc = this.locations.find(l => l.id === 116);
+    if (trioLoc) {
+      const sx = trioLoc.x - camera.x;
+      const sy = trioLoc.y - camera.y;
+
+      ctx.save();
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.35)';
+      ctx.beginPath();
+      ctx.ellipse(sx + 36, sy + 52, 34, 9, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Rock 1 (Left)
+      ctx.fillStyle = '#585868';
+      ctx.beginPath();
+      ctx.moveTo(sx + 8, sy + 48);
+      ctx.lineTo(sx + 22, sy + 12);
+      ctx.lineTo(sx + 34, sy + 48);
+      ctx.closePath();
+      ctx.fill();
+
+      // Rock 2 (Center tall)
+      ctx.fillStyle = '#787888';
+      ctx.beginPath();
+      ctx.moveTo(sx + 24, sy + 48);
+      ctx.lineTo(sx + 38, sy + 6);
+      ctx.lineTo(sx + 52, sy + 48);
+      ctx.closePath();
+      ctx.fill();
+
+      // Rock 3 (Right leaning)
+      ctx.fillStyle = '#686878';
+      ctx.beginPath();
+      ctx.moveTo(sx + 42, sy + 48);
+      ctx.lineTo(sx + 58, sy + 16);
+      ctx.lineTo(sx + 68, sy + 48);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 8px monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText('The Trio Rock', sx + 36, sy + 62);
+      ctx.restore();
+    }
+
+    // 4. Virgin Rock & High Rock
     [106, 107].forEach(id => {
       const rLoc = this.locations.find(l => l.id === id);
       if (rLoc) {
@@ -615,33 +727,11 @@ export class WorldMap {
         ctx.restore();
       }
     });
-
-    // Megalithic Site (#42)
-    const megaLoc = this.locations.find(l => l.id === 42);
-    if (megaLoc) {
-      const sx = megaLoc.x - camera.x;
-      const sy = megaLoc.y - camera.y;
-      ctx.save();
-      for (let i = 0; i < 8; i++) {
-        const angle = (i / 8) * Math.PI * 2;
-        const bx = sx + 30 + Math.cos(angle) * 22;
-        const by = sy + 25 + Math.sin(angle) * 22;
-        ctx.fillStyle = '#585868';
-        ctx.fillRect(bx - 4, by - 4, 8, 8);
-        ctx.fillStyle = '#888898';
-        ctx.fillRect(bx - 3, by - 3, 5, 5);
-      }
-      ctx.fillStyle = '#ffffff';
-      ctx.font = 'bold 8px monospace';
-      ctx.textAlign = 'center';
-      ctx.fillText('Megalithic Circle', sx + 30, sy + 44);
-      ctx.restore();
-    }
   }
 
   drawBuildings(ctx, camera) {
     for (const loc of this.locations) {
-      if (loc.isLake || loc.isMajorWonder || loc.id === 42) continue;
+      if (loc.isLake || loc.isMajorWonder || loc.id === 42 || loc.isGate) continue;
 
       const sx = loc.x - camera.x;
       const sy = loc.y - camera.y;
@@ -650,6 +740,116 @@ export class WorldMap {
 
       ctx.save();
 
+      // 1. Amphitheatre UoH (#111)
+      if (loc.isAmphitheatre) {
+        pixelEngine.drawAmphitheatre(ctx, sx + loc.width / 2, sy + loc.height / 2, 45);
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 9px monospace';
+        ctx.textAlign = 'center';
+        ctx.shadowColor = '#000000';
+        ctx.shadowBlur = 3;
+        ctx.fillText(loc.shortName, sx + loc.width / 2, sy - 4);
+        ctx.restore();
+        continue;
+      }
+
+      // 2. Temple (Chinna Gudi) (#114)
+      if (loc.isTemple) {
+        pixelEngine.drawCampusTemple(ctx, sx + loc.width / 2, sy + loc.height / 2);
+        ctx.restore();
+        continue;
+      }
+
+      // 3. Volleyball Court (#117)
+      if (loc.isVolleyball) {
+        pixelEngine.drawVolleyballCourt(ctx, sx, sy, loc.width, loc.height);
+        ctx.restore();
+        continue;
+      }
+
+      // 4. Check Dam UoH (#113)
+      if (loc.isCheckDam) {
+        pixelEngine.drawCheckDam(ctx, sx, sy, loc.width, loc.height);
+        ctx.restore();
+        continue;
+      }
+
+      // 5. School of Life Sciences (#73) — Concentric Circular GBA Complex
+      if (loc.id === 73) {
+        const rad = loc.width / 2;
+        const cx = sx + rad;
+        const cy = sy + rad;
+
+        // Outer Ring Wall & Shadow
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
+        ctx.beginPath();
+        ctx.arc(cx, cy + 6, rad + 4, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Outer Ring Base
+        ctx.fillStyle = '#f8f8e8';
+        ctx.beginPath();
+        ctx.arc(cx, cy, rad, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Outer Ring Roof (Emerald / Teal Biotech Tile)
+        ctx.fillStyle = '#107868';
+        ctx.beginPath();
+        ctx.arc(cx, cy, rad - 4, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Inner Circular Courtyard Garden
+        ctx.fillStyle = '#58b848';
+        ctx.beginPath();
+        ctx.arc(cx, cy, rad - 22, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Central Glass Dome & ASPIRE-BioNEST Cupola
+        ctx.fillStyle = '#90d8f8';
+        ctx.beginPath();
+        ctx.arc(cx, cy, 14, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 7px monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText('SLS', cx, cy + 3);
+
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 9px monospace';
+        ctx.shadowColor = '#000000';
+        ctx.shadowBlur = 3;
+        ctx.fillText('School of Life Sciences', cx, sy - 4);
+        ctx.shadowBlur = 0;
+
+        ctx.restore();
+        continue;
+      }
+
+      // 6. Sports Stadium Oval Track (#47)
+      if (loc.id === 47) {
+        ctx.fillStyle = '#b84030';
+        ctx.beginPath();
+        ctx.ellipse(sx + loc.width / 2, sy + loc.height / 2, loc.width / 2, loc.height / 2, 0, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = '#38b848';
+        ctx.beginPath();
+        ctx.ellipse(sx + loc.width / 2, sy + loc.height / 2, loc.width / 2 - 12, loc.height / 2 - 12, 0, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 9px monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText(loc.shortName, sx + loc.width / 2, sy - 3);
+        ctx.restore();
+        continue;
+      }
+
+      // 7. Standard Upgraded GBA Departmental & Residential Buildings
       ctx.fillStyle = 'rgba(0, 0, 0, 0.35)';
       ctx.fillRect(sx + 4, sy + 4, loc.width, loc.height);
 
@@ -675,79 +875,53 @@ export class WorldMap {
         roofPrimary = '#e84878';
         roofShadow = '#982048';
         roofHighlight = '#f878a8';
-      } else if (loc.category === 'sports') {
-        roofPrimary = '#28a848';
-        roofShadow = '#106828';
-        roofHighlight = '#58d878';
       }
 
-      if (loc.id === 73) {
-        const rad = loc.width / 2;
-        ctx.fillStyle = wallColor;
-        ctx.beginPath();
-        ctx.arc(sx + rad, sy + rad, rad, 0, Math.PI * 2);
-        ctx.fill();
+      // Foundation
+      ctx.fillStyle = foundationColor;
+      ctx.fillRect(sx, sy + loc.height - 8, loc.width, 8);
 
-        ctx.fillStyle = roofPrimary;
-        ctx.beginPath();
-        ctx.arc(sx + rad, sy + rad, rad - 6, 0, Math.PI * 2);
-        ctx.fill();
+      // Walls
+      ctx.fillStyle = wallColor;
+      ctx.fillRect(sx + 2, sy + 18, loc.width - 4, loc.height - 26);
 
-        ctx.strokeStyle = roofHighlight;
-        ctx.lineWidth = 2;
-        ctx.stroke();
-      } else if (loc.id === 47) {
-        ctx.fillStyle = '#b84030';
-        ctx.beginPath();
-        ctx.ellipse(sx + loc.width / 2, sy + loc.height / 2, loc.width / 2, loc.height / 2, 0, 0, Math.PI * 2);
-        ctx.fill();
+      // Roof
+      ctx.fillStyle = roofShadow;
+      ctx.fillRect(sx, sy, loc.width, 18);
+      ctx.fillStyle = roofPrimary;
+      ctx.fillRect(sx + 2, sy + 2, loc.width - 4, 14);
+      ctx.fillStyle = roofHighlight;
+      ctx.fillRect(sx + 4, sy + 2, loc.width - 8, 3);
 
-        ctx.fillStyle = '#38b848';
-        ctx.beginPath();
-        ctx.ellipse(sx + loc.width / 2, sy + loc.height / 2, loc.width / 2 - 12, loc.height / 2 - 12, 0, 0, Math.PI * 2);
-        ctx.fill();
-      } else {
-        ctx.fillStyle = foundationColor;
-        ctx.fillRect(sx, sy + loc.height - 8, loc.width, 8);
-
-        ctx.fillStyle = wallColor;
-        ctx.fillRect(sx + 2, sy + 18, loc.width - 4, loc.height - 26);
-
+      for (let rx = sx + 8; rx < sx + loc.width - 6; rx += 12) {
         ctx.fillStyle = roofShadow;
-        ctx.fillRect(sx, sy, loc.width, 18);
-        ctx.fillStyle = roofPrimary;
-        ctx.fillRect(sx + 2, sy + 2, loc.width - 4, 14);
-        ctx.fillStyle = roofHighlight;
-        ctx.fillRect(sx + 4, sy + 2, loc.width - 8, 3);
+        ctx.fillRect(rx, sy + 5, 2, 10);
+      }
 
-        ctx.fillStyle = roofShadow;
-        for (let rx = sx + 8; rx < sx + loc.width - 6; rx += 12) {
-          ctx.fillRect(rx, sy + 5, 2, 10);
-        }
+      // Entrance Door
+      const doorW = 16;
+      const doorX = sx + loc.width / 2 - doorW / 2;
+      const doorY = sy + loc.height - 14;
 
-        const doorW = 16;
-        const doorX = sx + loc.width / 2 - doorW / 2;
-        const doorY = sy + loc.height - 14;
+      ctx.fillStyle = loc.hasInterior ? '#d82828' : '#3878b8';
+      ctx.fillRect(doorX - 2, doorY + 8, doorW + 4, 6);
 
-        ctx.fillStyle = loc.hasInterior ? '#d82828' : '#3878b8';
-        ctx.fillRect(doorX - 2, doorY + 8, doorW + 4, 6);
+      ctx.fillStyle = '#282838';
+      ctx.fillRect(doorX, doorY, doorW, 12);
+      ctx.fillStyle = '#90d8f8';
+      ctx.fillRect(doorX + 2, doorY + 2, 5, 8);
+      ctx.fillRect(doorX + 9, doorY + 2, 5, 8);
 
-        ctx.fillStyle = '#282838';
-        ctx.fillRect(doorX, doorY, doorW, 12);
+      // Windows
+      const numWindows = Math.max(1, Math.floor((loc.width - 24) / 16));
+      for (let w = 0; w < numWindows; w++) {
+        const wx = sx + 8 + w * 16;
+        ctx.fillStyle = '#182838';
+        ctx.fillRect(wx, sy + 22, 10, 8);
         ctx.fillStyle = '#90d8f8';
-        ctx.fillRect(doorX + 2, doorY + 2, 5, 8);
-        ctx.fillRect(doorX + 9, doorY + 2, 5, 8);
-
-        const numWindows = Math.max(1, Math.floor((loc.width - 24) / 16));
-        for (let w = 0; w < numWindows; w++) {
-          const wx = sx + 8 + w * 16;
-          ctx.fillStyle = '#182838';
-          ctx.fillRect(wx, sy + 22, 10, 8);
-          ctx.fillStyle = '#90d8f8';
-          ctx.fillRect(wx + 1, sy + 23, 8, 6);
-          ctx.fillStyle = '#ffffff';
-          ctx.fillRect(wx + 2, sy + 24, 2, 2);
-        }
+        ctx.fillRect(wx + 1, sy + 23, 8, 6);
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(wx + 2, sy + 24, 2, 2);
       }
 
       if (loc.id <= 76) {
@@ -788,7 +962,6 @@ export class WorldMap {
     const benchSprite = pixelEngine.getBenchSprite();
     const fountainSprite = pixelEngine.getFountainSprite();
 
-    // Fences
     for (const f of this.fences) {
       for (let i = 0; i < f.length; i++) {
         const sx = (f.x + i * 16) - camera.x;
@@ -799,7 +972,6 @@ export class WorldMap {
       }
     }
 
-    // Benches
     for (const b of this.benches) {
       const sx = b.x - camera.x;
       const sy = b.y - camera.y;
@@ -808,7 +980,6 @@ export class WorldMap {
       }
     }
 
-    // Fountains
     for (const fn of this.fountains) {
       const sx = fn.x - camera.x - 16;
       const sy = fn.y - camera.y - 16;
@@ -817,7 +988,6 @@ export class WorldMap {
       }
     }
 
-    // Signposts
     for (const s of this.signposts) {
       const sx = s.x - camera.x;
       const sy = s.y - camera.y;

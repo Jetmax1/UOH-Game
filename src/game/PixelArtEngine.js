@@ -1,5 +1,5 @@
 /**
- * PixelArtEngine: Procedural Pokémon FireRed GBA-Style Sprite & Tile Generator
+ * PixelArtEngine: Procedural Pokémon FireRed GBA-Style Sprite, Tile & Architecture Generator
  * Generates authentic 16-bit GBA pixel-art tiles, characters, building facades, props, and wildlife.
  */
 
@@ -92,18 +92,17 @@ export class PixelArtEngine {
     return canvas;
   }
 
-  // Trimmed Garden Hedge Tile (16x16)
   getHedgeTile() {
     if (this.cache.hedge) return this.cache.hedge;
     const { canvas, ctx } = this.createCanvas(16, 16);
 
-    ctx.fillStyle = '#206020'; // Shadow
+    ctx.fillStyle = '#206020';
     ctx.fillRect(0, 0, 16, 16);
 
-    ctx.fillStyle = '#389830'; // Midtone
+    ctx.fillStyle = '#389830';
     ctx.fillRect(1, 1, 14, 14);
 
-    ctx.fillStyle = '#68c850'; // Top Highlight
+    ctx.fillStyle = '#68c850';
     ctx.fillRect(2, 2, 12, 4);
     ctx.fillRect(3, 6, 10, 2);
 
@@ -111,12 +110,10 @@ export class PixelArtEngine {
     return canvas;
   }
 
-  // Classic FireRed Rounded Tree (32x32)
   getTreeSprite() {
     if (this.cache.tree) return this.cache.tree;
     const { canvas, ctx } = this.createCanvas(32, 32);
 
-    // Trunk
     ctx.fillStyle = '#483820';
     ctx.fillRect(12, 22, 8, 10);
     ctx.fillStyle = '#805830';
@@ -124,7 +121,6 @@ export class PixelArtEngine {
     ctx.fillStyle = '#a87848';
     ctx.fillRect(14, 22, 2, 10);
 
-    // Layered Foliage
     ctx.fillStyle = '#206020';
     ctx.beginPath();
     ctx.arc(16, 14, 13, 0, Math.PI * 2);
@@ -148,18 +144,15 @@ export class PixelArtEngine {
     return canvas;
   }
 
-  // Dense Pine Tree Sprite (32x36) for Forest Borders
   getPineTreeSprite() {
     if (this.cache.pine) return this.cache.pine;
     const { canvas, ctx } = this.createCanvas(32, 36);
 
-    // Trunk
     ctx.fillStyle = '#483820';
     ctx.fillRect(13, 26, 6, 10);
     ctx.fillStyle = '#785028';
     ctx.fillRect(14, 26, 3, 10);
 
-    // Tier 3 (Bottom cone)
     ctx.fillStyle = '#185018';
     ctx.beginPath();
     ctx.moveTo(3, 26);
@@ -176,7 +169,6 @@ export class PixelArtEngine {
     ctx.closePath();
     ctx.fill();
 
-    // Tier 2 (Middle cone)
     ctx.fillStyle = '#185018';
     ctx.beginPath();
     ctx.moveTo(5, 18);
@@ -193,7 +185,6 @@ export class PixelArtEngine {
     ctx.closePath();
     ctx.fill();
 
-    // Tier 1 (Top cone)
     ctx.fillStyle = '#60c850';
     ctx.beginPath();
     ctx.moveTo(10, 10);
@@ -275,17 +266,14 @@ export class PixelArtEngine {
     return canvas;
   }
 
-  // Park Bench (24x16)
   getBenchSprite() {
     if (this.cache.bench) return this.cache.bench;
     const { canvas, ctx } = this.createCanvas(24, 16);
 
-    // Legs
     ctx.fillStyle = '#383848';
     ctx.fillRect(3, 8, 3, 8);
     ctx.fillRect(18, 8, 3, 8);
 
-    // Wooden Slats
     ctx.fillStyle = '#885830';
     ctx.fillRect(1, 4, 22, 4);
     ctx.fillRect(1, 9, 22, 3);
@@ -298,12 +286,10 @@ export class PixelArtEngine {
     return canvas;
   }
 
-  // Stone Fountain / Monument (32x32)
   getFountainSprite() {
     if (this.cache.fountain) return this.cache.fountain;
     const { canvas, ctx } = this.createCanvas(32, 32);
 
-    // Outer Stone Basin
     ctx.fillStyle = '#585868';
     ctx.beginPath();
     ctx.arc(16, 16, 15, 0, Math.PI * 2);
@@ -314,13 +300,11 @@ export class PixelArtEngine {
     ctx.arc(16, 16, 13, 0, Math.PI * 2);
     ctx.fill();
 
-    // Water
     ctx.fillStyle = '#3888d8';
     ctx.beginPath();
     ctx.arc(16, 16, 11, 0, Math.PI * 2);
     ctx.fill();
 
-    // Center Spout
     ctx.fillStyle = '#d0d0d8';
     ctx.fillRect(14, 10, 4, 12);
     ctx.fillStyle = '#90d8f8';
@@ -331,7 +315,185 @@ export class PixelArtEngine {
   }
 
   // =========================================================================
-  // 2. WILDLIFE PIXEL SPRITES (Peacock, Spotted Deer, Butterflies)
+  // 2. SOUTH CAMPUS SPECIAL ARCHITECTURAL DESIGNS
+  // =========================================================================
+
+  // Semicircular Stepped Amphitheatre UoH
+  drawAmphitheatre(ctx, sx, sy, radius = 55) {
+    ctx.save();
+    // Drop shadow
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.35)';
+    ctx.beginPath();
+    ctx.arc(sx, sy + 4, radius + 8, Math.PI * 0.9, Math.PI * 2.1);
+    ctx.fill();
+
+    // Terraced Tiers
+    const tiers = 4;
+    for (let i = tiers; i >= 1; i--) {
+      const r = (radius / tiers) * i;
+      ctx.fillStyle = i % 2 === 0 ? '#d0b888' : '#e0c898';
+      ctx.beginPath();
+      ctx.arc(sx, sy, r, Math.PI * 0.9, Math.PI * 2.1);
+      ctx.lineTo(sx, sy);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.strokeStyle = '#a88850';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+    }
+
+    // Center Performance Stage
+    ctx.fillStyle = '#3b82f6';
+    ctx.beginPath();
+    ctx.arc(sx, sy + 4, 14, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 8px monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText('STAGE', sx, sy + 7);
+
+    ctx.restore();
+  }
+
+  // Heritage Campus Temple (Chinna Gudi)
+  drawCampusTemple(ctx, sx, sy) {
+    ctx.save();
+    // Base platform
+    ctx.fillStyle = '#585868';
+    ctx.fillRect(sx - 20, sy - 10, 40, 36);
+
+    // Stone Mandapam Sanctum
+    ctx.fillStyle = '#e8d8b8';
+    ctx.fillRect(sx - 16, sy - 6, 32, 28);
+
+    // Stone Pillars
+    ctx.fillStyle = '#c0a070';
+    ctx.fillRect(sx - 14, sy + 6, 4, 16);
+    ctx.fillRect(sx + 10, sy + 6, 4, 16);
+
+    // Temple Gopuram Pyramid Roof
+    ctx.fillStyle = '#b84028';
+    ctx.beginPath();
+    ctx.moveTo(sx - 18, sy - 6);
+    ctx.lineTo(sx, sy - 26);
+    ctx.lineTo(sx + 18, sy - 6);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.fillStyle = '#f89838';
+    ctx.beginPath();
+    ctx.moveTo(sx - 12, sy - 6);
+    ctx.lineTo(sx, sy - 24);
+    ctx.lineTo(sx + 12, sy - 6);
+    ctx.closePath();
+    ctx.fill();
+
+    // Gold Kalasam & Flag
+    ctx.fillStyle = '#f8d030';
+    ctx.fillRect(sx - 2, sy - 30, 4, 4);
+    ctx.fillStyle = '#e82828';
+    ctx.fillRect(sx + 2, sy - 32, 6, 4);
+
+    // Sanctum Idol / Lamp Glow
+    ctx.fillStyle = '#f8a820';
+    ctx.beginPath();
+    ctx.arc(sx, sy + 12, 3, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 8px monospace';
+    ctx.textAlign = 'center';
+    ctx.shadowColor = '#000000';
+    ctx.shadowBlur = 2;
+    ctx.fillText('Temple (Chinna Gudi)', sx, sy + 34);
+
+    ctx.restore();
+  }
+
+  // Sand Volleyball Court
+  drawVolleyballCourt(ctx, sx, sy, width = 64, height = 40) {
+    ctx.save();
+    // Yellow Sand Pitch
+    ctx.fillStyle = '#ecd890';
+    ctx.fillRect(sx, sy, width, height);
+
+    // White Boundary Tape
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 1.5;
+    ctx.strokeRect(sx + 2, sy + 2, width - 4, height - 4);
+
+    // Center Net Line
+    const midX = sx + width / 2;
+    ctx.strokeStyle = '#282838';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(midX, sy);
+    ctx.lineTo(midX, sy + height);
+    ctx.stroke();
+
+    // Net Mesh Texture
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([2, 2]);
+    ctx.beginPath();
+    ctx.moveTo(midX, sy + 2);
+    ctx.lineTo(midX, sy + height - 2);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Net Posts
+    ctx.fillStyle = '#d82828';
+    ctx.fillRect(midX - 2, sy - 3, 4, 4);
+    ctx.fillRect(midX - 2, sy + height - 1, 4, 4);
+
+    ctx.fillStyle = '#1e3a8a';
+    ctx.font = 'bold 7px monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText('VOLLEYBALL', midX, sy + height / 2 + 3);
+
+    ctx.restore();
+  }
+
+  // Check Dam UoH (Reservoir & Stone Barrier)
+  drawCheckDam(ctx, sx, sy, width = 70, height = 45) {
+    ctx.save();
+    // Reservoir Water
+    ctx.fillStyle = '#2868a8';
+    ctx.fillRect(sx, sy, width, height);
+
+    // Water ripple lines
+    ctx.strokeStyle = '#90d8f8';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(sx + 8, sy + 12);
+    ctx.lineTo(sx + width - 8, sy + 12);
+    ctx.moveTo(sx + 14, sy + 24);
+    ctx.lineTo(sx + width - 14, sy + 24);
+    ctx.stroke();
+
+    // Stone Dam Wall Barrier
+    ctx.fillStyle = '#585868';
+    ctx.fillRect(sx, sy + height - 8, width, 8);
+    ctx.fillStyle = '#888898';
+    ctx.fillRect(sx + 2, sy + height - 7, width - 4, 3);
+
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 8px monospace';
+    ctx.textAlign = 'center';
+    ctx.shadowColor = '#000000';
+    ctx.shadowBlur = 2;
+    ctx.fillText('Check Dam UoH', sx + width / 2, sy + height / 2 + 2);
+
+    ctx.restore();
+  }
+
+  // =========================================================================
+  // 3. WILDLIFE PIXEL SPRITES
   // =========================================================================
 
   getPeacockSprite(frame = 0) {
@@ -339,7 +501,6 @@ export class PixelArtEngine {
     if (this.cache[key]) return this.cache[key];
     const { canvas, ctx } = this.createCanvas(20, 20);
 
-    // Fan Tail (Emerald & Gold)
     ctx.fillStyle = '#107850';
     ctx.beginPath();
     ctx.arc(14, 8, 7, 0, Math.PI * 2);
@@ -350,21 +511,17 @@ export class PixelArtEngine {
     ctx.fillRect(15, 4, 2, 2);
     ctx.fillRect(13, 8, 2, 2);
 
-    // Body (Vibrant Turquoise Blue)
     ctx.fillStyle = '#1858b8';
     ctx.fillRect(5, 7, 6, 7);
 
-    // Neck & Head
     ctx.fillRect(4, 3, 3, 5);
     ctx.fillRect(3, 2, 4, 3);
 
-    // Golden Beak & Crest
     ctx.fillStyle = '#f8a820';
     ctx.fillRect(1, 3, 2, 1);
     ctx.fillStyle = '#107850';
     ctx.fillRect(4, 0, 2, 2);
 
-    // Legs
     ctx.fillStyle = '#483820';
     ctx.fillRect(6, 14, 1, 5 + (frame % 2));
     ctx.fillRect(9, 14, 1, 5 - (frame % 2));
@@ -378,31 +535,25 @@ export class PixelArtEngine {
     if (this.cache[key]) return this.cache[key];
     const { canvas, ctx } = this.createCanvas(20, 22);
 
-    // Body (Warm Fawn Brown)
     ctx.fillStyle = '#a86830';
     ctx.fillRect(4, 7, 11, 7);
 
-    // White Spots
     ctx.fillStyle = '#f8f8f8';
     ctx.fillRect(6, 8, 2, 2);
     ctx.fillRect(10, 8, 2, 2);
     ctx.fillRect(8, 11, 2, 2);
 
-    // Neck & Head
     ctx.fillStyle = '#a86830';
     ctx.fillRect(12, 3, 4, 6);
     ctx.fillRect(13, 1, 5, 4);
 
-    // Black Nose & Eye
     ctx.fillStyle = '#181820';
     ctx.fillRect(18, 3, 1, 1);
     ctx.fillRect(15, 2, 1, 1);
 
-    // Antlers
     ctx.fillStyle = '#583818';
     ctx.fillRect(13, 0, 2, 1);
 
-    // Legs
     ctx.fillStyle = '#784818';
     ctx.fillRect(5, 14, 2, 7 + (frame % 2));
     ctx.fillRect(12, 14, 2, 7 - (frame % 2));
@@ -418,14 +569,12 @@ export class PixelArtEngine {
 
     const wingSpread = frame % 2 === 0 ? 3 : 1;
 
-    // Wings
     ctx.fillStyle = '#f8d030';
     ctx.fillRect(5 - wingSpread, 2, wingSpread, 3);
     ctx.fillRect(5, 2, wingSpread, 3);
     ctx.fillRect(5 - wingSpread, 6, wingSpread, 2);
     ctx.fillRect(5, 6, wingSpread, 2);
 
-    // Body
     ctx.fillStyle = '#181828';
     ctx.fillRect(4, 2, 2, 6);
 
@@ -434,7 +583,7 @@ export class PixelArtEngine {
   }
 
   // =========================================================================
-  // 3. GBA TRAINER & NPC SPRITES
+  // 4. GBA TRAINER & NPC SPRITES
   // =========================================================================
 
   getTrainerSprite(direction = 'down', frame = 0, isSprinting = false) {

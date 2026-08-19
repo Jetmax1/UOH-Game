@@ -66,9 +66,12 @@ export class CampusMapUI {
                 <button class="btn btn-travel" data-travel="10">💻 Computer Science</button>
                 <button class="btn btn-travel" data-travel="15">📈 Management Studies</button>
                 <button class="btn btn-travel" data-travel="47">🏟️ UoH Stadium</button>
+                <button class="btn btn-travel" data-travel="73">🔬 Life Sciences (SLS)</button>
+                <button class="btn btn-travel" data-travel="111">🎭 Amphitheatre (South)</button>
                 <button class="btn btn-travel" data-travel="67">🏠 MHK Hostel (Dorm)</button>
                 <button class="btn btn-travel" data-travel="101">🌊 Gundla Kunta</button>
                 <button class="btn btn-travel" data-travel="76">🍄 Mushroom Rock</button>
+                <button class="btn btn-travel" data-travel="112">🌊 Secret Lake</button>
               </div>
 
               <div class="map-legend">
