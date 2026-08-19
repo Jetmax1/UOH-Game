@@ -1,0 +1,42 @@
+{
+  "points": {
+    "majorNaturalLandmark": 120,
+    "rareHiddenLandmark": 150,
+    "importantUniversityLocation": 40,
+    "gateDiscovery": 50,
+    "normalQuizPassed": 50,
+    "perfectQuizBonus": 50,
+    "sportsActivity": 50,
+    "nightCanteenActivity": 40,
+    "nightPartyActivity": 60,
+    "hostelSleepStamina": 100
+  },
+  "player": {
+    "normalSpeed": 220,
+    "sprintSpeed": 350,
+    "startLocation": {
+      "x": 890,
+      "y": 260
+    },
+    "defaultSpawnZone": "Gate I (North Entrance)"
+  },
+  "time": {
+    "minutesPerRealSecond": 2,
+    "startHour": 8,
+    "startMinute": 30,
+    "nightCanteenOpenHour": 22,
+    "nightPartyStartHour": 21,
+    "wakeUpHour": 7,
+    "wakeUpMinute": 0
+  },
+  "world": {
+    "width": 2300,
+    "height": 2200,
+    "tileSize": 32
+  },
+  "audio": {
+    "masterVolume": 0.7,
+    "sfxVolume": 0.8,
+    "musicVolume": 0.5
+  }
+}

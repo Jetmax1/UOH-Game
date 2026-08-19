@@ -1,0 +1,106 @@
+[
+  {
+    "id": "guard_gate1",
+    "name": "Guard Jagdish",
+    "role": "Gate I Security",
+    "x": 890,
+    "y": 240,
+    "avatar": "👮",
+    "dialogue": [
+      "Namaste, new student! Welcome to the University of Hyderabad (HCU).",
+      "If you're looking for your admissions desk, head straight south down this road to the Administration Building (Building 1) or Pariksha Bhavan (43).",
+      "Don't forget to explore our beautiful campus! There are 5 lakes and magnificent ancient rocks like Mushroom Rock to discover."
+    ]
+  },
+  {
+    "id": "senior_ananya",
+    "name": "Senior Scholar Ananya",
+    "role": "PhD Scholar & Campus Guide",
+    "x": 1030,
+    "y": 790,
+    "avatar": "🎓",
+    "dialogue": [
+      "Hey there, fresher! Congratulations on getting admitted to UoH!",
+      "Tip from a senior: Always keep your Campus Discovery Book handy (press 'J'). Every time you find a building, lake, or rock, you earn exploration points!",
+      "If you need a break between lectures, check out Zakir Complex (Food Court 27) for some delicious chai!"
+    ]
+  },
+  {
+    "id": "prof_sharma",
+    "name": "Prof. Sharma",
+    "role": "Faculty, Computer Science",
+    "x": 1150,
+    "y": 760,
+    "avatar": "👨‍🏫",
+    "dialogue": [
+      "Welcome to the School of Computer Science & Information Sciences!",
+      "We build world-class AI models and distributed networks here.",
+      "Step inside our interactive lab classroom anytime to test your skills in the 5-question pop quiz!"
+    ]
+  },
+  {
+    "id": "prof_rao",
+    "name": "Prof. Rao",
+    "role": "Faculty, Management Studies",
+    "x": 1160,
+    "y": 900,
+    "avatar": "👩‍🏫",
+    "dialogue": [
+      "Greetings! This is the School of Management Studies (SMS).",
+      "We prepare future leaders in strategy, marketing, healthcare, and analytics.",
+      "Feel free to enter the classroom and attempt our Business Strategy quiz!"
+    ]
+  },
+  {
+    "id": "librarian_radhika",
+    "name": "Librarian Radhika",
+    "role": "Chief Librarian, IGM Library",
+    "x": 1130,
+    "y": 990,
+    "avatar": "📚",
+    "dialogue": [
+      "Welcome to the Indira Gandhi Memorial Library.",
+      "We house over 400,000 reference books, journals, and digital research terminals.",
+      "Step inside to enjoy peaceful study reading or take our campus heritage quiz!"
+    ]
+  },
+  {
+    "id": "coach_vikram",
+    "name": "Coach Vikram",
+    "role": "Physical Education Director",
+    "x": 580,
+    "y": 720,
+    "avatar": "🏃",
+    "dialogue": [
+      "Great to see you at the athletics pavilion!",
+      "A healthy body fosters a sharp mind. We have running tracks, football pitches, tennis courts, and a gym.",
+      "Take a lap around the stadium to build up your stamina!"
+    ]
+  },
+  {
+    "id": "canteen_raju",
+    "name": "Raju Bhai",
+    "role": "Night Canteen Master",
+    "x": 340,
+    "y": 1800,
+    "avatar": "☕",
+    "dialogue": [
+      "Bhaiya! Welcome to the famous South Night Canteen!",
+      "When the clock strikes 10:00 PM, we serve the crispiest samosas, hot Irani chai, and spicy midnight Maggi.",
+      "Come hang out with scholars and recharge after a long day of classes!"
+    ]
+  },
+  {
+    "id": "warden_murali",
+    "name": "Warden Murali",
+    "role": "Hostel Warden, MHK",
+    "x": 480,
+    "y": 1940,
+    "avatar": "🔑",
+    "dialogue": [
+      "Welcome to MHK Hostel (Hostels L & M). Your room is ready on the ground floor!",
+      "Whenever you are tired after night activities, come inside your room and hop into bed.",
+      "Sleeping advances time to the next morning and saves your game progress automatically."
+    ]
+  }
+]

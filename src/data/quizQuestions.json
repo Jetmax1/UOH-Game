@@ -1,0 +1,188 @@
+{
+  "computer_science": {
+    "title": "Computer Science & AI Pop Quiz",
+    "department": "School of Computer Science & Information Sciences",
+    "passScore": 3,
+    "questions": [
+      {
+        "question": "What is the time complexity of searching in a balanced Binary Search Tree (BST)?",
+        "options": [
+          "O(1)",
+          "O(log N)",
+          "O(N)",
+          "O(N^2)"
+        ],
+        "correctIndex": 1,
+        "explanation": "Binary search trees divide the search space in half at each step, yielding O(log N) time on balanced trees."
+      },
+      {
+        "question": "Which data structure follows the First-In, First-Out (FIFO) principle?",
+        "options": [
+          "Stack",
+          "Queue",
+          "Tree",
+          "Heap"
+        ],
+        "correctIndex": 1,
+        "explanation": "Queues process elements in the order they arrive (FIFO)."
+      },
+      {
+        "question": "In Python, which built-in function returns the number of items in a list or string?",
+        "options": [
+          "size()",
+          "count()",
+          "len()",
+          "length()"
+        ],
+        "correctIndex": 2,
+        "explanation": "The len() function returns the length/size of collections in Python."
+      },
+      {
+        "question": "What does HTTP stand for in web network communications?",
+        "options": [
+          "HyperText Transfer Protocol",
+          "High Tech Transmission Path",
+          "Hyperlink Text Translation Process",
+          "Host Terminal Traffic Protocol"
+        ],
+        "correctIndex": 0,
+        "explanation": "HTTP stands for HyperText Transfer Protocol, the foundation of data communication on the World Wide Web."
+      },
+      {
+        "question": "Which neural network layer is most widely used for image recognition & computer vision?",
+        "options": [
+          "Convolutional Layer (CNN)",
+          "Recurrent Layer (RNN)",
+          "Decision Tree",
+          "Markov Chain"
+        ],
+        "correctIndex": 0,
+        "explanation": "Convolutional Neural Networks (CNNs) use spatial filters to extract image features effectively."
+      }
+    ]
+  },
+  "management": {
+    "title": "Strategic Management & Business Quiz",
+    "department": "School of Management Studies",
+    "passScore": 3,
+    "questions": [
+      {
+        "question": "What are the classic '4 Ps' of the Marketing Mix?",
+        "options": [
+          "Product, Price, Place, Promotion",
+          "Profit, People, Process, Performance",
+          "Plan, Pitch, Position, Produce",
+          "Policy, Payment, Platform, Packaging"
+        ],
+        "correctIndex": 0,
+        "explanation": "Product, Price, Place, and Promotion form the fundamental pillars of traditional marketing strategy."
+      },
+      {
+        "question": "In financial analysis, what does ROI stand for?",
+        "options": [
+          "Rate of Inflation",
+          "Return on Investment",
+          "Ratio of Income",
+          "Revenue on Interest"
+        ],
+        "correctIndex": 1,
+        "explanation": "Return on Investment (ROI) evaluates the efficiency or profitability of an investment."
+      },
+      {
+        "question": "What does the 'S' in SWOT analysis represent?",
+        "options": [
+          "Strategy",
+          "Sustainability",
+          "Strengths",
+          "Structure"
+        ],
+        "correctIndex": 2,
+        "explanation": "SWOT stands for Strengths, Weaknesses, Opportunities, and Threats."
+      },
+      {
+        "question": "Which management concept focuses on continuous incremental improvement in processes?",
+        "options": [
+          "Kaizen",
+          "Merger",
+          "Liquidation",
+          "Arbitrage"
+        ],
+        "correctIndex": 0,
+        "explanation": "Kaizen is a Japanese philosophy focusing on continuous improvement throughout all aspects of an organization."
+      },
+      {
+        "question": "What is the break-even point in business economics?",
+        "options": [
+          "When maximum possible revenue is earned",
+          "When total revenue equals total costs (zero profit/loss)",
+          "When taxes are paid in full",
+          "When stock prices hit a record high"
+        ],
+        "correctIndex": 1,
+        "explanation": "The break-even point is the sales volume where total revenues equal total expenses."
+      }
+    ]
+  },
+  "campus_heritage": {
+    "title": "UoH Campus Heritage & Trivia",
+    "department": "Indira Gandhi Memorial Library & Campus Archives",
+    "passScore": 3,
+    "questions": [
+      {
+        "question": "In what year was the University of Hyderabad (UoH / HCU) established?",
+        "options": [
+          "1950",
+          "1974",
+          "1991",
+          "2005"
+        ],
+        "correctIndex": 1,
+        "explanation": "The University of Hyderabad was founded in 1974 as a premier Central University."
+      },
+      {
+        "question": "What famous balancing rock formation on campus is a protected national geological monument?",
+        "options": [
+          "Diamond Rock",
+          "Mushroom Rock",
+          "Elephant Boulder",
+          "Sunset Peak"
+        ],
+        "correctIndex": 1,
+        "explanation": "Mushroom Rock is a famous natural balancing granite boulder protected for its geological rarity."
+      },
+      {
+        "question": "Which scenic natural water body is located right in the heart of the central campus?",
+        "options": [
+          "Gundla Kunta",
+          "Hussain Sagar",
+          "Osman Sagar",
+          "Durgam Cheruvu"
+        ],
+        "correctIndex": 0,
+        "explanation": "Gundla Kunta is the iconic central lake of UoH, loved for serene walks and bird watching."
+      },
+      {
+        "question": "What is the name of the main central library on campus?",
+        "options": [
+          "Sarojini Naidu Reading Hall",
+          "Indira Gandhi Memorial Library",
+          "Tagore International Library",
+          "Deccan Research Archives"
+        ],
+        "correctIndex": 1,
+        "explanation": "The Indira Gandhi Memorial Library (IGML) houses over 400,000 volumes."
+      },
+      {
+        "question": "What popular student cultural festival is celebrated with music and theatre across the campus?",
+        "options": [
+          "Sukoon",
+          "Mood Indigo",
+          "Rendezvous",
+          "Oasis"
+        ],
+        "correctIndex": 0,
+        "explanation": "Sukoon is the beloved annual cultural festival celebrated with grandeur across the Open Air Theatre and campus grounds."
+      }
+    ]
+  }
+}

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>University of Hyderabad Campus Adventure — Playable Web Game</title>
+  <meta name="description" content="Explore the University of Hyderabad campus in this top-down adventure! Discover 76 indexed locations, 5 natural lakes, Mushroom Rock, attend classes, take quizzes, and live the hostel life.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./src/style.css">
+</head>
+<body>
+  <div id="game-app">
+    <!-- Main Game Canvas -->
+    <canvas id="game-canvas"></canvas>
+
+    <!-- Top HUD Overlay -->
+    <header id="game-hud" class="glass-bar">
+      <div class="hud-left">
+        <div class="hud-brand">
+          <span class="hud-logo">🏛️</span>
+          <div class="hud-title-wrap">
+            <h1 class="hud-game-title">UoH Adventure</h1>
+            <span class="hud-edition">Central University of Hyderabad</span>
+          </div>
+        </div>
+
+        <div class="hud-pill hud-score-pill">
+          <span class="hud-pill-icon">🌟</span>
+          <div class="hud-pill-text">
+            <span class="hud-label">EXPLORATION SCORE</span>
+            <span class="hud-val" id="hud-score">0</span>
+          </div>
+        </div>
+
+        <div class="hud-pill hud-time-pill">
+          <span class="hud-pill-icon" id="hud-time-icon">☀️</span>
+          <div class="hud-pill-text">
+            <span class="hud-val" id="hud-time">08:30 AM</span>
+            <span class="hud-sub" id="hud-period">Day 1 · Morning</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Center Active Quest Ticker -->
+      <div class="hud-center">
+        <div class="hud-quest-ticker" id="hud-quest-ticker">
+          <span class="ticker-badge">OBJECTIVE</span>
+          <div class="ticker-content">
+            <strong id="hud-quest-title">Freshman Induction Trail</strong>:
+            <span id="hud-quest-text">Visit the Administration Building (Building 1)</span>
+          </div>
+          <span class="ticker-prog" id="hud-quest-prog">[0/3]</span>
+        </div>
+      </div>
+
+      <!-- Right Action Controls -->
+      <div class="hud-right">
+        <div class="stamina-wrapper" title="Sprint Stamina (Hold Shift / Sprint button)">
+          <div class="stamina-label">⚡ STAMINA</div>
+          <div class="stamina-track">
+            <div class="stamina-bar" id="stamina-fill" style="width: 100%;"></div>
+          </div>
+        </div>
+
+        <div class="hud-actions-group">
+          <button class="hud-btn" id="btn-map" title="Campus Map (M)">
+            <span class="hud-btn-icon">🗺️</span>
+            <span class="hud-btn-label">Map (M)</span>
+          </button>
+          <button class="hud-btn" id="btn-book" title="Discovery Book (J)">
+            <span class="hud-btn-icon">📖</span>
+            <span class="hud-btn-label">Book (J)</span>
+          </button>
+          <button class="hud-btn" id="btn-quests" title="Quests (Q)">
+            <span class="hud-btn-icon">🏆</span>
+            <span class="hud-btn-label">Quests</span>
+          </button>
+          <button class="hud-btn hud-btn-icon-only" id="btn-sound" title="Toggle Sound">
+            <span id="sound-icon">🔊</span>
+          </button>
+          <button class="hud-btn hud-btn-icon-only" id="btn-settings" title="Settings & Guide">
+            <span>⚙️</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Bottom Right Minimap HUD -->
+    <div id="minimap-container" class="glass-panel">
+      <div class="minimap-header">
+        <span>📍 UoH Radar</span>
+      </div>
+      <canvas id="minimap-canvas" width="160" height="140"></canvas>
+    </div>
+
+    <!-- Onscreen Controls for Mobile & Touch Devices -->
+    <div id="mobile-controls-overlay">
+      <div id="mobile-dpad">
+        <div class="joystick-base">
+          <div class="joystick-stick"></div>
+        </div>
+      </div>
+      <div id="mobile-action-buttons">
+        <button class="mobile-btn" id="btn-mobile-sprint">⚡ RUN</button>
+        <button class="mobile-btn mobile-btn-primary" id="btn-mobile-interact">E INTERACT</button>
+      </div>
+    </div>
+
+    <!-- Toasts Notifications Container -->
+    <div id="toast-container"></div>
+
+    <!-- Modals Container Root -->
+    <div id="book-modal" class="modal-root hidden"></div>
+    <div id="map-modal" class="modal-root hidden"></div>
+    <div id="quiz-modal" class="modal-root hidden"></div>
+    <div id="dialog-modal" class="modal-root hidden"></div>
+    <div id="generic-modal" class="modal-root hidden">
+      <div class="modal-backdrop">
+        <div id="generic-modal-content"></div>
+      </div>
+    </div>
+
+    <!-- Fullscreen Sleep Fade Overlay -->
+    <div id="sleep-overlay" class="hidden">
+      <div class="sleep-content">
+        <div class="sleep-moon">🌙 💤</div>
+        <h2>Resting in MHK Hostel...</h2>
+        <p>Restoring stamina and advancing to the morning.</p>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,203 @@
+[
+  {
+    "id": "freshman_induction",
+    "title": "Freshman Induction Trail",
+    "category": "main",
+    "description": "Begin your journey as a newly admitted UoH student! Visit the Administration Building, check Pariksha Bhavan, and settle into your room at MHK Hostel.",
+    "rewardPoints": 250,
+    "objectives": [
+      {
+        "id": "visit_admin",
+        "description": "Visit the Administration Building (Building 1)",
+        "targetLocationId": 1,
+        "completed": false
+      },
+      {
+        "id": "visit_pariksha",
+        "description": "Locate Pariksha Bhavan (Building 43)",
+        "targetLocationId": 43,
+        "completed": false
+      },
+      {
+        "id": "checkin_mhk",
+        "description": "Check in to your dorm room at MHK Hostel (Building 67)",
+        "targetLocationId": 67,
+        "completed": false
+      }
+    ]
+  },
+  {
+    "id": "lakes_explorer",
+    "title": "The Five Lakes of UoH",
+    "category": "nature",
+    "description": "Discover all 5 pristine lakes and water bodies across the campus sanctuary.",
+    "rewardPoints": 400,
+    "objectives": [
+      {
+        "id": "disc_gundla",
+        "description": "Discover Gundla Kunta Lake",
+        "targetLocationId": 101,
+        "completed": false
+      },
+      {
+        "id": "disc_peacock",
+        "description": "Discover Peacock Lake",
+        "targetLocationId": 102,
+        "completed": false
+      },
+      {
+        "id": "disc_chilkala",
+        "description": "Discover Chilkala Kunta Lake",
+        "targetLocationId": 103,
+        "completed": false
+      },
+      {
+        "id": "disc_nallagandla",
+        "description": "Discover Nallagandla Lake",
+        "targetLocationId": 104,
+        "completed": false
+      },
+      {
+        "id": "disc_kamalavanam",
+        "description": "Discover Kamalavanam Kunta",
+        "targetLocationId": 105,
+        "completed": false
+      }
+    ]
+  },
+  {
+    "id": "rock_explorer",
+    "title": "Ancient Deccan Rock Explorer",
+    "category": "nature",
+    "description": "Uncover the billion-year-old natural monolithic wonders and prehistoric heritage of the campus.",
+    "rewardPoints": 500,
+    "objectives": [
+      {
+        "id": "disc_mushroom_rock",
+        "description": "Find the protected natural wonder Mushroom Rock (Building 76)",
+        "targetLocationId": 76,
+        "completed": false
+      },
+      {
+        "id": "disc_virgin_rock",
+        "description": "Climb up to Virgin Rock formation",
+        "targetLocationId": 106,
+        "completed": false
+      },
+      {
+        "id": "disc_high_rock",
+        "description": "Reach the summit of High Rock peak",
+        "targetLocationId": 107,
+        "completed": false
+      },
+      {
+        "id": "disc_megalithic",
+        "description": "Visit the prehistoric Megalithic Site (Building 42)",
+        "targetLocationId": 42,
+        "completed": false
+      }
+    ]
+  },
+  {
+    "id": "academic_pioneer",
+    "title": "Academic Pioneer",
+    "category": "academic",
+    "description": "Tour the prestigious schools of science, technology, management, and literature.",
+    "rewardPoints": 350,
+    "objectives": [
+      {
+        "id": "visit_library",
+        "description": "Visit Indira Gandhi Memorial Library (Building 12)",
+        "targetLocationId": 12,
+        "completed": false
+      },
+      {
+        "id": "visit_cs",
+        "description": "Visit School of Computer Science & Info Sciences (Building 10)",
+        "targetLocationId": 10,
+        "completed": false
+      },
+      {
+        "id": "visit_mba",
+        "description": "Visit School of Management Studies (Building 15)",
+        "targetLocationId": 15,
+        "completed": false
+      },
+      {
+        "id": "visit_chemistry",
+        "description": "Visit School of Chemistry (Building 31)",
+        "targetLocationId": 31,
+        "completed": false
+      },
+      {
+        "id": "visit_sls",
+        "description": "Visit School of Life Sciences Circular Complex (Building 73)",
+        "targetLocationId": 73,
+        "completed": false
+      }
+    ]
+  },
+  {
+    "id": "scholars_trial",
+    "title": "The Scholar's Classroom Trial",
+    "category": "academic",
+    "description": "Step inside a classroom in the Computer Science or Management department and pass the 5-question lecture quiz!",
+    "rewardPoints": 300,
+    "objectives": [
+      {
+        "id": "pass_quiz",
+        "description": "Complete a 5-question classroom quiz with passing score",
+        "type": "quiz_passed",
+        "completed": false
+      }
+    ]
+  },
+  {
+    "id": "sports_champion",
+    "title": "Campus Sports Tour",
+    "category": "sports",
+    "description": "Explore the athletic facilities and grounds across the campus.",
+    "rewardPoints": 200,
+    "objectives": [
+      {
+        "id": "visit_stadium",
+        "description": "Visit the UoH Main Athletics Stadium (Building 47)",
+        "targetLocationId": 47,
+        "completed": false
+      },
+      {
+        "id": "visit_gym",
+        "description": "Check out the University Gymnasium (Building 48)",
+        "targetLocationId": 48,
+        "completed": false
+      },
+      {
+        "id": "visit_football",
+        "description": "Walk across the Football Ground (Building 37)",
+        "targetLocationId": 37,
+        "completed": false
+      }
+    ]
+  },
+  {
+    "id": "night_owl_canteen",
+    "title": "Night Owl's Chai & Beats",
+    "category": "night",
+    "description": "Experience UoH nocturnal life after 10:00 PM: order hot chai at the Night Canteen and check out the South Complex social scene.",
+    "rewardPoints": 300,
+    "objectives": [
+      {
+        "id": "visit_night_canteen",
+        "description": "Visit South Complex Night Canteen after 10:00 PM for late-night snacks",
+        "type": "night_canteen_visited",
+        "completed": false
+      },
+      {
+        "id": "enjoy_south_party",
+        "description": "Participate in the South Complex night dance/music jam",
+        "type": "south_party_attended",
+        "completed": false
+      }
+    ]
+  }
+]
