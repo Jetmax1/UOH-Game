@@ -1,10 +1,16 @@
 /**
- * Full-screen Interactive Campus Map Modal with live player pin and fast-travel
+ * Full-screen Interactive Campus Map Modal with 4-Section Regional Views & Fast Travel
+ * Displays all 78 registered University of Hyderabad pins across:
+ * - 🟢 North / Main Campus
+ * - 🔵 South Campus
+ * - 🟡 West Campus
+ * - 🟣 East Campus
  */
 export class CampusMapUI {
   constructor(uiManager) {
     this.uiManager = uiManager;
     this.isOpen = false;
+    this.selectedSectionTab = 'active'; // 'active', 'main', 'south', 'west', 'east', 'overview'
   }
 
   toggle() {
@@ -13,6 +19,9 @@ export class CampusMapUI {
     if (!modal) return;
 
     if (this.isOpen) {
+      if (this.uiManager.game) {
+        this.selectedSectionTab = this.uiManager.game.worldMap.currentSection || 'main';
+      }
       this.render();
       modal.classList.remove('hidden');
       this.drawFullMap();
@@ -27,6 +36,7 @@ export class CampusMapUI {
 
     const game = this.uiManager.game;
     const stats = game.discoverySystem.getDiscoveryStats();
+    const curSec = game.worldMap.currentSection;
 
     modal.innerHTML = `
       <div class="modal-backdrop">
@@ -36,8 +46,8 @@ export class CampusMapUI {
             <div class="map-title-group">
               <span class="map-icon">🗺️</span>
               <div>
-                <h2>University of Hyderabad — Interactive Campus Map</h2>
-                <p class="map-subtitle">Full World Layout & Real Locations Index (76 Buildings, 5 Lakes, 3 Gates)</p>
+                <h2>University of Hyderabad — 4-Section Regional Campus Map</h2>
+                <p class="map-subtitle">Pokémon-Style Regional World: North/Main (🟢), South (🔵), West (🟡), and East (🟣) Campuses</p>
               </div>
             </div>
             <div class="map-header-right">
@@ -46,43 +56,66 @@ export class CampusMapUI {
             </div>
           </div>
 
+          <!-- Section Switcher Bar -->
+          <div class="map-section-nav-tabs">
+            <button class="map-sec-tab ${this.selectedSectionTab === 'main' ? 'active' : ''}" data-sectab="main">🟢 NORTH / MAIN (26)</button>
+            <button class="map-sec-tab ${this.selectedSectionTab === 'south' ? 'active' : ''}" data-sectab="south">🔵 SOUTH CAMPUS (24)</button>
+            <button class="map-sec-tab ${this.selectedSectionTab === 'west' ? 'active' : ''}" data-sectab="west">🟡 WEST CAMPUS (7)</button>
+            <button class="map-sec-tab ${this.selectedSectionTab === 'east' ? 'active' : ''}" data-sectab="east">🟣 EAST CAMPUS (23)</button>
+            <button class="map-sec-tab ${this.selectedSectionTab === 'amphi_valley' ? 'active' : ''}" data-sectab="amphi_valley">🌲 DECCAN WILDERNESS (4)</button>
+            <button class="map-sec-tab ${this.selectedSectionTab === 'overview' ? 'active' : ''}" data-sectab="overview">🗺️ OVERVIEW</button>
+          </div>
+
           <!-- Main Map Canvas & Legend Split -->
           <div class="map-body-layout">
             <div class="map-canvas-wrapper">
-              <canvas id="full-map-canvas" width="800" height="750"></canvas>
+              <canvas id="full-map-canvas" width="820" height="660"></canvas>
             </div>
 
             <!-- Sidebar Fast Travel & Legend -->
             <div class="map-sidebar">
               <h3>🚀 Fast Travel Portals</h3>
-              <p class="sidebar-tip">Jump to unlocked gates and major hubs:</p>
+              <p class="sidebar-tip">Jump to any location across campus sections:</p>
               <div class="fast-travel-grid">
-                <button class="btn btn-travel" data-travel="108">⛩️ Gate I (North)</button>
-                <button class="btn btn-travel" data-travel="109">⛩️ Gate II (East)</button>
-                <button class="btn btn-travel" data-travel="110">⛩️ Gate III (South)</button>
-                <button class="btn btn-travel" data-travel="1">🏛️ Admin Building</button>
-                <button class="btn btn-travel" data-travel="12">📚 IGM Library</button>
-                <button class="btn btn-travel" data-travel="27">☕ Zakir Food Court</button>
-                <button class="btn btn-travel" data-travel="10">💻 Computer Science</button>
-                <button class="btn btn-travel" data-travel="15">📈 Management Studies</button>
-                <button class="btn btn-travel" data-travel="47">🏟️ UoH Stadium</button>
-                <button class="btn btn-travel" data-travel="73">🔬 Life Sciences (SLS)</button>
-                <button class="btn btn-travel" data-travel="111">🎭 Amphitheatre (South)</button>
-                <button class="btn btn-travel" data-travel="67">🏠 MHK Hostel (Dorm)</button>
-                <button class="btn btn-travel" data-travel="101">🌊 Gundla Kunta</button>
-                <button class="btn btn-travel" data-travel="76">🍄 Mushroom Rock</button>
-                <button class="btn btn-travel" data-travel="112">🌊 Secret Lake</button>
+                <!-- Main Campus -->
+                <button class="btn btn-travel sec-main-btn" data-travel="36">🏛️ Admin Building (#36)</button>
+                <button class="btn btn-travel sec-main-btn" data-travel="51">📚 IGM Library (#51)</button>
+                <button class="btn btn-travel sec-main-btn" data-travel="45">💻 Computer Science (#45)</button>
+                <button class="btn btn-travel sec-main-btn" data-travel="27">🪨 The Masoom's Rock (#27)</button>
+                <!-- South Campus (SLS Road & Central Spine) -->
+                <button class="btn btn-travel sec-south-btn" data-travel="3">🔬 Life Sciences (SLS) (#3)</button>
+                <button class="btn btn-travel sec-south-btn" data-travel="2">🧬 ASPIRE BioNEST (#2)</button>
+                <button class="btn btn-travel sec-south-btn" data-travel="7">🔬 Nanotechnology (#7)</button>
+                <button class="btn btn-travel sec-south-btn" data-travel="21">🎭 Amphitheatre UoH (#21)</button>
+                <button class="btn btn-travel sec-south-btn" data-travel="1">🌊 Check Dam UoH (#1)</button>
+                <button class="btn btn-travel sec-south-btn" data-travel="5">🎓 Integrated Studies (#5)</button>
+                <button class="btn btn-travel sec-south-btn" data-travel="13">🏠 MHK Hostel (Dorm) (#13)</button>
+                <button class="btn btn-travel sec-south-btn" data-travel="9">🛍️ South Shopping (#9)</button>
+                <button class="btn btn-travel sec-south-btn" data-travel="8">🌐 International Hostel (#8)</button>
+                <button class="btn btn-travel sec-south-btn" data-travel="11">🏠 MH-J Hostel (#11)</button>
+                <button class="btn btn-travel sec-south-btn" data-travel="15">🏠 LH-10 Hostel (#15)</button>
+                <button class="btn btn-travel sec-south-btn" data-travel="79">🏠 LH-9 Hostel (#79)</button>
+                <button class="btn btn-travel sec-south-btn" data-travel="83">⛩️ South Gate (#83)</button>
+                <!-- West Campus -->
+                <button class="btn btn-travel sec-west-btn" data-travel="30">🏟️ Indoor Stadium (#30)</button>
+                <button class="btn btn-travel sec-west-btn" data-travel="75">⛩️ Gate 3 IDC (#75)</button>
+                <button class="btn btn-travel sec-west-btn" data-travel="78">🏪 Kirana Store (#78)</button>
+                <!-- East Campus -->
+                <button class="btn btn-travel sec-east-btn" data-travel="59">☕ Sukoon Canteen (#59)</button>
+                <button class="btn btn-travel sec-east-btn" data-travel="61">🧪 Chemistry Annex (#61)</button>
+                <button class="btn btn-travel sec-east-btn" data-travel="56">🎨 SN School Arts (#56)</button>
+                <button class="btn btn-travel sec-east-btn" data-travel="41">⛩️ HCU Small Gate (#41)</button>
               </div>
 
               <div class="map-legend">
-                <h4>🎨 Map Legend</h4>
-                <div class="legend-item"><span class="legend-swatch" style="background:#2980b9;"></span> Lakes & Water Bodies</div>
-                <div class="legend-item"><span class="legend-swatch" style="background:#9c3d3d;"></span> Academic Schools</div>
-                <div class="legend-item"><span class="legend-swatch" style="background:#1f618d;"></span> Research Institutes</div>
-                <div class="legend-item"><span class="legend-swatch" style="background:#b9770e;"></span> Hostels & Housing</div>
-                <div class="legend-item"><span class="legend-swatch" style="background:#16a085;"></span> Sports & Athletics</div>
-                <div class="legend-item"><span class="legend-swatch" style="background:#7f8c8d;"></span> Natural Rocks & Heritage</div>
-                <div class="legend-item"><span class="legend-swatch" style="background:#e74c3c; border-radius:50%;"></span> You Are Here</div>
+                <h4>🎨 Section Color Guide</h4>
+                <div class="legend-item"><span class="legend-swatch" style="background:#10b981;"></span> 🟢 North/Main: Admin & CS</div>
+                <div class="legend-item"><span class="legend-swatch" style="background:#059669;"></span> 🌲 Amphi Valley: Amphitheatre (Main↔South)</div>
+                <div class="legend-item"><span class="legend-swatch" style="background:#0284c7;"></span> 🌊 Check Dam: Wetland (West↔South)</div>
+                <div class="legend-item"><span class="legend-swatch" style="background:#2563eb;"></span> 🔵 South: SLS Road & Hostels</div>
+                <div class="legend-item"><span class="legend-swatch" style="background:#eab308;"></span> 🟡 West: Stadium & Gate 3</div>
+                <div class="legend-item"><span class="legend-swatch" style="background:#a855f7;"></span> 🟣 East: Chemistry & Arts</div>
+                <div class="legend-item"><span class="legend-swatch" style="background:#f59e0b; border: 1px solid #ffffff;"></span> ⛩️ Road Checkpoint Gates</div>
               </div>
             </div>
           </div>
@@ -99,103 +132,299 @@ export class CampusMapUI {
 
     const ctx = canvas.getContext('2d');
     const game = this.uiManager.game;
-    const worldW = game.worldMap.width;
-    const worldH = game.worldMap.height;
     const w = canvas.width;
     const h = canvas.height;
 
     ctx.clearRect(0, 0, w, h);
 
+    if (this.selectedSectionTab === 'overview') {
+      this.drawFourSectionsOverview(ctx, w, h);
+      return;
+    }
+
+    const targetSectionId = this.selectedSectionTab;
+    const secCfg = game.worldMap.sectionConfigs[targetSectionId];
+    if (!secCfg) return;
+
+    const worldW = secCfg.width;
+    const worldH = secCfg.height;
     const sx = w / worldW;
     const sy = h / worldH;
 
-    // 1. Lush Campus Ground
-    ctx.fillStyle = '#5c8a3c';
+    // 1. Lush Section Terrain Ground
+    ctx.fillStyle = '#4a7c36';
     ctx.fillRect(0, 0, w, h);
 
-    // 2. Water Bodies
-    for (const lake of game.worldMap.waterBodies) {
-      ctx.fillStyle = '#2980b9';
+    // Subtle grid lines
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.03)';
+    for (let x = 0; x < w; x += 16) {
+      ctx.fillRect(x, 0, 1, h);
+    }
+    for (let y = 0; y < h; y += 16) {
+      ctx.fillRect(0, y, w, 1);
+    }
+
+    // 2. Plazas & Quads
+    for (const p of secCfg.plazas || []) {
+      ctx.fillStyle = '#b8a070';
+      ctx.fillRect(p.x * sx, p.y * sy, p.w * sx, p.h * sy);
+      ctx.strokeStyle = '#947848';
+      ctx.lineWidth = 1;
+      ctx.strokeRect(p.x * sx, p.y * sy, p.w * sx, p.h * sy);
+    }
+
+    // 3. Roads Network
+    for (const [x1, y1, x2, y2, rw, isTrail] of secCfg.roads || []) {
+      if (isTrail) {
+        ctx.strokeStyle = '#8b6943';
+        ctx.lineWidth = Math.max(2, rw * sx * 0.8);
+        ctx.beginPath();
+        ctx.moveTo(x1 * sx, y1 * sy);
+        ctx.lineTo(x2 * sx, y2 * sy);
+        ctx.stroke();
+      } else {
+        // Road curb
+        ctx.strokeStyle = '#7c6848';
+        ctx.lineWidth = Math.max(3, (rw + 4) * sx);
+        ctx.lineCap = 'round';
+        ctx.beginPath();
+        ctx.moveTo(x1 * sx, y1 * sy);
+        ctx.lineTo(x2 * sx, y2 * sy);
+        ctx.stroke();
+
+        // Asphalt surface
+        ctx.strokeStyle = '#334155';
+        ctx.lineWidth = Math.max(2, rw * sx);
+        ctx.beginPath();
+        ctx.moveTo(x1 * sx, y1 * sy);
+        ctx.lineTo(x2 * sx, y2 * sy);
+        ctx.stroke();
+      }
+    }
+
+    // 4. Checkpoint Gates
+    for (const cp of secCfg.checkpoints || []) {
+      ctx.fillStyle = '#eab308';
+      ctx.fillRect(cp.x * sx, cp.y * sy, Math.max(6, cp.width * sx), Math.max(6, cp.height * sy));
+      ctx.strokeStyle = '#1e293b';
+      ctx.lineWidth = 1.5;
+      ctx.strokeRect(cp.x * sx, cp.y * sy, Math.max(6, cp.width * sx), Math.max(6, cp.height * sy));
+
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 8px Inter, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(`${cp.shortLabel || '⛩️ Gate'}`, cp.x * sx + (cp.width * sx) / 2, cp.y * sy - 4);
+    }
+
+    // 5. Water Bodies
+    for (const lake of secCfg.waterBodies || []) {
+      ctx.fillStyle = '#2563eb';
       ctx.beginPath();
       ctx.ellipse(lake.x * sx, lake.y * sy, lake.radiusX * sx, lake.radiusY * sy, 0, 0, Math.PI * 2);
       ctx.fill();
 
-      ctx.strokeStyle = '#1b4f72';
-      ctx.lineWidth = 1;
+      ctx.strokeStyle = '#1d4ed8';
+      ctx.lineWidth = 1.5;
       ctx.stroke();
 
       ctx.fillStyle = '#ffffff';
-      ctx.font = 'bold 9px Inter, sans-serif';
+      ctx.font = 'bold 8px Inter, sans-serif';
       ctx.textAlign = 'center';
-      ctx.fillText(lake.name, lake.x * sx, lake.y * sy);
+      ctx.fillText(lake.name, lake.x * sx, lake.y * sy + 3);
     }
 
-    // 3. Roads Network
-    ctx.strokeStyle = '#34495e';
-    ctx.lineWidth = 3;
-    for (const [x1, y1, x2, y2] of game.worldMap.roads) {
-      ctx.beginPath();
-      ctx.moveTo(x1 * sx, y1 * sy);
-      ctx.lineTo(x2 * sx, y2 * sy);
-      ctx.stroke();
-    }
-
-    // 4. Buildings & Landmarks
-    for (const loc of game.locations) {
+    // 6. Buildings & Landmarks in this section
+    const secLocs = game.locations.filter(loc => loc.section === targetSectionId);
+    for (const loc of secLocs) {
       if (loc.isLake) continue;
 
       const isDisc = game.discoverySystem.isDiscovered(loc.id);
       const bx = loc.x * sx;
       const by = loc.y * sy;
-      const bw = Math.max(4, loc.width * sx);
-      const bh = Math.max(4, loc.height * sy);
+      const bw = Math.max(8, loc.width * sx);
+      const bh = Math.max(7, loc.height * sy);
 
       // Color coding
-      if (loc.category === 'academic') ctx.fillStyle = isDisc ? '#9c3d3d' : '#5d6d7e';
-      else if (loc.category === 'research') ctx.fillStyle = isDisc ? '#1f618d' : '#5d6d7e';
-      else if (loc.category === 'residential') ctx.fillStyle = isDisc ? '#b9770e' : '#5d6d7e';
-      else if (loc.category === 'sports') ctx.fillStyle = isDisc ? '#16a085' : '#5d6d7e';
-      else if (loc.category === 'nature-rocks') ctx.fillStyle = isDisc ? '#7f8c8d' : '#5d6d7e';
-      else ctx.fillStyle = isDisc ? '#f39c12' : '#7f8c8d';
+      if (loc.category === 'academic') ctx.fillStyle = isDisc ? '#1d4ed8' : '#64748b';
+      else if (loc.category === 'research') ctx.fillStyle = isDisc ? '#059669' : '#64748b';
+      else if (loc.category === 'residential') ctx.fillStyle = isDisc ? '#d97706' : '#64748b';
+      else if (loc.category === 'sports') ctx.fillStyle = isDisc ? '#0d9488' : '#64748b';
+      else if (loc.category === 'nature-rocks') ctx.fillStyle = isDisc ? '#4b5563' : '#64748b';
+      else if (loc.category === 'amenities' || loc.isNightCanteen) ctx.fillStyle = isDisc ? '#db2777' : '#64748b';
+      else ctx.fillStyle = isDisc ? '#ea580c' : '#64748b';
 
       ctx.fillRect(bx, by, bw, bh);
+      ctx.strokeStyle = '#1e293b';
+      ctx.lineWidth = 1;
+      ctx.strokeRect(bx, by, bw, bh);
 
-      // Number badge if discovered or major
-      if (loc.id <= 76 && (isDisc || loc.id % 5 === 0)) {
-        ctx.fillStyle = '#ffffff';
-        ctx.font = '7px Inter, sans-serif';
-        ctx.textAlign = 'center';
-        ctx.fillText(`${loc.id}`, bx + bw / 2, by + bh / 2 + 2);
-      }
+      // Number badge
+      ctx.fillStyle = '#dc2626';
+      ctx.beginPath();
+      ctx.arc(bx + bw / 2, by + bh / 2, 5, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 6px Inter, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(`${loc.id}`, bx + bw / 2, by + bh / 2);
     }
 
-    // 5. Player Marker
-    const px = game.player.x * sx;
-    const py = game.player.y * sy;
+    // 7. Player Marker (if player is currently in this section)
+    if (game.worldMap.currentSection === targetSectionId) {
+      const px = game.player.x * sx;
+      const py = game.player.y * sy;
 
-    // Pulsing radar ring
-    ctx.strokeStyle = 'rgba(231, 76, 60, 0.6)';
+      ctx.strokeStyle = 'rgba(239, 68, 68, 0.7)';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.arc(px, py, 10, 0, Math.PI * 2);
+      ctx.stroke();
+
+      ctx.fillStyle = '#ef4444';
+      ctx.beginPath();
+      ctx.arc(px, py, 5, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 9px Inter, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('YOU', px, py - 12);
+    }
+  }
+
+  drawFourSectionsOverview(ctx, w, h) {
+    const game = this.uiManager.game;
+
+    // Background
+    ctx.fillStyle = '#1e293b';
+    ctx.fillRect(0, 0, w, h);
+
+    // Title banner
+    ctx.fillStyle = '#f8fafc';
+    ctx.font = 'bold 15px Inter, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('UNIVERSITY OF HYDERABAD — REGIONAL HUBS & BUFFER ROUTES', w / 2, 32);
+
+    // Draw Section Quadrants & Connector
+    const pad = 35;
+    const boxW = (w - pad * 3) / 2;
+    const boxH = (h - pad * 3 - 35) / 2;
+
+    const sections = [
+      { id: 'west', name: '🟡 WEST CAMPUS', sub: 'Stadium & Gate 3 (7 POIs)', x: pad, y: pad + 15, w: boxW, h: boxH, color: 'rgba(234, 179, 8, 0.20)', border: '#eab308' },
+      { id: 'main', name: '🟢 NORTH / MAIN CAMPUS', sub: 'Admin, CS, Library & Lakes (26 POIs)', x: pad * 2 + boxW, y: pad + 15, w: boxW, h: boxH, color: 'rgba(16, 185, 129, 0.20)', border: '#10b981' },
+      { id: 'south', name: '🔵 SOUTH CAMPUS', sub: 'SLS Road & Hostels Quads (15 POIs)', x: pad, y: pad * 2 + 15 + boxH, w: boxW, h: boxH, color: 'rgba(37, 99, 235, 0.20)', border: '#2563eb' },
+      { id: 'east', name: '🟣 EAST CAMPUS', sub: 'Chemistry, Arts & Sukoon (23 POIs)', x: pad * 2 + boxW, y: pad * 2 + 15 + boxH, w: boxW, h: boxH, color: 'rgba(168, 85, 247, 0.20)', border: '#a855f7' }
+    ];
+
+    sections.forEach(s => {
+      ctx.fillStyle = s.color;
+      ctx.fillRect(s.x, s.y, s.w, s.h);
+      ctx.strokeStyle = s.border;
+      ctx.lineWidth = 2;
+      ctx.strokeRect(s.x, s.y, s.w, s.h);
+
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 12px Inter, sans-serif';
+      ctx.textAlign = 'left';
+      ctx.fillText(s.name, s.x + 12, s.y + 20);
+
+      ctx.fillStyle = '#94a3b8';
+      ctx.font = '9px Inter, sans-serif';
+      ctx.fillText(s.sub, s.x + 12, s.y + 34);
+
+      if (game.worldMap.currentSection === s.id) {
+        ctx.fillStyle = '#ef4444';
+        ctx.fillRect(s.x + s.w - 105, s.y + 6, 95, 18);
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 8px Inter, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('📍 YOU ARE HERE', s.x + s.w - 58, s.y + 18);
+      }
+    });
+
+    // 1. Check Dam Buffer Badge (Between West & South)
+    const cdX = pad + boxW * 0.15;
+    const cdY = pad + 15 + boxH - 22;
+    const cdW = boxW * 0.7;
+    const cdH = 44;
+
+    ctx.fillStyle = game.worldMap.currentSection === 'checkdam_buffer' ? 'rgba(2, 132, 199, 0.9)' : 'rgba(15, 23, 42, 0.92)';
+    ctx.fillRect(cdX, cdY, cdW, cdH);
+    ctx.strokeStyle = '#0284c7';
     ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.arc(px, py, 9, 0, Math.PI * 2);
-    ctx.stroke();
-
-    ctx.fillStyle = '#e74c3c';
-    ctx.beginPath();
-    ctx.arc(px, py, 4.5, 0, Math.PI * 2);
-    ctx.fill();
+    ctx.strokeRect(cdX, cdY, cdW, cdH);
 
     ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 10px Inter, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('🌊 CHECK DAM BUFFER (4 POIs)', cdX + cdW / 2, cdY + 18);
+
+    ctx.fillStyle = '#7dd3fc';
+    ctx.font = '8px Inter, sans-serif';
+    ctx.fillText('Check Dam · Globe Rock · Temple (West ↔ South)', cdX + cdW / 2, cdY + 32);
+
+    // 2. Amphi Valley Buffer Badge (Between Main & South)
+    const amphiX = pad * 2 + boxW * 0.05;
+    const amphiY = pad + 15 + boxH - 22;
+    const amphiW = boxW * 0.7;
+    const amphiH = 44;
+
+    ctx.fillStyle = game.worldMap.currentSection === 'amphi_valley' ? 'rgba(5, 150, 105, 0.9)' : 'rgba(15, 23, 42, 0.92)';
+    ctx.fillRect(amphiX, amphiY, amphiW, amphiH);
+    ctx.strokeStyle = '#10b981';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(amphiX, amphiY, amphiW, amphiH);
+
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 10px Inter, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('🌲 AMPHI VALLEY BUFFER (3 POIs)', amphiX + amphiW / 2, amphiY + 18);
+
+    ctx.fillStyle = '#a7f3d0';
+    ctx.font = '8px Inter, sans-serif';
+    ctx.fillText('Amphitheatre UoH · Amphi Lake (Main ↔ South)', amphiX + amphiW / 2, amphiY + 32);
+
+    // Draw Main Campus Road Spine (Connecting highway through buffer routes)
+    ctx.strokeStyle = '#dc2626';
+    ctx.lineWidth = 5;
+    ctx.lineCap = 'round';
+    ctx.beginPath();
+    // West to Main
+    ctx.moveTo(pad + boxW * 0.7, pad + 15 + boxH * 0.4);
+    ctx.lineTo(pad * 2 + boxW * 0.3, pad + 15 + boxH * 0.4);
+    // West to Check Dam to South
+    ctx.moveTo(pad + boxW * 0.5, pad + 15 + boxH * 0.7);
+    ctx.lineTo(cdX + cdW / 2, cdY + cdH / 2);
+    ctx.lineTo(pad + boxW * 0.3, pad * 2 + 15 + boxH + 30);
+    // Main to Amphi Valley to South
+    ctx.moveTo(pad * 2 + boxW * 0.2, pad + 15 + boxH * 0.7);
+    ctx.lineTo(amphiX + amphiW / 2, amphiY + amphiH / 2);
+    ctx.lineTo(pad + boxW * 0.85, pad * 2 + 15 + boxH + 30);
+    // Main to East
+    ctx.moveTo(pad * 2 + boxW * 0.7, pad + 15 + boxH * 0.6);
+    ctx.lineTo(pad * 2 + boxW * 0.3, pad * 2 + 15 + boxH * 0.3);
+    ctx.stroke();
+
+    ctx.fillStyle = '#fef08a';
     ctx.font = 'bold 9px Inter, sans-serif';
     ctx.textAlign = 'center';
-    ctx.shadowColor = '#000000';
-    ctx.shadowBlur = 3;
-    ctx.fillText('YOU', px, py - 12);
-    ctx.shadowBlur = 0;
+    ctx.fillText('🔴 Main Campus Connecting Highway & Scenic Checkpoint Routes', w / 2, h - 8);
   }
 
   bindEvents(modal) {
     document.getElementById('btn-close-full-map')?.addEventListener('click', () => this.toggle());
+
+    modal.querySelectorAll('.map-sec-tab').forEach(tab => {
+      tab.addEventListener('click', (e) => {
+        this.selectedSectionTab = e.currentTarget.dataset.sectab;
+        modal.querySelectorAll('.map-sec-tab').forEach(t => t.classList.remove('active'));
+        e.currentTarget.classList.add('active');
+        this.drawFullMap();
+      });
+    });
 
     modal.querySelectorAll('.btn-travel').forEach(btn => {
       btn.addEventListener('click', (e) => {

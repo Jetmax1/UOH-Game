@@ -1,13 +1,13 @@
 {
   "points": {
-    "majorNaturalLandmark": 120,
-    "rareHiddenLandmark": 150,
-    "importantUniversityLocation": 40,
-    "gateDiscovery": 50,
+    "majorNaturalLandmark": 100,
+    "rareHiddenLandmark": 120,
+    "importantUniversityLocation": 50,
+    "gateDiscovery": 40,
     "normalQuizPassed": 50,
     "perfectQuizBonus": 50,
-    "sportsActivity": 50,
-    "nightCanteenActivity": 40,
+    "sportsActivity": 40,
+    "nightCanteenActivity": 35,
     "nightPartyActivity": 60,
     "hostelSleepStamina": 100
   },
@@ -15,10 +15,10 @@
     "normalSpeed": 220,
     "sprintSpeed": 350,
     "startLocation": {
-      "x": 890,
-      "y": 260
+      "x": 1090,
+      "y": 700
     },
-    "defaultSpawnZone": "Gate I (North Entrance)"
+    "defaultSpawnZone": "Admin Quad (North Campus)"
   },
   "time": {
     "minutesPerRealSecond": 2,
@@ -30,8 +30,8 @@
     "wakeUpMinute": 0
   },
   "world": {
-    "width": 2300,
-    "height": 2200,
+    "width": 1800,
+    "height": 1450,
     "tileSize": 32
   },
   "audio": {

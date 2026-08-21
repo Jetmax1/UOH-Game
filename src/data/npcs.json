@@ -1,106 +1,170 @@
 [
   {
-    "id": "guard_gate1",
+    "id": "guard_admin",
     "name": "Guard Jagdish",
-    "role": "Gate I Security",
-    "x": 890,
-    "y": 240,
+    "role": "Admin Quad Security",
+    "section": "main",
+    "x": 745,
+    "y": 280,
     "avatar": "👮",
     "dialogue": [
-      "Namaste, new student! Welcome to the University of Hyderabad (HCU).",
-      "If you're looking for your admissions desk, head straight south down this road to the Administration Building (Building 1) or Pariksha Bhavan (43).",
-      "Don't forget to explore our beautiful campus! There are 5 lakes and magnificent ancient rocks like Mushroom Rock to discover."
+      "Namaste, new student! Welcome to the Central / Main Campus of University of Hyderabad.",
+      "Head north into the Administration Building (Pin 36) or Admission Office (Pin 37) for document verification.",
+      "Checkpoints connect you to West Campus (left road), East Campus (right avenue), and South Campus (south avenue)!"
     ]
   },
   {
     "id": "senior_ananya",
     "name": "Senior Scholar Ananya",
     "role": "PhD Scholar & Campus Guide",
-    "x": 1030,
-    "y": 790,
+    "section": "main",
+    "x": 620,
+    "y": 350,
     "avatar": "🎓",
     "dialogue": [
       "Hey there, fresher! Congratulations on getting admitted to UoH!",
       "Tip from a senior: Always keep your Campus Discovery Book handy (press 'J'). Every time you find a building, lake, or rock, you earn exploration points!",
-      "If you need a break between lectures, check out Zakir Complex (Food Court 27) for some delicious chai!"
+      "You can cross road checkpoints to explore the other 3 campus sections anytime!"
     ]
   },
   {
     "id": "prof_sharma",
     "name": "Prof. Sharma",
-    "role": "Faculty, Computer Science",
-    "x": 1150,
-    "y": 760,
+    "role": "Faculty, Computer Science (SCIS)",
+    "section": "main",
+    "x": 940,
+    "y": 600,
     "avatar": "👨‍🏫",
     "dialogue": [
-      "Welcome to the School of Computer Science & Information Sciences!",
-      "We build world-class AI models and distributed networks here.",
-      "Step inside our interactive lab classroom anytime to test your skills in the 5-question pop quiz!"
-    ]
-  },
-  {
-    "id": "prof_rao",
-    "name": "Prof. Rao",
-    "role": "Faculty, Management Studies",
-    "x": 1160,
-    "y": 900,
-    "avatar": "👩‍🏫",
-    "dialogue": [
-      "Greetings! This is the School of Management Studies (SMS).",
-      "We prepare future leaders in strategy, marketing, healthcare, and analytics.",
-      "Feel free to enter the classroom and attempt our Business Strategy quiz!"
+      "Welcome to the School of Computer and Information Sciences (SCIS) - Pin 45!",
+      "We build world-class AI models, distributed networks, and quantum algorithms here.",
+      "Step inside our interactive lab classroom anytime (press E) to test your skills in the 5-question CS pop quiz!"
     ]
   },
   {
     "id": "librarian_radhika",
     "name": "Librarian Radhika",
     "role": "Chief Librarian, IGM Library",
-    "x": 1130,
-    "y": 990,
+    "section": "main",
+    "x": 800,
+    "y": 970,
     "avatar": "📚",
     "dialogue": [
-      "Welcome to the Indira Gandhi Memorial Library.",
-      "We house over 400,000 reference books, journals, and digital research terminals.",
+      "Welcome to the Indira Gandhi Memorial Library (Pin 51).",
+      "We house over 400,000 reference volumes, scholarly journals, and digital research databases.",
       "Step inside to enjoy peaceful study reading or take our campus heritage quiz!"
     ]
   },
   {
-    "id": "coach_vikram",
-    "name": "Coach Vikram",
-    "role": "Physical Education Director",
-    "x": 580,
-    "y": 720,
-    "avatar": "🏃",
+    "id": "prof_manjula",
+    "name": "Prof. Manjula Sridharan",
+    "role": "Faculty, School of Life Sciences",
+    "section": "south",
+    "x": 320,
+    "y": 480,
+    "avatar": "👩‍🔬",
     "dialogue": [
-      "Great to see you at the athletics pavilion!",
-      "A healthy body fosters a sharp mind. We have running tracks, football pitches, tennis courts, and a gym.",
-      "Take a lap around the stadium to build up your stamina!"
-    ]
-  },
-  {
-    "id": "canteen_raju",
-    "name": "Raju Bhai",
-    "role": "Night Canteen Master",
-    "x": 340,
-    "y": 1800,
-    "avatar": "☕",
-    "dialogue": [
-      "Bhaiya! Welcome to the famous South Night Canteen!",
-      "When the clock strikes 10:00 PM, we serve the crispiest samosas, hot Irani chai, and spicy midnight Maggi.",
-      "Come hang out with scholars and recharge after a long day of classes!"
+      "Greetings! Welcome to South Campus, home to the School of Life Sciences (Pin 3) and ASPIRE BioNEST (Pin 2).",
+      "Our bio-incubators and genetic research labs are recognized globally for biotechnology innovations.",
+      "Follow SLS Road east to reach the Centre for Integrated Studies (Pin 5) and the South Hostels quads!"
     ]
   },
   {
     "id": "warden_murali",
     "name": "Warden Murali",
     "role": "Hostel Warden, MHK",
-    "x": 480,
-    "y": 1940,
+    "section": "south",
+    "x": 1260,
+    "y": 450,
     "avatar": "🔑",
     "dialogue": [
-      "Welcome to MHK Hostel (Hostels L & M). Your room is ready on the ground floor!",
-      "Whenever you are tired after night activities, come inside your room and hop into bed.",
-      "Sleeping advances time to the next morning and saves your game progress automatically."
+      "Welcome to MHK Hostel (Pin 13) on South Campus!",
+      "Your student dorm room is ready inside. Press E to enter your room whenever you need to sleep and restore your stamina.",
+      "The South Shopping Complex (Pin 9) and Volleyball Court (Pin 16) are located at the west end of SLS Road."
+    ]
+  },
+  {
+    "id": "guard_gate3",
+    "name": "Guard Balram",
+    "role": "Gate 3 Security",
+    "section": "west",
+    "x": 680,
+    "y": 485,
+    "avatar": "👮",
+    "dialogue": [
+      "Welcome to West Campus!",
+      "This section houses the Indoor Stadium & Gymnasium (Pin 30), Central Workshop (Pin 73), IDC Building (Pin 76), and India Post (Pin 74).",
+      "Take the East Checkpoint gate to travel to Main Campus, or the South Trail to reach the scenic Check Dam!"
+    ]
+  },
+  {
+    "id": "coach_vikram",
+    "name": "Coach Vikram",
+    "role": "Physical Education Director",
+    "section": "west",
+    "x": 550,
+    "y": 310,
+    "avatar": "🏃",
+    "dialogue": [
+      "Great to see you at the Indoor Stadium & Gymnasium (Pin 30)!",
+      "A healthy body fosters a sharp mind. We have badminton courts, fitness gyms, and table tennis arenas.",
+      "Run laps across the stadium track to build up your stamina!"
+    ]
+  },
+  {
+    "id": "canteen_raju",
+    "name": "Raju Bhai",
+    "role": "Sukoon Canteen Master",
+    "section": "east",
+    "x": 280,
+    "y": 530,
+    "avatar": "☕",
+    "dialogue": [
+      "Bhaiya! Welcome to Sukoon Canteen (Pin 59) on East Campus!",
+      "When evening sets in and night falls, we serve the crispiest samosas, hot Irani chai, and spicy Maggi.",
+      "Scholars from Chemistry, Mathematics, and Arts & Communication gather here every evening!"
+    ]
+  },
+  {
+    "id": "guard_smallgate",
+    "name": "Guard Shankar",
+    "role": "East Small Gate Security",
+    "section": "east",
+    "x": 1420,
+    "y": 345,
+    "avatar": "👮",
+    "dialogue": [
+      "Welcome to the East Campus entrance (Pin 41)!",
+      "Head west along this avenue to reach Chemistry, CR Rao Institute of Mathematics (Pin 62), and the Arts studios.",
+      "Karthik Xerox and Sim cards (Pin 42) is right here for all your printouts."
+    ]
+  },
+  {
+    "id": "warden_amphi",
+    "name": "Warden Sreenivas",
+    "role": "Chief Warden's Office & Nature Pavilion",
+    "section": "amphi_valley",
+    "x": 960,
+    "y": 680,
+    "avatar": "🏛️",
+    "dialogue": [
+      "Welcome to Amphi Valley! This scenic corridor connects North/Main Campus and South Campus.",
+      "Here you'll find the iconic stepped Amphitheatre (Pin 21), Amphi Lake (Pin 20), and Secret Lake (Pin 22).",
+      "Follow the north-east road to reach Administration & Library, or the south-west road to reach the School of Life Sciences!"
+    ]
+  },
+  {
+    "id": "ranger_arjun",
+    "name": "Ranger Arjun",
+    "role": "Check Dam Wetland Conservator",
+    "section": "checkdam_buffer",
+    "x": 660,
+    "y": 360,
+    "avatar": "🌲",
+    "dialogue": [
+      "Greetings traveler! You've arrived at the Check Dam Wetland Basin (Pin 1).",
+      "This natural buffer zone catches rainfall cascading down the granite ridges, nurturing biodiversity across campus.",
+      "Explore Globbo Rock (Pin 17) and Chinna Gudi Temple (Pin 18) perched on the rocky plateau!"
     ]
   }
 ]

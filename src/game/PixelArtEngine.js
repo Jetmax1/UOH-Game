@@ -492,6 +492,170 @@ export class PixelArtEngine {
     ctx.restore();
   }
 
+  // Championship Tennis Court
+  drawTennisCourt(ctx, sx, sy, width = 60, height = 45) {
+    ctx.save();
+    // Blue hardcourt surface
+    ctx.fillStyle = '#2563eb';
+    ctx.fillRect(sx, sy, width, height);
+
+    // Green outer surround
+    ctx.strokeStyle = '#15803d';
+    ctx.lineWidth = 3;
+    ctx.strokeRect(sx, sy, width, height);
+
+    // White court boundary lines
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 1.5;
+    ctx.strokeRect(sx + 4, sy + 4, width - 8, height - 8);
+
+    // Center Net
+    const midX = sx + width / 2;
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(midX, sy + 2);
+    ctx.lineTo(midX, sy + height - 2);
+    ctx.stroke();
+
+    // Center Service line
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(sx + 4, sy + height / 2);
+    ctx.lineTo(sx + width - 4, sy + height / 2);
+    ctx.stroke();
+
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 7px monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText('TENNIS', midX, sy + 10);
+
+    ctx.restore();
+  }
+
+  // Ancient Deccan Monolith Rock Formations
+  drawRockMonolith(ctx, sx, sy, name, type = 'granite') {
+    ctx.save();
+    // Drop shadow
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.35)';
+    ctx.beginPath();
+    ctx.ellipse(sx + 30, sy + 38, 28, 9, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    if (type === 'masoom') {
+      // Mushroom-shaped iconic Masoom's Rock
+      ctx.fillStyle = '#484858';
+      ctx.fillRect(sx + 20, sy + 18, 20, 22);
+      ctx.fillStyle = '#787888';
+      ctx.fillRect(sx + 22, sy + 18, 8, 22);
+
+      // Balancing top cap
+      ctx.fillStyle = '#585868';
+      ctx.beginPath();
+      ctx.ellipse(sx + 30, sy + 14, 28, 14, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = '#9898a8';
+      ctx.beginPath();
+      ctx.ellipse(sx + 28, sy + 11, 24, 10, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = '#d82828';
+      ctx.fillRect(sx + 10, sy + 38, 40, 10);
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 7px monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText("MASOOM'S ROCK", sx + 30, sy + 46);
+    } else if (type === 'globbo') {
+      // Spherical Deccan granite sphere
+      ctx.fillStyle = '#484858';
+      ctx.beginPath();
+      ctx.arc(sx + 30, sy + 22, 20, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = '#787888';
+      ctx.beginPath();
+      ctx.arc(sx + 28, sy + 20, 18, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = '#b8b8c8';
+      ctx.beginPath();
+      ctx.arc(sx + 24, sy + 16, 8, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 7px monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText('GLOBBO ROCK', sx + 30, sy + 46);
+    } else if (type === 'cherry') {
+      // Pinkish/cherry granite
+      ctx.fillStyle = '#6b3848';
+      ctx.beginPath();
+      ctx.moveTo(sx + 8, sy + 36);
+      ctx.lineTo(sx + 28, sy + 6);
+      ctx.lineTo(sx + 52, sy + 36);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.fillStyle = '#b05870';
+      ctx.beginPath();
+      ctx.moveTo(sx + 14, sy + 34);
+      ctx.lineTo(sx + 28, sy + 8);
+      ctx.lineTo(sx + 40, sy + 34);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 7px monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText('CHERRY ROCK', sx + 30, sy + 46);
+    } else if (type === 'aquarium') {
+      // Monolith with hollow basin pool
+      ctx.fillStyle = '#484858';
+      ctx.beginPath();
+      ctx.ellipse(sx + 30, sy + 22, 26, 16, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = '#787888';
+      ctx.beginPath();
+      ctx.ellipse(sx + 30, sy + 20, 22, 12, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Rainwater basin pool
+      ctx.fillStyle = '#38bdf8';
+      ctx.beginPath();
+      ctx.ellipse(sx + 30, sy + 20, 14, 7, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 7px monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText('AQUARIUM ROCK', sx + 30, sy + 46);
+    } else {
+      ctx.fillStyle = '#585868';
+      ctx.beginPath();
+      ctx.moveTo(sx + 10, sy + 36);
+      ctx.lineTo(sx + 30, sy + 8);
+      ctx.lineTo(sx + 50, sy + 36);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.fillStyle = '#888898';
+      ctx.beginPath();
+      ctx.moveTo(sx + 15, sy + 34);
+      ctx.lineTo(sx + 30, sy + 10);
+      ctx.lineTo(sx + 36, sy + 34);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 7px monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText(name || 'Rock', sx + 30, sy + 46);
+    }
+    ctx.restore();
+  }
+
   // =========================================================================
   // 3. WILDLIFE PIXEL SPRITES
   // =========================================================================

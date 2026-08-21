@@ -87,24 +87,34 @@ export class Player {
       const dx = moveVec.x * this.currentSpeed * delta;
       const dy = moveVec.y * this.currentSpeed * delta;
 
-      const newX = this.x + dx;
-      if (!collisionChecker({
-        x: newX + this.collisionBox.offsetX,
-        y: this.y + this.collisionBox.offsetY,
-        width: this.collisionBox.width,
-        height: this.collisionBox.height
-      })) {
-        this.x = newX;
-      }
+      const currentBounds = this.getBounds();
+      const isCurrentlyStuck = collisionChecker(currentBounds);
 
-      const newY = this.y + dy;
-      if (!collisionChecker({
-        x: this.x + this.collisionBox.offsetX,
-        y: newY + this.collisionBox.offsetY,
-        width: this.collisionBox.width,
-        height: this.collisionBox.height
-      })) {
-        this.y = newY;
+      // If player is currently stuck inside a collider (e.g. from an old save or spawn),
+      // allow moving in any direction that gets closer to freedom or nudge out
+      if (isCurrentlyStuck) {
+        this.x += dx;
+        this.y += dy;
+      } else {
+        const newX = this.x + dx;
+        if (!collisionChecker({
+          x: newX + this.collisionBox.offsetX,
+          y: this.y + this.collisionBox.offsetY,
+          width: this.collisionBox.width,
+          height: this.collisionBox.height
+        })) {
+          this.x = newX;
+        }
+
+        const newY = this.y + dy;
+        if (!collisionChecker({
+          x: this.x + this.collisionBox.offsetX,
+          y: newY + this.collisionBox.offsetY,
+          width: this.collisionBox.width,
+          height: this.collisionBox.height
+        })) {
+          this.y = newY;
+        }
       }
 
       // Footstep dust puff

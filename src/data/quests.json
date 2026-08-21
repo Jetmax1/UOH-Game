@@ -3,64 +3,70 @@
     "id": "freshman_induction",
     "title": "Freshman Induction Trail",
     "category": "main",
-    "description": "Begin your journey as a newly admitted UoH student! Visit the Administration Building, check Pariksha Bhavan, and settle into your room at MHK Hostel.",
+    "description": "Begin your journey as a newly admitted UoH student! Visit the Administration Building, check the Admission Office, and settle into your dorm room at MHK Hostel.",
     "rewardPoints": 250,
     "objectives": [
       {
         "id": "visit_admin",
-        "description": "Visit the Administration Building (Building 1)",
-        "targetLocationId": 1,
+        "description": "Visit the Administration Building (Building 36)",
+        "targetLocationId": 36,
         "completed": false
       },
       {
-        "id": "visit_pariksha",
-        "description": "Locate Pariksha Bhavan (Building 43)",
-        "targetLocationId": 43,
+        "id": "visit_admission",
+        "description": "Locate the Admission Office (Building 37)",
+        "targetLocationId": 37,
         "completed": false
       },
       {
         "id": "checkin_mhk",
-        "description": "Check in to your dorm room at MHK Hostel (Building 67)",
-        "targetLocationId": 67,
+        "description": "Check in to your dorm room at MHK Hostel (Building 13)",
+        "targetLocationId": 13,
         "completed": false
       }
     ]
   },
   {
     "id": "lakes_explorer",
-    "title": "The Five Lakes of UoH",
+    "title": "The Lakes & Dams of UoH",
     "category": "nature",
-    "description": "Discover all 5 pristine lakes and water bodies across the campus sanctuary.",
-    "rewardPoints": 400,
+    "description": "Discover all pristine lakes, reservoirs, and check dams across the campus sanctuary.",
+    "rewardPoints": 450,
     "objectives": [
       {
-        "id": "disc_gundla",
-        "description": "Discover Gundla Kunta Lake",
-        "targetLocationId": 101,
+        "id": "disc_check_dam",
+        "description": "Discover Check Dam UoH (Pin 1)",
+        "targetLocationId": 1,
         "completed": false
       },
       {
-        "id": "disc_peacock",
-        "description": "Discover Peacock Lake",
-        "targetLocationId": 102,
+        "id": "disc_amphi_lake",
+        "description": "Discover Amphi Lake (Pin 20)",
+        "targetLocationId": 20,
         "completed": false
       },
       {
-        "id": "disc_chilkala",
-        "description": "Discover Chilkala Kunta Lake",
-        "targetLocationId": 103,
+        "id": "disc_secret_lake",
+        "description": "Discover Secret Lake (Pin 22)",
+        "targetLocationId": 22,
         "completed": false
       },
       {
-        "id": "disc_nallagandla",
-        "description": "Discover Nallagandla Lake",
-        "targetLocationId": 104,
+        "id": "disc_buffalo_lake",
+        "description": "Discover Buffalo Lake (Pin 26)",
+        "targetLocationId": 26,
         "completed": false
       },
       {
-        "id": "disc_kamalavanam",
-        "description": "Discover Kamalavanam Kunta",
-        "targetLocationId": 105,
+        "id": "disc_peacock_lake",
+        "description": "Discover Peacock Lake (Pin 28)",
+        "targetLocationId": 28,
+        "completed": false
+      },
+      {
+        "id": "disc_auroya_dam",
+        "description": "Discover Auroya Dam (Pin 29)",
+        "targetLocationId": 29,
         "completed": false
       }
     ]
@@ -69,31 +75,31 @@
     "id": "rock_explorer",
     "title": "Ancient Deccan Rock Explorer",
     "category": "nature",
-    "description": "Uncover the billion-year-old natural monolithic wonders and prehistoric heritage of the campus.",
+    "description": "Uncover the billion-year-old natural monolithic wonders and heritage rock formations of the campus.",
     "rewardPoints": 500,
     "objectives": [
       {
-        "id": "disc_mushroom_rock",
-        "description": "Find the protected natural wonder Mushroom Rock (Building 76)",
-        "targetLocationId": 76,
+        "id": "disc_masoom_rock",
+        "description": "Find the protected natural wonder The Masoom's Rock (Pin 27)",
+        "targetLocationId": 27,
         "completed": false
       },
       {
-        "id": "disc_virgin_rock",
-        "description": "Climb up to Virgin Rock formation",
-        "targetLocationId": 106,
+        "id": "disc_globbo_rock",
+        "description": "Climb up to Globbo Rock (Pin 17)",
+        "targetLocationId": 17,
         "completed": false
       },
       {
-        "id": "disc_high_rock",
-        "description": "Reach the summit of High Rock peak",
-        "targetLocationId": 107,
+        "id": "disc_cherry_rock",
+        "description": "Reach the summit of Cherry Rock (Pin 24)",
+        "targetLocationId": 24,
         "completed": false
       },
       {
-        "id": "disc_megalithic",
-        "description": "Visit the prehistoric Megalithic Site (Building 42)",
-        "targetLocationId": 42,
+        "id": "disc_aquarium_rock",
+        "description": "Explore the cavernous Aquarium Rock (Pin 25)",
+        "targetLocationId": 25,
         "completed": false
       }
     ]
@@ -102,37 +108,37 @@
     "id": "academic_pioneer",
     "title": "Academic Pioneer",
     "category": "academic",
-    "description": "Tour the prestigious schools of science, technology, management, and literature.",
+    "description": "Tour the prestigious schools of science, technology, arts, and literature across campus.",
     "rewardPoints": 350,
     "objectives": [
       {
         "id": "visit_library",
-        "description": "Visit Indira Gandhi Memorial Library (Building 12)",
-        "targetLocationId": 12,
+        "description": "Visit Indira Gandhi Memorial Library (Building 51)",
+        "targetLocationId": 51,
         "completed": false
       },
       {
         "id": "visit_cs",
-        "description": "Visit School of Computer Science & Info Sciences (Building 10)",
-        "targetLocationId": 10,
-        "completed": false
-      },
-      {
-        "id": "visit_mba",
-        "description": "Visit School of Management Studies (Building 15)",
-        "targetLocationId": 15,
-        "completed": false
-      },
-      {
-        "id": "visit_chemistry",
-        "description": "Visit School of Chemistry (Building 31)",
-        "targetLocationId": 31,
+        "description": "Visit School of Computer & Info Sciences (Building 45)",
+        "targetLocationId": 45,
         "completed": false
       },
       {
         "id": "visit_sls",
-        "description": "Visit School of Life Sciences Circular Complex (Building 73)",
-        "targetLocationId": 73,
+        "description": "Visit School of Life Sciences Complex (Building 3)",
+        "targetLocationId": 3,
+        "completed": false
+      },
+      {
+        "id": "visit_cis",
+        "description": "Visit Centre for Integrated Studies (Building 5)",
+        "targetLocationId": 5,
+        "completed": false
+      },
+      {
+        "id": "visit_arts",
+        "description": "Visit SN School of Arts & Communication (Building 56)",
+        "targetLocationId": 56,
         "completed": false
       }
     ]
@@ -141,7 +147,7 @@
     "id": "scholars_trial",
     "title": "The Scholar's Classroom Trial",
     "category": "academic",
-    "description": "Step inside a classroom in the Computer Science or Management department and pass the 5-question lecture quiz!",
+    "description": "Step inside a classroom in the Computer Science or Life Sciences department and pass the 5-question lecture quiz!",
     "rewardPoints": 300,
     "objectives": [
       {
@@ -156,25 +162,25 @@
     "id": "sports_champion",
     "title": "Campus Sports Tour",
     "category": "sports",
-    "description": "Explore the athletic facilities and grounds across the campus.",
-    "rewardPoints": 200,
+    "description": "Explore the athletic facilities and sporting courts across the campus.",
+    "rewardPoints": 250,
     "objectives": [
       {
         "id": "visit_stadium",
-        "description": "Visit the UoH Main Athletics Stadium (Building 47)",
-        "targetLocationId": 47,
+        "description": "Visit the Indoor Stadium and Gym (Building 30)",
+        "targetLocationId": 30,
         "completed": false
       },
       {
-        "id": "visit_gym",
-        "description": "Check out the University Gymnasium (Building 48)",
-        "targetLocationId": 48,
+        "id": "visit_volleyball",
+        "description": "Check out the South Volleyball Court (Building 16)",
+        "targetLocationId": 16,
         "completed": false
       },
       {
-        "id": "visit_football",
-        "description": "Walk across the Football Ground (Building 37)",
-        "targetLocationId": 37,
+        "id": "visit_tennis",
+        "description": "Walk to the University Tennis Court (Building 63)",
+        "targetLocationId": 63,
         "completed": false
       }
     ]
@@ -183,18 +189,18 @@
     "id": "night_owl_canteen",
     "title": "Night Owl's Chai & Beats",
     "category": "night",
-    "description": "Experience UoH nocturnal life after 10:00 PM: order hot chai at the Night Canteen and check out the South Complex social scene.",
+    "description": "Experience UoH nocturnal life after 10:00 PM: order hot chai at Sukoon or South Canteen and check out the Amphitheatre scene.",
     "rewardPoints": 300,
     "objectives": [
       {
         "id": "visit_night_canteen",
-        "description": "Visit South Complex Night Canteen after 10:00 PM for late-night snacks",
+        "description": "Visit Sukoon Canteen (59) or South Complex (9) after 10:00 PM for late-night snacks",
         "type": "night_canteen_visited",
         "completed": false
       },
       {
         "id": "enjoy_south_party",
-        "description": "Participate in the South Complex night dance/music jam",
+        "description": "Participate in the Amphitheatre / South Complex night jam",
         "type": "south_party_attended",
         "completed": false
       }

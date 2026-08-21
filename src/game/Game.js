@@ -17,7 +17,8 @@ import gameConfigData from '../data/gameConfig.json';
 
 /**
  * Master Game Controller coordinating rendering, world physics, UI modals, and events.
- * Features Pokémon FireRed GBA camera scaling (2.6x–3.2x zoom) and zone transitions.
+ * Features Pokémon FireRed GBA camera scaling (2.6x–3.2x zoom), 4 spacious sections,
+ * and checkpoint gate transitions.
  */
 export class Game {
   constructor(canvas, uiManager) {
@@ -53,13 +54,13 @@ export class Game {
       this.autoSave();
     });
 
-    // Player Entity
-    const startX = this.config.player.startLocation.x;
-    const startY = this.config.player.startLocation.y;
-    this.player = new Player(startX, startY, this.config.player);
-
-    // World Map
+    // World Map (4 Sections Engine)
     this.worldMap = new WorldMap(this.locations, this.npcs);
+
+    // Player Entity (Default Spawn at Admin Quad in Main Campus)
+    const startX = 740;
+    const startY = 320;
+    this.player = new Player(startX, startY, this.config.player);
 
     // GBA Camera Scale Factor (Authentic Handheld Zoom)
     this.zoom = 2.6;
@@ -74,6 +75,8 @@ export class Game {
     this.currentInterior = null;
     this.isPaused = false;
     this.isSleeping = false;
+    this.isTransitioning = false;
+    this.transitionFade = 0;
     this.lastSectorId = null;
     this.lastTime = performance.now();
 
@@ -89,6 +92,9 @@ export class Game {
     if (saved) {
       this.discoverySystem.loadState(saved.discovery);
       this.questSystem.loadState(saved.quests);
+      if (saved.currentSection) {
+        this.worldMap.setSection(saved.currentSection);
+      }
       if (saved.player) {
         this.player.x = saved.player.x;
         this.player.y = saved.player.y;
@@ -102,8 +108,11 @@ export class Game {
         this.timeSystem.day = saved.time.day;
       }
     } else {
-      this.discoverySystem.discoverLocation(108); // Gate I
+      this.discoverySystem.discoverLocation(36); // Admin Building (#36)
     }
+
+    // Safe spawn check: If player spawned inside any collider (e.g. from old saved coordinates), rescue to safe road
+    this.verifyAndFixSafeSpawn();
 
     // Connect UI
     this.uiManager.setGame(this);
@@ -153,8 +162,10 @@ export class Game {
       }
     };
 
-    // 4. Player Physics & Movement
-    this.player.update(delta, this.input, collisionChecker, this.particles);
+    // 4. Player Physics & Movement (Paused during transition)
+    if (!this.isTransitioning) {
+      this.player.update(delta, this.input, collisionChecker, this.particles);
+    }
 
     // 5. Update Wildlife
     if (!this.currentInterior) {
@@ -173,12 +184,11 @@ export class Game {
       this.camera.y = Math.max(0, Math.min(this.camera.y, this.worldMap.height - this.camera.height));
     }
 
-    // 7. Check Sector Boundary Transitions
-    if (!this.currentInterior) {
-      const sec = this.worldMap.getCurrentSector(this.player.x, this.player.y);
-      if (sec && sec.id !== this.lastSectorId) {
-        this.lastSectorId = sec.id;
-        this.uiManager.showZoneBanner(sec);
+    // 7. Check Checkpoint Gate Collisions (Section Transitions)
+    if (!this.currentInterior && !this.isTransitioning) {
+      const cp = this.worldMap.checkCheckpointCollision(this.player.getBounds());
+      if (cp) {
+        this.transitionToSection(cp.targetSection, cp.targetX, cp.targetY, cp.targetDirection, cp.name);
       }
     }
 
@@ -199,13 +209,60 @@ export class Game {
     if (this.input.consumeBook()) this.uiManager.toggleDiscoveryBook();
     if (this.input.consumeQuest()) this.uiManager.toggleQuestsModal();
     if (this.input.consumePause()) this.uiManager.toggleSettings();
+    if (this.input.consumeUnstuck()) this.respawnOnSafeRoad();
 
     // 12. Update HUD
     this.uiManager.updateHUD();
   }
 
+  transitionToSection(targetSection, targetX, targetY, targetDirection = 'down', checkpointName = '') {
+    if (this.isTransitioning) return;
+    this.isTransitioning = true;
+    soundManager.playDoorTransition();
+
+    const fadeDuration = 250; // ms
+    const startTime = performance.now();
+
+    const performSwitch = () => {
+      this.worldMap.setSection(targetSection);
+      this.player.x = targetX;
+      this.player.y = targetY;
+      this.player.direction = targetDirection;
+      this.camera.x = Math.max(0, Math.min(targetX - this.camera.width / 2, this.worldMap.width - this.camera.width));
+      this.camera.y = Math.max(0, Math.min(targetY - this.camera.height / 2, this.worldMap.height - this.camera.height));
+
+      this.uiManager.showZoneBanner(this.worldMap.getCurrentSector(this.player.x, this.player.y));
+      this.autoSave();
+
+      // Fade in
+      const fadeInStart = performance.now();
+      const fadeInStep = () => {
+        const elapsed = performance.now() - fadeInStart;
+        this.transitionFade = Math.max(0, 1 - (elapsed / fadeDuration));
+        if (this.transitionFade > 0) {
+          requestAnimationFrame(fadeInStep);
+        } else {
+          this.isTransitioning = false;
+        }
+      };
+      requestAnimationFrame(fadeInStep);
+    };
+
+    // Fade out
+    const fadeOutStep = () => {
+      const elapsed = performance.now() - startTime;
+      this.transitionFade = Math.min(1, elapsed / fadeDuration);
+      if (this.transitionFade < 1) {
+        requestAnimationFrame(fadeOutStep);
+      } else {
+        performSwitch();
+      }
+    };
+    requestAnimationFrame(fadeOutStep);
+  }
+
   updateAudioAmbience() {
-    if (this.timeSystem.isSouthPartyActive() && !this.currentInterior && this.isNearLocation(69, 180)) {
+    if (this.timeSystem.isSouthPartyActive() && !this.currentInterior && this.worldMap.currentSection === 'south') {
       soundManager.setAmbientMode('party');
     } else if (this.isNearAnyLake(160) && !this.currentInterior) {
       soundManager.setAmbientMode('lake');
@@ -218,7 +275,7 @@ export class Game {
 
   isNearLocation(locationId, radius = 100) {
     const loc = this.locations.find(l => l.id === locationId);
-    if (!loc) return false;
+    if (!loc || loc.section !== this.worldMap.currentSection) return false;
     const cx = loc.x + loc.width / 2;
     const cy = loc.y + loc.height / 2;
     const dx = this.player.x - cx;
@@ -230,7 +287,7 @@ export class Game {
     for (const lake of this.worldMap.waterBodies) {
       const dx = this.player.x - lake.x;
       const dy = this.player.y - lake.y;
-      if (Math.sqrt(dx * dx + dy * dy) <= lake.radiusX + radius) {
+      if (Math.sqrt(dx * dx + dy * dy) <= radius) {
         return true;
       }
     }
@@ -241,7 +298,7 @@ export class Game {
     const px = this.player.x + this.player.width / 2;
     const py = this.player.y + this.player.height / 2;
 
-    for (const loc of this.locations) {
+    for (const loc of this.worldMap.locations) {
       if (this.discoverySystem.isDiscovered(loc.id)) continue;
 
       const cx = loc.x + loc.width / 2;
@@ -340,11 +397,12 @@ export class Game {
     this.player.y = interior.spawnY;
 
     const locMap = {
-      'library': 12,
-      'cs_dept': 10,
-      'mba_dept': 15,
-      'zakir_complex': 27,
-      'mhk_hostel': 67
+      'library': 51,
+      'cs_dept': 45,
+      'sls_dept': 3,
+      'hostel_mhk': 13,
+      'mhk_hostel': 13,
+      'sukoon_canteen': 59
     };
     if (locMap[interiorType]) {
       this.discoverySystem.discoverLocation(locMap[interiorType]);
@@ -356,10 +414,20 @@ export class Game {
 
   exitInterior(exitX, exitY) {
     soundManager.playDoorTransition();
+    const prevInterior = this.player.currentInterior;
     this.currentInterior = null;
     this.player.currentInterior = null;
-    this.player.x = exitX || 890;
-    this.player.y = exitY || 350;
+
+    if (prevInterior === 'sls_dept' || prevInterior === 'hostel_mhk' || prevInterior === 'mhk_hostel') {
+      this.worldMap.setSection('south');
+    } else if (prevInterior === 'sukoon_canteen') {
+      this.worldMap.setSection('east');
+    } else {
+      this.worldMap.setSection('main');
+    }
+
+    this.player.x = exitX || 740;
+    this.player.y = exitY || 320;
     this.autoSave();
   }
 
@@ -376,6 +444,50 @@ export class Game {
     });
   }
 
+  verifyAndFixSafeSpawn() {
+    const isStuck = this.currentInterior
+      ? this.interiors.checkInteriorCollision(this.currentInterior, this.player.getBounds())
+      : this.worldMap.checkCollision(this.player.getBounds());
+
+    if (isStuck) {
+      console.log('Detected player inside collider on initialization. Rescuing to safe road...');
+      this.respawnOnSafeRoad();
+    }
+  }
+
+  respawnOnSafeRoad(targetSection = null) {
+    if (this.currentInterior) {
+      this.currentInterior = null;
+      this.player.currentInterior = null;
+    }
+
+    if (targetSection) {
+      this.worldMap.setSection(targetSection);
+    }
+
+    const safeSpawns = {
+      main: { x: 700, y: 300, dir: 'down' },
+      south: { x: 950, y: 1200, dir: 'down' },
+      west: { x: 550, y: 350, dir: 'down' },
+      east: { x: 280, y: 510, dir: 'down' },
+      amphi_valley: { x: 820, y: 620, dir: 'down' },
+      checkdam_buffer: { x: 600, y: 360, dir: 'down' }
+    };
+
+    const sp = safeSpawns[this.worldMap.currentSection] || safeSpawns.main;
+    this.player.x = sp.x;
+    this.player.y = sp.y;
+    this.player.direction = sp.dir;
+    this.isTransitioning = false;
+    this.transitionFade = 0;
+
+    this.camera.x = Math.max(0, Math.min(this.player.x - this.camera.width / 2, this.worldMap.width - this.camera.width));
+    this.camera.y = Math.max(0, Math.min(this.player.y - this.camera.height / 2, this.worldMap.height - this.camera.height));
+
+    this.uiManager.showToast('🧭 Position reset to open campus road!', 'info');
+    this.autoSave();
+  }
+
   fastTravelTo(locationId) {
     const loc = this.locations.find(l => l.id === locationId);
     if (!loc) return;
@@ -385,17 +497,33 @@ export class Game {
       this.player.currentInterior = null;
     }
 
-    this.player.x = loc.x + loc.width / 2;
-    this.player.y = loc.y + loc.height + 25;
-    this.camera.x = this.player.x - this.camera.width / 2;
-    this.camera.y = this.player.y - this.camera.height / 2;
+    if (loc.section && loc.section !== this.worldMap.currentSection) {
+      this.worldMap.setSection(loc.section);
+    }
+
+    this.isTransitioning = false;
+    this.transitionFade = 0;
+
+    if (loc.isLake || loc.isMajorWonder) {
+      this.player.x = loc.x - this.player.width / 2;
+      this.player.y = loc.y + (loc.radiusY || loc.height || 40) + 25;
+    } else {
+      this.player.x = loc.x + loc.width / 2 - this.player.width / 2;
+      this.player.y = loc.y + loc.height + 30;
+    }
+
+    this.camera.x = Math.max(0, Math.min(this.player.x - this.camera.width / 2, this.worldMap.width - this.camera.width));
+    this.camera.y = Math.max(0, Math.min(this.player.y - this.camera.height / 2, this.worldMap.height - this.camera.height));
 
     soundManager.playDoorTransition();
-    this.uiManager.showToast(`🚀 Fast traveled to ${loc.shortName || loc.name}!`, 'info');
+    this.uiManager.showZoneBanner(this.worldMap.getCurrentSector(this.player.x, this.player.y));
+    this.uiManager.showToast(`🚀 Fast traveled to ${loc.shortName || loc.name} (${loc.section.toUpperCase()})!`, 'info');
+    this.autoSave();
   }
 
   autoSave() {
     this.saveSystem.saveGame({
+      currentSection: this.worldMap.currentSection,
       player: this.player,
       timeSystem: this.timeSystem,
       discoverySystem: this.discoverySystem,
@@ -422,6 +550,12 @@ export class Game {
         this.ctx.fillStyle = this.timeSystem.ambientLightColor;
         this.ctx.fillRect(0, 0, this.camera.width, this.camera.height);
       }
+    }
+
+    // Screen Fade Effect for Section Checkpoint Transitions
+    if (this.transitionFade > 0) {
+      this.ctx.fillStyle = `rgba(0, 0, 0, ${this.transitionFade})`;
+      this.ctx.fillRect(0, 0, this.camera.width, this.camera.height);
     }
 
     this.ctx.restore();

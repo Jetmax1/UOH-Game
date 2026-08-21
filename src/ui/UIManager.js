@@ -35,6 +35,9 @@ export class UIManager {
     document.getElementById('btn-map')?.addEventListener('click', () => this.toggleCampusMap());
     document.getElementById('btn-book')?.addEventListener('click', () => this.toggleDiscoveryBook());
     document.getElementById('btn-quests')?.addEventListener('click', () => this.toggleQuestsModal());
+    document.getElementById('btn-hud-unstuck')?.addEventListener('click', () => {
+      if (this.game) this.game.respawnOnSafeRoad();
+    });
     document.getElementById('btn-sound')?.addEventListener('click', () => {
       const enabled = soundManager.toggleSound();
       const icon = document.getElementById('sound-icon');
@@ -124,9 +127,9 @@ export class UIManager {
     }
 
     // Draw Roads
-    ctx.strokeStyle = '#34495e';
-    ctx.lineWidth = 2;
-    for (const [x1, y1, x2, y2] of this.game.worldMap.roads) {
+    for (const [x1, y1, x2, y2, rw, isTrail] of this.game.worldMap.roads) {
+      ctx.strokeStyle = isTrail ? '#9a7b56' : '#2c3e50';
+      ctx.lineWidth = isTrail ? 1.5 : 2.5;
       ctx.beginPath();
       ctx.moveTo(x1 * sx, y1 * sy);
       ctx.lineTo(x2 * sx, y2 * sy);
@@ -137,12 +140,12 @@ export class UIManager {
     for (const loc of this.game.locations) {
       if (loc.isLake) continue;
       const isDisc = this.game.discoverySystem.isDiscovered(loc.id);
-      ctx.fillStyle = isDisc ? '#f1c40f' : 'rgba(255, 255, 255, 0.4)';
-      ctx.fillRect(loc.x * sx, loc.y * sy, Math.max(2, loc.width * sx), Math.max(2, loc.height * sy));
+      ctx.fillStyle = isDisc ? '#f59e0b' : 'rgba(255, 255, 255, 0.45)';
+      ctx.fillRect(loc.x * sx, loc.y * sy, Math.max(3, loc.width * sx), Math.max(3, loc.height * sy));
     }
 
     // Draw Player Radar Pin
-    ctx.fillStyle = '#e74c3c';
+    ctx.fillStyle = '#ef4444';
     ctx.beginPath();
     ctx.arc(this.game.player.x * sx, this.game.player.y * sy, 3.5, 0, Math.PI * 2);
     ctx.fill();
@@ -176,64 +179,75 @@ export class UIManager {
     this.zoneBannerTimeout = setTimeout(() => {
       banner.classList.remove('zone-banner-show');
       banner.classList.add('zone-banner-hide');
-    }, 3200);
+    }, 2200);
   }
 
   showToast(message, type = 'info') {
     const container = document.getElementById('toast-container');
     if (!container) return;
 
+    // Clear old toast to prevent clutter
+    container.innerHTML = '';
+
     const toast = document.createElement('div');
-    toast.className = `game-toast toast-${type}`;
+    toast.className = `game-toast toast-${type} toast-enter`;
     toast.innerHTML = `
-      <div class="toast-content">${message}</div>
+      <span class="toast-mini-icon">${type === 'success' ? '✅' : (type === 'error' ? '⚠️' : 'ℹ️')}</span>
+      <span class="toast-mini-text">${message}</span>
     `;
 
     container.appendChild(toast);
     setTimeout(() => {
       toast.classList.add('toast-fade-out');
-      setTimeout(() => toast.remove(), 400);
-    }, 3200);
+      setTimeout(() => toast.remove(), 250);
+    }, 2000);
   }
 
   showDiscoveryToast(location, points, totalScore) {
     const container = document.getElementById('toast-container');
     if (!container) return;
 
+    // Clear old toast so screen stays clean
+    container.innerHTML = '';
+
     const toast = document.createElement('div');
-    toast.className = 'game-toast toast-discovery';
+    toast.className = 'game-toast toast-discovery toast-enter';
     toast.innerHTML = `
-      <div class="toast-badge">✨ NEW DISCOVERY</div>
-      <div class="toast-title">${location.name}</div>
-      <div class="toast-desc">${location.trivia || location.description}</div>
-      <div class="toast-points">+${points} Exploration Score!</div>
+      <span class="toast-mini-icon">✨</span>
+      <div class="toast-mini-body">
+        <span class="toast-mini-title">${location.shortName || location.name}</span>
+        <span class="toast-mini-sub">+${points} pts · Total: ${totalScore}</span>
+      </div>
     `;
 
     container.appendChild(toast);
     setTimeout(() => {
       toast.classList.add('toast-fade-out');
-      setTimeout(() => toast.remove(), 500);
-    }, 4500);
+      setTimeout(() => toast.remove(), 250);
+    }, 2200);
   }
 
   showQuestCompletedToast(quest, points, totalScore) {
     const container = document.getElementById('toast-container');
     if (!container) return;
 
+    container.innerHTML = '';
+
     const toast = document.createElement('div');
-    toast.className = 'game-toast toast-quest-complete';
+    toast.className = 'game-toast toast-quest-complete toast-enter';
     toast.innerHTML = `
-      <div class="toast-badge">🏆 QUEST COMPLETED</div>
-      <div class="toast-title">${quest.title}</div>
-      <div class="toast-desc">${quest.description}</div>
-      <div class="toast-points">+${points} Bonus Points!</div>
+      <span class="toast-mini-icon">🏆</span>
+      <div class="toast-mini-body">
+        <span class="toast-mini-title">Quest: ${quest.title}</span>
+        <span class="toast-mini-sub">+${points} Bonus Pts!</span>
+      </div>
     `;
 
     container.appendChild(toast);
     setTimeout(() => {
       toast.classList.add('toast-fade-out');
-      setTimeout(() => toast.remove(), 500);
-    }, 5000);
+      setTimeout(() => toast.remove(), 250);
+    }, 2500);
   }
 
   showLocationInfo(location) {

@@ -59,6 +59,10 @@ export class SettingsUI {
               <span class="key-badge">Q</span>
               <span class="key-desc">View Exploration Quests</span>
             </div>
+            <div class="control-item">
+              <span class="key-badge">U</span>
+              <span class="key-desc">Emergency Unstuck / Respawn on Road</span>
+            </div>
           </div>
         </div>
 
@@ -66,6 +70,7 @@ export class SettingsUI {
           <h3>💾 Game Progress & Save Management</h3>
           <div class="save-actions-row">
             <button class="btn btn-primary" id="btn-manual-save">💾 Save Game Now</button>
+            <button class="btn btn-warning" id="btn-unstuck-player" style="background:#d97706; border-color:#fcd34d;">🧭 Unstuck Player (Respawn on Road)</button>
             <button class="btn btn-danger" id="btn-reset-game">⚠️ Reset Progress (New Game)</button>
           </div>
           <p class="save-note">Progress automatically saves when you discover landmarks, complete quests, pass quizzes, and sleep in your MHK hostel room.</p>
@@ -75,7 +80,7 @@ export class SettingsUI {
           <h3>🏛️ About UoH Campus Adventure</h3>
           <p class="about-text">
             Based on the authentic 2,300-acre campus of the University of Hyderabad (HCU / UoH).
-            Recreates 76 indexed locations, 5 natural lakes, 3 major gates, and ancient rock formations like Mushroom Rock.
+            Recreates 78 indexed locations, 6 natural lakes & dams, 3 major gates, and ancient rock formations like The Masoom's Rock.
           </p>
         </div>
 
@@ -92,6 +97,11 @@ export class SettingsUI {
       this.uiManager.game.autoSave();
       soundManager.playQuizCorrect();
       this.uiManager.showToast('💾 Game progress successfully saved to browser local storage!', 'success');
+    });
+
+    document.getElementById('btn-unstuck-player')?.addEventListener('click', () => {
+      this.uiManager.game.respawnOnSafeRoad();
+      this.toggle();
     });
 
     document.getElementById('btn-reset-game')?.addEventListener('click', () => {

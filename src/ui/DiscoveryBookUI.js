@@ -59,11 +59,11 @@ export class DiscoveryBookUI {
 
           <!-- Pokédex Navigation Tabs -->
           <div class="pokedex-tabs-row">
-            <button class="pokedex-tab ${this.currentTab === 'all' ? 'active' : ''}" data-tab="all">ALL (#76)</button>
+            <button class="pokedex-tab ${this.currentTab === 'all' ? 'active' : ''}" data-tab="all">ALL (#78)</button>
             <button class="pokedex-tab ${this.currentTab === 'nature' ? 'active' : ''}" data-tab="nature">LAKES & ROCKS</button>
             <button class="pokedex-tab ${this.currentTab === 'academic' ? 'active' : ''}" data-tab="academic">ACADEMIC</button>
             <button class="pokedex-tab ${this.currentTab === 'residential' ? 'active' : ''}" data-tab="residential">HOSTELS</button>
-            <button class="pokedex-tab ${this.currentTab === 'sports' ? 'active' : ''}" data-tab="sports">SPORTS</button>
+            <button class="pokedex-tab ${this.currentTab === 'sports' ? 'active' : ''}" data-tab="sports">SPORTS & AMENITIES</button>
             <button class="pokedex-tab ${this.currentTab === 'quests' ? 'active' : ''}" data-tab="quests">QUESTS (${quests.filter(q => q.isComplete).length}/${quests.length})</button>
           </div>
 

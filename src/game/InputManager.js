@@ -42,6 +42,9 @@ export class InputManager {
       if (e.key === 'q' || e.key === 'Q') {
         this.questPressed = true;
       }
+      if (e.key === 'u' || e.key === 'U') {
+        this.unstuckPressed = true;
+      }
       if (e.key === 'Escape') {
         this.pausePressed = true;
       }
@@ -208,6 +211,12 @@ export class InputManager {
   consumePause() {
     const res = this.pausePressed;
     this.pausePressed = false;
+    return res;
+  }
+
+  consumeUnstuck() {
+    const res = this.unstuckPressed;
+    this.unstuckPressed = false;
     return res;
   }
 }

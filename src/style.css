@@ -1057,6 +1057,53 @@ html, body {
   overflow: hidden;
 }
 
+.map-section-nav-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  background: #0f172a;
+  padding: 6px;
+  border-radius: 8px;
+  border: 1px solid #334155;
+}
+
+.map-sec-tab {
+  flex: 1;
+  min-width: 140px;
+  background: #1e293b;
+  border: 2px solid #334155;
+  color: #94a3b8;
+  font-family: var(--font-gba);
+  font-size: 9px;
+  font-weight: 800;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+.map-sec-tab:hover {
+  color: #ffffff;
+  border-color: #64748b;
+  background: #334155;
+}
+
+.map-sec-tab.active {
+  background: #3b82f6;
+  border-color: #93c5fd;
+  color: #ffffff;
+  box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+}
+
+.map-sec-tab[data-sectab="main"].active { background: #059669; border-color: #6ee7b7; box-shadow: 0 0 10px rgba(16, 185, 129, 0.5); }
+.map-sec-tab[data-sectab="amphi_valley"].active { background: #047857; border-color: #34d399; box-shadow: 0 0 10px rgba(5, 150, 105, 0.6); }
+.map-sec-tab[data-sectab="checkdam_buffer"].active { background: #0284c7; border-color: #7dd3fc; box-shadow: 0 0 10px rgba(2, 132, 199, 0.6); }
+.map-sec-tab[data-sectab="south"].active { background: #1d4ed8; border-color: #93c5fd; box-shadow: 0 0 10px rgba(37, 99, 235, 0.5); }
+.map-sec-tab[data-sectab="west"].active { background: #ca8a04; border-color: #fde047; box-shadow: 0 0 10px rgba(234, 179, 8, 0.5); }
+.map-sec-tab[data-sectab="east"].active { background: #7e22ce; border-color: #d8b4fe; box-shadow: 0 0 10px rgba(168, 85, 247, 0.5); }
+.map-sec-tab[data-sectab="overview"].active { background: #dc2626; border-color: #fca5a5; box-shadow: 0 0 10px rgba(220, 38, 38, 0.5); }
+
 .fast-travel-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -1073,12 +1120,19 @@ html, body {
   padding: 6px;
   border-radius: 4px;
   cursor: pointer;
+  transition: all 0.15s ease;
 }
 
 .btn-travel:hover {
-  background: #ef4444;
-  border-color: #fca5a5;
+  transform: scale(1.02);
 }
+
+.sec-main-btn:hover { background: #065f46; border-color: #34d399; }
+.sec-amphi-btn:hover { background: #065f46; border-color: #6ee7b7; }
+.sec-checkdam-btn:hover { background: #075985; border-color: #38bdf8; }
+.sec-south-btn:hover { background: #1e3a8a; border-color: #60a5fa; }
+.sec-west-btn:hover { background: #713f12; border-color: #facc15; }
+.sec-east-btn:hover { background: #581c87; border-color: #c084fc; }
 
 /* Quiz */
 .quiz-question-box {
@@ -1124,3 +1178,106 @@ html, body {
 
 .opt-correct { background: #14532d !important; border-color: #22c55e !important; }
 .opt-wrong { background: #7f1d1d !important; border-color: #ef4444 !important; }
+
+/* ==========================================================================
+   Sleek, Non-Distracting Toast Notifications (Bottom-Left Pill)
+   ========================================================================== */
+#toast-container {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  z-index: 150;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.game-toast {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(15, 23, 42, 0.92);
+  backdrop-filter: blur(8px);
+  border: 2px solid #334155;
+  border-radius: 8px;
+  padding: 8px 14px;
+  color: #ffffff;
+  font-family: var(--font-gba);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+  max-width: 320px;
+  pointer-events: auto;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.toast-enter {
+  animation: toastSlideIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes toastSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.toast-fade-out {
+  opacity: 0 !important;
+  transform: translateY(-8px) scale(0.96) !important;
+}
+
+.toast-mini-icon {
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.toast-mini-text {
+  font-size: 11px;
+  font-weight: 700;
+  color: #f1f5f9;
+}
+
+.toast-mini-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.toast-mini-title {
+  font-size: 11px;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.toast-mini-sub {
+  font-size: 9px;
+  font-weight: 700;
+  color: #fbbf24;
+}
+
+/* Toast Color Themes */
+.toast-discovery {
+  border-color: #10b981;
+  background: rgba(6, 78, 59, 0.92);
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+}
+
+.toast-quest-complete {
+  border-color: #f59e0b;
+  background: rgba(120, 53, 15, 0.92);
+  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.3);
+}
+
+.toast-success {
+  border-color: #3b82f6;
+  background: rgba(30, 58, 138, 0.92);
+}
+
+.toast-info {
+  border-color: #64748b;
+  background: rgba(15, 23, 42, 0.92);
+}
