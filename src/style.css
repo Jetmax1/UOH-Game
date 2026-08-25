@@ -1,26 +1,34 @@
 /* ==========================================================================
-   University of Hyderabad Campus Adventure — Pokémon FireRed GBA Edition
-   Authentic 16-Bit Retro Pixel-Art Styling, Pokédex UI & GBA Dialogue Frame
+   University of Hyderabad Campus Adventure — Retro NES Pixel Edition
+   Inspired by peteroravec.com retro 8-bit / NES styling and interactive world
    ========================================================================== */
 
 :root {
-  --primary-red: #d82828;
-  --dark-red: #981818;
-  --pokedex-bg: #dc2626;
-  --pokedex-border: #991b1b;
-  --pokedex-screen: #e2e8f0;
-  --pokedex-screen-dark: #0f172a;
-  --dialog-bg: #f8f8f0;
-  --dialog-border: #284878;
-  --dialog-text: #181828;
-  --gba-blue: #2563eb;
-  --gba-gold: #f59e0b;
-  --gba-green: #10b981;
-  --font-gba: 'Space Grotesk', 'Courier New', monospace;
-  --font-main: 'Inter', system-ui, sans-serif;
+  --nes-font: 'Press Start 2P', monospace;
+  --body-font: 'Space Grotesk', -apple-system, sans-serif;
+  --bg-dark: #0f172a;
+  --nes-black: #212529;
+  --nes-white: #ffffff;
+  --nes-grey: #e2e8f0;
+  --nes-blue: #209cee;
+  --nes-blue-dark: #108de0;
+  --nes-red: #e76e55;
+  --nes-red-dark: #ce372b;
+  --nes-green: #92cc41;
+  --nes-green-dark: #76c442;
+  --nes-yellow: #f7d51d;
+  --nes-yellow-dark: #e59b00;
+  --nes-purple: #9b5de5;
 }
 
-* {
+/* --------------------------------------------------------------------------
+   Custom Pixel Glove Pointer Cursor (peteroravec.com style)
+   -------------------------------------------------------------------------- */
+html, body, button, a, input, select {
+  cursor: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAzElEQVRYR+2X0Q6AIAhF5f8/2jYXZkwEjNSVvVUjDpcrGgT7FUkI2D9xRfQETwNIiWO85wfINfQUEyxBG2ArsLwC0jioGt5zFcwF4OYDPi/mBYKm4t0U8ATgRm3ThFoAqkhNgWkA0jJLvaOVSs7j3qMnSgXWBMiWPXe94QqMBMBc1VZIvaTu5u5pQewq0EqNZvIEMCmxAawK0DNkay9QmfFNAJUXfgGgUkLaE7j/h8fnASkxHTz0DGIBMCnBeeM7AArpUd3mz2x3C7wADglA8BcWMZhZAAAAAElFTkSuQmCC") 14 0, auto !important;
+}
+
+*, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -32,8 +40,8 @@ html, body {
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background-color: #080c14;
-  font-family: var(--font-gba);
+  background-color: #000000;
+  font-family: var(--nes-font);
   color: #ffffff;
   touch-action: none;
 }
@@ -42,6 +50,344 @@ html, body {
   display: none !important;
 }
 
+/* --------------------------------------------------------------------------
+   CRT Scanline Overlay (Optional retro arcade monitor filter)
+   -------------------------------------------------------------------------- */
+#crt-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 999999;
+  background: linear-gradient(
+    rgba(18, 16, 16, 0) 50%, 
+    rgba(0, 0, 0, 0.25) 50%
+  ), linear-gradient(
+    90deg,
+    rgba(255, 0, 0, 0.03),
+    rgba(0, 255, 0, 0.01),
+    rgba(0, 0, 255, 0.03)
+  );
+  background-size: 100% 3px, 6px 100%;
+  box-shadow: inset 0 0 80px rgba(0, 0, 0, 0.6);
+}
+
+/* --------------------------------------------------------------------------
+   Initial Loader Screen
+   -------------------------------------------------------------------------- */
+#init-load {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #0f172a;
+  color: #f8fafc;
+  z-index: 9999999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--nes-font);
+  font-size: 14px;
+}
+
+/* --------------------------------------------------------------------------
+   1. Preloader Overlay (peteroravec.com style)
+   -------------------------------------------------------------------------- */
+.progress-percentage-cover {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #000000;
+  z-index: 99998;
+  opacity: 1;
+  transition: opacity 0.4s ease-out;
+}
+
+.progress-percentage {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 320px;
+  max-width: 90%;
+  text-align: center;
+  z-index: 99999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  opacity: 1;
+  transition: opacity 0.4s ease-out;
+}
+
+.preloader-text {
+  color: #ffffff;
+  font-family: var(--nes-font);
+  font-size: 16px;
+  line-height: 1.4;
+  text-shadow: 2px 2px #000;
+}
+
+.preloader-subtext {
+  font-size: 8px;
+  color: #94a3b8;
+  letter-spacing: 1px;
+}
+
+.preloader-image {
+  width: 64px;
+  height: 64px;
+  image-rendering: pixelated;
+}
+
+.preloader {
+  width: 100%;
+  height: 20px;
+  background: #1e293b;
+  border: 4px solid #000000;
+  box-shadow: 0 -3px 0 0 #fff, 0 3px 0 0 #fff, -3px 0 0 0 #fff, 3px 0 0 0 #fff;
+  padding: 2px;
+  position: relative;
+}
+
+.preloader .bar {
+  height: 100%;
+  background: repeating-linear-gradient(
+    -45deg,
+    #209cee,
+    #209cee 10px,
+    #108de0 10px,
+    #108de0 20px
+  );
+  width: 0%;
+  transition: width 0.15s ease-out;
+}
+
+/* --------------------------------------------------------------------------
+   2. Play Screen Overlay ("Play Box" from peteroravec.com)
+   -------------------------------------------------------------------------- */
+.play-box {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: radial-gradient(circle at center, #1e293b 0%, #090d16 100%);
+  z-index: 99990;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.play-box.fade-out {
+  opacity: 0;
+  transform: scale(1.05);
+  pointer-events: none;
+}
+
+.play-box .top-text {
+  text-align: center;
+}
+
+.play-box .top-text .box {
+  display: inline-block;
+  background: #000000;
+  color: #38bdf8;
+  padding: 8px 16px;
+  font-size: 10px;
+  border: 2px solid #38bdf8;
+  letter-spacing: 1px;
+}
+
+.play-box .wrp {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-brand-card {
+  background: #0f172a;
+  border: 4px solid #000000;
+  padding: 32px 40px;
+  text-align: center;
+  max-width: 620px;
+  width: 100%;
+  box-shadow: 
+    0 -4px 0 0 #3b82f6, 0 4px 0 0 #3b82f6, 
+    -4px 0 0 0 #3b82f6, 4px 0 0 0 #3b82f6;
+}
+
+.hero-crest {
+  font-size: 32px;
+  margin-bottom: 12px;
+}
+
+.hero-title {
+  font-size: 24px;
+  color: #f87171;
+  text-shadow: 3px 3px #000000;
+  margin-bottom: 12px;
+  letter-spacing: 1px;
+}
+
+.hero-tagline {
+  font-size: 9px;
+  color: #94a3b8;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.hero-features-chips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.hero-features-chips .chip {
+  background: #1e293b;
+  color: #fef08a;
+  border: 2px solid #475569;
+  font-size: 8px;
+  padding: 4px 8px;
+}
+
+.btn-play {
+  font-size: 16px !important;
+  padding: 16px 36px !important;
+  letter-spacing: 1px;
+}
+
+.play-box .bottom-text {
+  width: 100%;
+}
+
+.play-box .limiter {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.quick-nav-box {
+  background: rgba(15, 23, 42, 0.95);
+  border: 3px solid #000000;
+  padding: 12px 20px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  box-shadow: 0 -2px 0 0 #475569, 0 2px 0 0 #475569, -2px 0 0 0 #475569, 2px 0 0 0 #475569;
+}
+
+.quick-nav-box .box.text {
+  font-size: 9px;
+  color: #e2e8f0;
+}
+
+.quick-nav-box .highlight-text {
+  color: #facc15;
+}
+
+.quick-nav-box .box.box-btn {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* --------------------------------------------------------------------------
+   NES Design System (NES.css style components)
+   -------------------------------------------------------------------------- */
+.pixel-corners {
+  box-shadow: 
+    0 -4px 0 0 #000000, 
+    0 4px 0 0 #000000, 
+    -4px 0 0 0 #000000, 
+    4px 0 0 0 #000000;
+  border-radius: 0;
+}
+
+.pixel-corners-mini {
+  box-shadow: 
+    0 -2px 0 0 #000000, 
+    0 2px 0 0 #000000, 
+    -2px 0 0 0 #000000, 
+    2px 0 0 0 #000000;
+}
+
+.nes-btn {
+  position: relative;
+  display: inline-block;
+  padding: 8px 14px;
+  font-family: var(--nes-font);
+  font-size: 9px;
+  text-align: center;
+  text-decoration: none;
+  vertical-align: middle;
+  background-color: #e2e8f0;
+  color: #212529;
+  border: 3px solid #000000;
+  box-shadow: inset -2px -2px #94a3b8, inset 2px 2px #ffffff;
+  outline: none !important;
+  transition: transform 0.05s ease;
+}
+
+.nes-btn:hover {
+  background-color: #cbd5e1;
+}
+
+.nes-btn:active {
+  transform: translate(0, 2px);
+  box-shadow: inset 2px 2px #94a3b8;
+}
+
+.nes-btn.is-primary {
+  background-color: var(--nes-blue);
+  color: #ffffff;
+  box-shadow: inset -2px -2px #1d4ed8, inset 2px 2px #93c5fd;
+}
+.nes-btn.is-primary:hover {
+  background-color: #1d4ed8;
+}
+
+.nes-btn.is-error {
+  background-color: var(--nes-red);
+  color: #ffffff;
+  box-shadow: inset -2px -2px #991b1b, inset 2px 2px #fca5a5;
+}
+.nes-btn.is-error:hover {
+  background-color: #b91c1c;
+}
+
+.nes-btn.is-success {
+  background-color: var(--nes-green);
+  color: #ffffff;
+  box-shadow: inset -2px -2px #15803d, inset 2px 2px #bbf7d0;
+}
+.nes-btn.is-success:hover {
+  background-color: #16a34a;
+}
+
+.nes-btn.is-warning {
+  background-color: var(--nes-yellow);
+  color: #212529;
+  box-shadow: inset -2px -2px #b45309, inset 2px 2px #fef08a;
+}
+.nes-btn.is-warning:hover {
+  background-color: #eab308;
+}
+
+/* --------------------------------------------------------------------------
+   3. Top Game HUD Bar
+   -------------------------------------------------------------------------- */
 #game-app {
   position: relative;
   width: 100vw;
@@ -58,52 +404,46 @@ html, body {
   image-rendering: crisp-edges;
 }
 
-/* ==========================================================================
-   Top HUD Bar (GBA Style)
-   ========================================================================== */
-#game-hud {
+.nes-hud-bar {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  padding: 8px 16px;
+  padding: 6px 14px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  background: rgba(15, 23, 42, 0.92);
-  border-bottom: 2px solid #334155;
-  backdrop-filter: blur(8px);
+  gap: 10px;
+  background: rgba(15, 23, 42, 0.95);
+  border-bottom: 3px solid #000000;
+  box-shadow: 0 3px 0 0 #334155;
   z-index: 50;
 }
 
 .hud-left {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
 }
 
 .hud-brand {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
 }
 
 .hud-logo {
-  font-size: 22px;
+  font-size: 18px;
 }
 
 .hud-game-title {
-  font-family: var(--font-gba);
-  font-size: 14px;
-  font-weight: 800;
-  letter-spacing: 0.5px;
+  font-size: 11px;
   color: #f87171;
+  text-shadow: 1px 1px #000;
 }
 
 .hud-edition {
-  font-size: 9px;
-  font-weight: 700;
+  font-size: 7px;
   color: #94a3b8;
   text-transform: uppercase;
 }
@@ -113,13 +453,13 @@ html, body {
   align-items: center;
   gap: 6px;
   background: #1e293b;
-  border: 2px solid #334155;
-  padding: 4px 10px;
-  border-radius: 8px;
+  border: 2px solid #000000;
+  padding: 3px 8px;
+  box-shadow: inset -1px -1px #0f172a, inset 1px 1px #475569;
 }
 
 .hud-pill-icon {
-  font-size: 14px;
+  font-size: 12px;
 }
 
 .hud-pill-text {
@@ -128,26 +468,23 @@ html, body {
 }
 
 .hud-label {
-  font-size: 8px;
-  font-weight: 800;
+  font-size: 6px;
   color: #94a3b8;
 }
 
 .hud-val {
-  font-size: 13px;
-  font-weight: 800;
-  color: #fbbf24;
+  font-size: 9px;
+  color: #fef08a;
 }
 
 .hud-sub {
-  font-size: 9px;
+  font-size: 6px;
   color: #cbd5e1;
 }
 
-/* Center Active Quest Ticker */
 .hud-center {
   flex: 1;
-  max-width: 420px;
+  max-width: 460px;
 }
 
 .hud-quest-ticker {
@@ -155,146 +492,131 @@ html, body {
   align-items: center;
   gap: 8px;
   background: #1e293b;
-  border: 2px solid #3b82f6;
-  padding: 5px 12px;
-  border-radius: 8px;
-  font-size: 11px;
+  border: 2px solid #000000;
+  padding: 4px 10px;
+  box-shadow: inset -1px -1px #0f172a, inset 1px 1px #475569;
 }
 
 .ticker-badge {
-  background: #ef4444;
+  background: #dc2626;
   color: #ffffff;
-  font-size: 8px;
-  font-weight: 800;
-  padding: 2px 5px;
-  border-radius: 4px;
+  font-size: 6px;
+  padding: 2px 4px;
+  border: 1px solid #000;
 }
 
 .ticker-content {
   flex: 1;
+  font-size: 8px;
+  color: #f8fafc;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.ticker-prog {
-  font-weight: 800;
-  color: #38bdf8;
+.ticker-content strong {
+  color: #60a5fa;
 }
 
-/* Right HUD */
+.ticker-prog {
+  font-size: 8px;
+  color: #fbbf24;
+}
+
 .hud-right {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
 }
 
 .stamina-wrapper {
   display: flex;
-  flex-direction: column;
-  gap: 2px;
-  width: 80px;
+  align-items: center;
+  gap: 6px;
+  background: #1e293b;
+  border: 2px solid #000000;
+  padding: 3px 8px;
 }
 
 .stamina-label {
-  font-size: 8px;
-  font-weight: 800;
-  color: #38bdf8;
+  font-size: 7px;
+  color: #fbbf24;
 }
 
 .stamina-track {
-  width: 100%;
-  height: 6px;
+  width: 50px;
+  height: 8px;
   background: #0f172a;
-  border: 1px solid #475569;
-  border-radius: 3px;
-  overflow: hidden;
+  border: 1px solid #000;
 }
 
 .stamina-bar {
   height: 100%;
-  background: #38bdf8;
-  transition: width 0.1s ease;
+  background: #eab308;
+  transition: width 0.1s linear;
 }
 
 .hud-actions-group {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
 }
 
-.hud-btn {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  background: #1e293b;
-  border: 2px solid #475569;
-  color: #ffffff;
-  font-family: var(--font-gba);
-  font-size: 11px;
-  font-weight: 700;
-  padding: 6px 10px;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.1s ease;
+.hud-action-btn {
+  padding: 4px 8px !important;
+  font-size: 7px !important;
 }
 
-.hud-btn:hover {
-  background: #334155;
-  border-color: #f87171;
+.btn-icon-only {
+  padding: 4px 6px !important;
+  font-size: 10px !important;
 }
 
-.hud-btn:active {
-  transform: translateY(1px);
-}
-
-.hud-btn-icon-only {
-  padding: 6px 8px;
-}
-
-/* ==========================================================================
-   Bottom Right Minimap (GBA Town Map Style)
-   ========================================================================== */
+/* --------------------------------------------------------------------------
+   4. Minimap Radar HUD
+   -------------------------------------------------------------------------- */
 #minimap-container {
   position: absolute;
   bottom: 16px;
   right: 16px;
-  padding: 6px;
-  background: #1e293b;
-  border: 3px solid #475569;
-  border-radius: 8px;
+  background: #0f172a;
+  border: 3px solid #000000;
+  padding: 4px;
   z-index: 40;
+  box-shadow: 
+    0 -3px 0 0 #3b82f6, 0 3px 0 0 #3b82f6, 
+    -3px 0 0 0 #3b82f6, 3px 0 0 0 #3b82f6;
 }
 
 .minimap-header {
-  font-size: 10px;
-  font-weight: 800;
-  color: #fbbf24;
-  margin-bottom: 4px;
+  font-size: 7px;
+  color: #93c5fd;
   text-align: center;
+  padding-bottom: 3px;
+  border-bottom: 1px solid #334155;
+  margin-bottom: 3px;
 }
 
 #minimap-canvas {
   display: block;
-  border: 1px solid #0f172a;
   image-rendering: pixelated;
 }
 
-/* ==========================================================================
-   Mobile Virtual Controls
-   ========================================================================== */
+/* --------------------------------------------------------------------------
+   5. Mobile & Touch Joystick
+   -------------------------------------------------------------------------- */
 #mobile-controls-overlay {
   display: none;
   position: absolute;
-  bottom: 0;
+  top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   pointer-events: none;
-  z-index: 45;
+  z-index: 60;
 }
 
-@media (max-width: 1024px), (pointer: coarse) {
+@media (pointer: coarse), (max-width: 900px) {
   #mobile-controls-overlay {
     display: block;
   }
@@ -310,23 +632,24 @@ html, body {
 }
 
 .joystick-base {
-  position: relative;
   width: 100%;
   height: 100%;
-  background: rgba(30, 41, 59, 0.6);
-  border: 3px solid #64748b;
+  background: rgba(15, 23, 42, 0.7);
+  border: 3px solid #000;
   border-radius: 50%;
+  position: relative;
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
 }
 
 .joystick-stick {
+  width: 44px;
+  height: 44px;
+  background: #3b82f6;
+  border: 2px solid #000;
+  border-radius: 50%;
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 44px;
-  height: 44px;
-  background: #ef4444;
-  border: 2px solid #ffffff;
-  border-radius: 50%;
   transform: translate(-50%, -50%);
 }
 
@@ -341,943 +664,389 @@ html, body {
 }
 
 .mobile-btn {
-  background: #1e293b;
-  border: 3px solid #64748b;
-  color: #ffffff;
-  font-family: var(--font-gba);
-  font-size: 12px;
-  font-weight: 800;
-  padding: 12px 18px;
-  border-radius: 24px;
+  padding: 12px 18px !important;
+  font-size: 10px !important;
 }
 
-.mobile-btn-primary {
-  background: #ef4444;
-  border-color: #fca5a5;
-}
-
-.mobile-btn.active {
-  background: #f59e0b;
-}
-
-/* ==========================================================================
-   FireRed Regional Zone Banner (Classic GBA Ribbon Transition)
-   ========================================================================== */
-.zone-banner {
-  position: absolute;
-  top: 68px;
-  left: 20px;
-  z-index: 80;
-  pointer-events: none;
-  transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.zone-banner-hide {
-  opacity: 0;
-  transform: translateY(-20px);
-}
-
-.zone-banner-show {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.zone-banner-casing {
-  background: #111827;
-  border: 3px solid #f59e0b;
-  border-left: 6px solid #10b981;
-  border-radius: 6px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.7);
-  padding: 6px 16px;
-}
-
-.zone-banner-ribbon {
-  display: flex;
-  flex-direction: column;
-}
-
-.zone-banner-title {
-  font-family: var(--font-gba);
-  font-size: 13px;
-  font-weight: 900;
-  color: #fef08a;
-  letter-spacing: 0.5px;
-}
-
-.zone-banner-sub {
-  font-family: var(--font-gba);
-  font-size: 9px;
-  font-weight: 700;
-  color: #94a3b8;
-}
-
-/* ==========================================================================
-   FireRed GBA Dialogue Box Overlay
-   ========================================================================== */
-.firered-dialog-overlay {
-  position: absolute;
-  bottom: 24px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 92%;
-  max-width: 760px;
-  z-index: 120;
-}
-
-.firered-dialog-frame {
-  position: relative;
-  background: var(--dialog-bg);
-  border: 4px solid var(--dialog-border);
-  border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7), inset 0 0 0 2px #ffffff;
-  padding: 18px 24px;
-  cursor: pointer;
-}
-
-.firered-dialog-speaker {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 8px;
-  border-bottom: 2px dashed #94a3b8;
-  padding-bottom: 4px;
-}
-
-.firered-speaker-avatar {
-  font-size: 20px;
-}
-
-.firered-speaker-name {
-  font-size: 13px;
-  font-weight: 800;
-  color: #1e3a8a;
-}
-
-.firered-speaker-role {
-  font-size: 11px;
-  color: #64748b;
-}
-
-.firered-dialog-text {
-  font-family: var(--font-gba);
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--dialog-text);
-  line-height: 1.6;
-  min-height: 48px;
-  white-space: pre-wrap;
-}
-
-.firered-dialog-arrow {
-  position: absolute;
-  bottom: 10px;
-  right: 18px;
-  font-size: 14px;
-  color: #dc2626;
-  animation: fireredBlink 0.6s infinite alternate;
-}
-
-@keyframes fireredBlink {
-  from { transform: translateY(0); opacity: 1; }
-  to { transform: translateY(3px); opacity: 0.4; }
-}
-
-/* ==========================================================================
-   Pokémon FireRed Pokédex Modal (Campus Discovery Book)
-   ========================================================================== */
-.pokedex-casing {
-  width: 100%;
-  max-width: 900px;
-  max-height: 88vh;
-  background: var(--pokedex-bg);
-  border: 6px solid var(--pokedex-border);
-  border-radius: 20px;
-  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.8), inset 0 0 0 3px #fca5a5;
-  display: flex;
-  flex-direction: column;
-  padding: 16px 20px;
-  gap: 12px;
-}
-
-.pokedex-top-bar {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  border-bottom: 3px solid var(--pokedex-border);
-  padding-bottom: 10px;
-}
-
-.pokedex-big-blue-lens {
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 30% 30%, #93c5fd, #2563eb, #1e3a8a);
-  border: 3px solid #ffffff;
-  box-shadow: 0 0 10px rgba(59, 130, 246, 0.6);
-}
-
-.pokedex-leds {
-  display: flex;
-  gap: 6px;
-}
-
-.pokedex-led {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  border: 1px solid #ffffff;
-}
-
-.led-red { background: #ef4444; }
-.led-yellow { background: #eab308; }
-.led-green { background: #22c55e; }
-
-.pokedex-title-badge {
-  font-size: 13px;
-  font-weight: 800;
-  color: #ffffff;
-  background: #991b1b;
-  padding: 4px 10px;
-  border-radius: 6px;
-  margin-left: auto;
-}
-
-.pokedex-close-btn {
-  background: #991b1b;
-  border: 2px solid #ffffff;
-  color: #ffffff;
-  font-size: 12px;
-  font-weight: 800;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.pokedex-tabs-row {
-  display: flex;
-  gap: 6px;
-  overflow-x: auto;
-}
-
-.pokedex-tab {
-  background: #991b1b;
-  border: 2px solid #7f1d1d;
-  color: #fca5a5;
-  font-family: var(--font-gba);
-  font-size: 11px;
-  font-weight: 800;
-  padding: 5px 12px;
-  border-radius: 6px;
-  cursor: pointer;
-  white-space: nowrap;
-}
-
-.pokedex-tab.active {
-  background: #fef08a;
-  border-color: #ca8a04;
-  color: #854d0e;
-}
-
-.pokedex-screen-frame {
-  flex: 1;
-  background: #0f172a;
-  border: 4px solid #334155;
-  border-radius: 12px;
-  padding: 12px;
-  overflow: hidden;
-  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.8);
-}
-
-.pokedex-dual-layout {
-  display: grid;
-  grid-template-columns: 1.2fr 1fr;
-  gap: 12px;
-  height: 100%;
-}
-
-.pokedex-list-pane {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  height: 100%;
-}
-
-.pokedex-search-box input {
-  width: 100%;
-  background: #1e293b;
-  border: 2px solid #475569;
-  border-radius: 6px;
-  padding: 6px 10px;
-  color: #ffffff;
-  font-family: var(--font-gba);
-  font-size: 11px;
-  outline: none;
-}
-
-.pokedex-items-scroll {
-  flex: 1;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  padding-right: 4px;
-}
-
-.pokedex-entry-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: #1e293b;
-  border: 1px solid #334155;
-  padding: 6px 8px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 11px;
-  transition: all 0.1s ease;
-}
-
-.pokedex-entry-row:hover {
-  background: #334155;
-}
-
-.pokedex-entry-row.selected {
-  background: #2563eb;
-  border-color: #60a5fa;
-}
-
-.entry-ball { font-size: 12px; }
-.entry-num { font-weight: 800; color: #94a3b8; }
-.pokedex-entry-row.selected .entry-num { color: #fef08a; }
-.entry-name { flex: 1; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.entry-check { color: #22c55e; font-weight: 800; }
-
-/* Right Detail Pane */
-.pokedex-detail-pane {
-  background: #1e293b;
-  border: 2px solid #475569;
-  border-radius: 8px;
-  padding: 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  overflow-y: auto;
-}
-
-.detail-card-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.detail-num-tag {
-  font-size: 12px;
-  font-weight: 800;
-  color: #fbbf24;
-}
-
-.detail-category-badge {
-  font-size: 8px;
-  font-weight: 800;
-  background: #3b82f6;
-  padding: 2px 6px;
-  border-radius: 4px;
-}
-
-.detail-title {
-  font-size: 13px;
-  font-weight: 800;
-  color: #ffffff;
-}
-
-.detail-photo-box {
-  background: #0f172a;
-  border: 2px solid #334155;
-  border-radius: 6px;
-  padding: 10px;
-  text-align: center;
-}
-
-.detail-icon-display {
-  font-size: 32px;
-}
-
-.detail-zone-label {
-  font-size: 9px;
-  font-weight: 800;
-  color: #38bdf8;
-  margin-top: 4px;
-}
-
-.detail-description {
-  font-size: 11px;
-  line-height: 1.4;
-  color: #cbd5e1;
-}
-
-.detail-fact-box {
-  background: #0f172a;
-  border-left: 3px solid #fbbf24;
-  padding: 6px 8px;
-  font-size: 10px;
-  color: #f1f5f9;
-  line-height: 1.3;
-}
-
-.detail-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: auto;
-}
-
-.detail-pts-tag {
-  font-weight: 800;
-  color: #22c55e;
-  font-size: 11px;
-}
-
-.detail-status-tag {
-  font-size: 9px;
-  font-weight: 800;
-  padding: 2px 6px;
-  border-radius: 4px;
-}
-
-.status-registered {
-  background: #15803d;
-  color: #ffffff;
-}
-
-.status-unseen {
-  background: #475569;
-  color: #cbd5e1;
-}
-
-.pokedex-bottom-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 11px;
-  color: #ffffff;
-}
-
-.pokedex-buttons {
-  display: flex;
-  gap: 6px;
-}
-
-.pokedex-btn-pill {
-  background: #7f1d1d;
-  border: 1px solid #fca5a5;
-  padding: 3px 8px;
-  border-radius: 10px;
-  font-size: 9px;
-  font-weight: 800;
-}
-
-/* Quests View */
-.pokedex-quests-pane {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.quests-pane-title {
-  font-size: 12px;
-  font-weight: 800;
-  color: #fbbf24;
-}
-
-.pokedex-quests-list {
-  flex: 1;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.pokedex-quest-card {
-  background: #1e293b;
-  border: 2px solid #334155;
-  padding: 10px;
-  border-radius: 8px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.pokedex-quest-done {
-  border-color: #22c55e;
-}
-
-.pokedex-quest-top {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.pquest-title {
-  font-size: 12px;
-  font-weight: 800;
-  flex: 1;
-}
-
-.pquest-pts {
-  font-weight: 800;
-  color: #fbbf24;
-  font-size: 10px;
-}
-
-.pquest-desc {
-  font-size: 10px;
-  color: #94a3b8;
-}
-
-.pquest-steps {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  background: #0f172a;
-  padding: 6px;
-  border-radius: 6px;
-  font-size: 10px;
-}
-
-.pquest-step-item.step-done {
-  color: #22c55e;
-}
-
-/* ==========================================================================
-   General Modals, Toasts, Sleep Overlay & Buttons
-   ========================================================================== */
-.modal-root {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 100;
-}
-
-.modal-backdrop {
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.75);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 16px;
-}
-
-.modal-close-btn {
-  background: #ef4444;
-  border: 1px solid #ffffff;
-  color: #ffffff;
-  font-size: 12px;
-  font-weight: 800;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.btn {
-  font-family: var(--font-gba);
-  font-size: 12px;
-  font-weight: 800;
-  padding: 8px 14px;
-  border-radius: 6px;
-  border: none;
-  cursor: pointer;
-}
-
-.btn-primary {
-  background: #ef4444;
-  color: #ffffff;
-  border: 2px solid #fca5a5;
-}
-
-.btn-primary:hover {
-  background: #dc2626;
-}
-
-.btn-secondary {
-  background: #334155;
-  color: #ffffff;
-  border: 2px solid #64748b;
-}
-
-.btn-danger {
-  background: #b91c1c;
-  color: #ffffff;
-}
-
-/* Toasts */
+/* --------------------------------------------------------------------------
+   6. Toasts Notifications
+   -------------------------------------------------------------------------- */
 #toast-container {
   position: absolute;
-  top: 70px;
-  right: 16px;
+  top: 64px;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
   flex-direction: column;
   gap: 8px;
-  z-index: 60;
+  z-index: 100;
   pointer-events: none;
+  width: 90%;
+  max-width: 500px;
 }
 
-.game-toast {
-  background: #1e293b;
-  border: 3px solid #3b82f6;
-  border-radius: 8px;
+.toast {
+  background: #0f172a;
+  border: 3px solid #000000;
   padding: 10px 14px;
-  min-width: 260px;
-  max-width: 360px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
-  pointer-events: auto;
-  animation: toastSlideIn 0.3s forwards;
-}
-
-.toast-discovery { border-color: #fbbf24; }
-.toast-quest-complete { border-color: #22c55e; }
-
-.toast-badge {
   font-size: 9px;
-  font-weight: 800;
-  color: #fbbf24;
-  margin-bottom: 2px;
-}
-
-.toast-title {
-  font-size: 13px;
-  font-weight: 800;
+  line-height: 1.5;
   color: #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 -2px 0 0 #fff, 0 2px 0 0 #fff, -2px 0 0 0 #fff, 2px 0 0 0 #fff;
+  animation: toastPop 0.2s ease-out;
 }
 
-.toast-desc {
-  font-size: 11px;
-  color: #94a3b8;
-  margin: 3px 0;
+.toast.toast-success {
+  border-color: #15803d;
+  color: #86efac;
 }
 
-.toast-points {
-  font-size: 11px;
-  font-weight: 800;
-  color: #22c55e;
+.toast.toast-discovery {
+  border-color: #b45309;
+  color: #fef08a;
 }
 
-.toast-fade-out {
-  opacity: 0;
-  transform: translateX(30px);
+@keyframes toastPop {
+  from { transform: translateY(-10px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
 }
 
-@keyframes toastSlideIn {
-  from { opacity: 0; transform: translateX(30px); }
-  to { opacity: 1; transform: translateX(0); }
-}
-
-/* Fullscreen Sleep Fade Overlay */
-#sleep-overlay {
-  position: absolute;
+/* --------------------------------------------------------------------------
+   7. NES Modal Framework (peteroravec.com style frames)
+   -------------------------------------------------------------------------- */
+.modal-root {
+  position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  background: #080c14;
+  width: 100vw;
+  height: 100vh;
   z-index: 200;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: opacity 0.8s ease;
-}
-
-.sleep-content {
-  text-align: center;
-  color: #ffffff;
-}
-
-.sleep-moon {
-  font-size: 48px;
-  margin-bottom: 10px;
-}
-
-.sleep-content h2 {
-  font-size: 20px;
-  font-weight: 800;
-  margin-bottom: 4px;
-}
-
-.sleep-content p {
-  font-size: 12px;
-  color: #94a3b8;
-}
-
-/* Map Modal & Quiz styling */
-.map-modal-container, .quiz-container, .settings-container, .canteen-menu-container, .party-modal-container {
-  width: 100%;
-  max-width: 900px;
-  max-height: 88vh;
-  background: #1e293b;
-  border: 4px solid #475569;
-  border-radius: 14px;
   padding: 16px;
+}
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(4px);
+  z-index: -1;
+}
+
+.frame-wrp {
+  position: relative;
+  max-width: 960px;
+  width: 100%;
+  max-height: 90vh;
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
 }
 
-.map-modal-header, .quiz-header, .settings-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.frame-wrp-inner {
+  position: relative;
+  width: 100%;
 }
 
-.map-body-layout {
-  display: grid;
-  grid-template-columns: 1fr 260px;
-  gap: 12px;
-  flex: 1;
-  overflow: hidden;
-}
-
-.map-canvas-wrapper {
+.frame.pixel-corners {
   background: #0f172a;
-  border: 2px solid #334155;
-  border-radius: 8px;
+  border: 4px solid #000000;
+  padding: 24px 28px;
+  color: #f8fafc;
+  overflow-y: auto;
+  max-height: 82vh;
+  box-shadow: 
+    0 -4px 0 0 #3b82f6, 0 4px 0 0 #3b82f6, 
+    -4px 0 0 0 #3b82f6, 4px 0 0 0 #3b82f6;
+}
+
+.close-btn-position {
+  position: absolute;
+  top: -12px;
+  right: -12px;
+  width: 32px;
+  height: 32px;
+  padding: 0 !important;
+  font-size: 16px !important;
+  line-height: 26px !important;
+  z-index: 300;
+}
+
+.big-title {
+  font-size: 16px;
+  color: #f87171;
+  text-align: center;
+  text-shadow: 2px 2px #000000;
+  margin-bottom: 16px;
+  letter-spacing: 1px;
+}
+
+/* --------------------------------------------------------------------------
+   8. Tech & Academic Schools Modal (peteroravec.com style)
+   -------------------------------------------------------------------------- */
+.tech-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 20px 0;
+}
+
+.tech-card {
+  background: #1e293b;
+  border: 3px solid #000000;
+  padding: 16px;
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  box-shadow: 0 -2px 0 0 #475569, 0 2px 0 0 #475569, -2px 0 0 0 #475569, 2px 0 0 0 #475569;
+}
+
+.tech-card .logo {
+  font-size: 36px;
+  background: #0f172a;
+  border: 2px solid #000;
+  width: 60px;
+  height: 60px;
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
+  flex-shrink: 0;
 }
 
-.map-section-nav-tabs {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  background: #0f172a;
-  padding: 6px;
-  border-radius: 8px;
-  border: 1px solid #334155;
-}
-
-.map-sec-tab {
+.tech-card .texts {
   flex: 1;
-  min-width: 140px;
+}
+
+.tech-card .texts .title {
+  font-size: 12px;
+  color: #60a5fa;
+  margin-bottom: 6px;
+}
+
+.tech-card .texts .desc {
+  font-size: 8px;
+  color: #fef08a;
+  margin-bottom: 8px;
+}
+
+.tech-card .texts p {
+  font-size: 8px;
+  font-family: var(--body-font);
+  line-height: 1.5;
+  color: #cbd5e1;
+  margin-bottom: 8px;
+}
+
+.other-skills-list {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.other-skills-list li {
   background: #1e293b;
-  border: 2px solid #334155;
-  color: #94a3b8;
-  font-family: var(--font-gba);
-  font-size: 9px;
-  font-weight: 800;
+  border: 2px solid #000;
   padding: 6px 10px;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.2s ease;
+  font-size: 8px;
+  color: #86efac;
+}
+
+/* --------------------------------------------------------------------------
+   9. About UoH Heritage Modal (peteroravec.com style)
+   -------------------------------------------------------------------------- */
+.heritage-profile-box {
+  background: #1e293b;
+  border: 3px solid #000;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.heritage-icon-big {
+  font-size: 44px;
+}
+
+.heritage-info h3 {
+  font-size: 13px;
+  color: #f87171;
+  margin-bottom: 4px;
+}
+
+.heritage-info .sub {
+  font-size: 8px;
+  color: #94a3b8;
+}
+
+.heritage-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 10px;
+  margin: 16px 0;
+}
+
+.stat-chip {
+  background: #0f172a;
+  border: 2px solid #000;
+  padding: 10px;
   text-align: center;
 }
 
-.map-sec-tab:hover {
-  color: #ffffff;
-  border-color: #64748b;
-  background: #334155;
+.stat-chip .val {
+  font-size: 14px;
+  color: #facc15;
+  margin-bottom: 4px;
 }
 
-.map-sec-tab.active {
-  background: #3b82f6;
-  border-color: #93c5fd;
-  color: #ffffff;
-  box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+.stat-chip .lbl {
+  font-size: 7px;
+  color: #94a3b8;
 }
 
-.map-sec-tab[data-sectab="main"].active { background: #059669; border-color: #6ee7b7; box-shadow: 0 0 10px rgba(16, 185, 129, 0.5); }
-.map-sec-tab[data-sectab="amphi_valley"].active { background: #047857; border-color: #34d399; box-shadow: 0 0 10px rgba(5, 150, 105, 0.6); }
-.map-sec-tab[data-sectab="checkdam_buffer"].active { background: #0284c7; border-color: #7dd3fc; box-shadow: 0 0 10px rgba(2, 132, 199, 0.6); }
-.map-sec-tab[data-sectab="south"].active { background: #1d4ed8; border-color: #93c5fd; box-shadow: 0 0 10px rgba(37, 99, 235, 0.5); }
-.map-sec-tab[data-sectab="west"].active { background: #ca8a04; border-color: #fde047; box-shadow: 0 0 10px rgba(234, 179, 8, 0.5); }
-.map-sec-tab[data-sectab="east"].active { background: #7e22ce; border-color: #d8b4fe; box-shadow: 0 0 10px rgba(168, 85, 247, 0.5); }
-.map-sec-tab[data-sectab="overview"].active { background: #dc2626; border-color: #fca5a5; box-shadow: 0 0 10px rgba(220, 38, 38, 0.5); }
+.text-block {
+  margin-bottom: 14px;
+  font-family: var(--body-font);
+  font-size: 9px;
+  line-height: 1.6;
+  color: #e2e8f0;
+}
 
-.fast-travel-grid {
+/* --------------------------------------------------------------------------
+   10. Compendium & Directory Modal (CV & Projects style)
+   -------------------------------------------------------------------------- */
+.compendium-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 16px;
+  border-bottom: 2px solid #334155;
+  padding-bottom: 12px;
+}
+
+.compendium-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4px;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 12px;
 }
 
-.btn-travel {
-  background: #0f172a;
-  border: 2px solid #334155;
+.compendium-card {
+  background: #1e293b;
+  border: 2px solid #000000;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.compendium-card .pin-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 9px;
+  color: #60a5fa;
+}
+
+.compendium-card .pin-badge {
+  background: #dc2626;
   color: #ffffff;
-  font-family: var(--font-gba);
-  font-size: 10px;
-  font-weight: 700;
-  padding: 6px;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.15s ease;
+  font-size: 7px;
+  padding: 2px 5px;
+  border: 1px solid #000;
 }
 
-.btn-travel:hover {
-  transform: scale(1.02);
+.compendium-card .pin-desc {
+  font-family: var(--body-font);
+  font-size: 8px;
+  color: #cbd5e1;
+  line-height: 1.4;
 }
 
-.sec-main-btn:hover { background: #065f46; border-color: #34d399; }
-.sec-amphi-btn:hover { background: #065f46; border-color: #6ee7b7; }
-.sec-checkdam-btn:hover { background: #075985; border-color: #38bdf8; }
-.sec-south-btn:hover { background: #1e3a8a; border-color: #60a5fa; }
-.sec-west-btn:hover { background: #713f12; border-color: #facc15; }
-.sec-east-btn:hover { background: #581c87; border-color: #c084fc; }
+/* --------------------------------------------------------------------------
+   11. 5-Question Arcade Pop Quiz Modal
+   -------------------------------------------------------------------------- */
+.quiz-header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  border-bottom: 2px solid #334155;
+  padding-bottom: 8px;
+}
 
-/* Quiz */
 .quiz-question-box {
-  background: #0f172a;
-  border: 2px solid #334155;
-  padding: 14px;
-  border-radius: 8px;
-  font-size: 13px;
-  font-weight: 700;
+  background: #1e293b;
+  border: 3px solid #000000;
+  padding: 16px;
+  margin-bottom: 16px;
+  font-size: 10px;
+  line-height: 1.6;
+  color: #ffffff;
 }
 
 .quiz-options-list {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 10px;
 }
 
 .quiz-option-btn {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  background: #0f172a;
-  border: 2px solid #334155;
-  color: #ffffff;
-  padding: 10px;
-  border-radius: 6px;
-  font-family: var(--font-gba);
-  font-size: 12px;
-  cursor: pointer;
-  text-align: left;
+  width: 100%;
+  text-align: left !important;
+  font-size: 8px !important;
+  padding: 10px 14px !important;
+  line-height: 1.4;
 }
 
-.quiz-option-btn:hover {
-  border-color: #f87171;
-}
-
-.opt-letter {
-  background: #334155;
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-weight: 800;
-}
-
-.opt-correct { background: #14532d !important; border-color: #22c55e !important; }
-.opt-wrong { background: #7f1d1d !important; border-color: #ef4444 !important; }
-
-/* ==========================================================================
-   Sleek, Non-Distracting Toast Notifications (Bottom-Left Pill)
-   ========================================================================== */
-#toast-container {
+/* --------------------------------------------------------------------------
+   12. Sleep Overlay
+   -------------------------------------------------------------------------- */
+#sleep-overlay {
   position: fixed;
-  bottom: 24px;
-  left: 24px;
-  z-index: 150;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  pointer-events: none;
-}
-
-.game-toast {
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #000000;
+  z-index: 99999;
   display: flex;
   align-items: center;
-  gap: 10px;
-  background: rgba(15, 23, 42, 0.92);
-  backdrop-filter: blur(8px);
-  border: 2px solid #334155;
-  border-radius: 8px;
-  padding: 8px 14px;
-  color: #ffffff;
-  font-family: var(--font-gba);
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
-  max-width: 320px;
-  pointer-events: auto;
-  transition: opacity 0.25s ease, transform 0.25s ease;
+  justify-content: center;
+  transition: opacity 0.5s ease;
 }
 
-.toast-enter {
-  animation: toastSlideIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+.sleep-content {
+  background: #0f172a;
+  border: 4px solid #000;
+  padding: 30px 40px;
+  text-align: center;
+  max-width: 440px;
+  box-shadow: 0 -4px 0 0 #3b82f6, 0 4px 0 0 #3b82f6, -4px 0 0 0 #3b82f6, 4px 0 0 0 #3b82f6;
 }
 
-@keyframes toastSlideIn {
-  from {
-    opacity: 0;
-    transform: translateY(12px) scale(0.96);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
+.sleep-moon {
+  font-size: 40px;
+  margin-bottom: 14px;
 }
 
-.toast-fade-out {
-  opacity: 0 !important;
-  transform: translateY(-8px) scale(0.96) !important;
+.sleep-content h2 {
+  font-size: 14px;
+  color: #93c5fd;
+  margin-bottom: 10px;
 }
 
-.toast-mini-icon {
-  font-size: 16px;
-  flex-shrink: 0;
-}
-
-.toast-mini-text {
-  font-size: 11px;
-  font-weight: 700;
-  color: #f1f5f9;
-}
-
-.toast-mini-body {
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-}
-
-.toast-mini-title {
-  font-size: 11px;
-  font-weight: 800;
-  color: #ffffff;
-}
-
-.toast-mini-sub {
-  font-size: 9px;
-  font-weight: 700;
-  color: #fbbf24;
-}
-
-/* Toast Color Themes */
-.toast-discovery {
-  border-color: #10b981;
-  background: rgba(6, 78, 59, 0.92);
-  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
-}
-
-.toast-quest-complete {
-  border-color: #f59e0b;
-  background: rgba(120, 53, 15, 0.92);
-  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.3);
-}
-
-.toast-success {
-  border-color: #3b82f6;
-  background: rgba(30, 58, 138, 0.92);
-}
-
-.toast-info {
-  border-color: #64748b;
-  background: rgba(15, 23, 42, 0.92);
+.sleep-content p {
+  font-size: 8px;
+  color: #cbd5e1;
+  line-height: 1.5;
 }

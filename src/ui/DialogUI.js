@@ -1,7 +1,8 @@
 import { soundManager } from '../game/AudioSynth.js';
 
 /**
- * Pokémon FireRed GBA-Style Dialogue Box with animated typewriter text & bouncing indicator arrow
+ * NES Pixel Art Dialogue Box with typewriter text & retro speaker portrait
+ * Matching peteroravec.com retro 8-bit styling
  */
 export class DialogUI {
   constructor(uiManager) {
@@ -21,6 +22,7 @@ export class DialogUI {
     const modal = document.getElementById('dialog-modal');
     if (!modal) return;
 
+    soundManager.playInteract();
     modal.classList.remove('hidden');
     this.renderSentence();
   }
@@ -38,21 +40,25 @@ export class DialogUI {
     this.isTyping = true;
 
     modal.innerHTML = `
-      <div class="firered-dialog-overlay">
-        <div class="firered-dialog-frame">
-          <div class="firered-dialog-speaker">
-            <span class="firered-speaker-avatar">${this.currentNPC.avatar || '👤'}</span>
-            <span class="firered-speaker-name">${this.currentNPC.name}</span>
-            <span class="firered-speaker-role">(${this.currentNPC.role || 'Resident'})</span>
+      <div class="modal-backdrop"></div>
+      <div style="position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 720px; z-index: 300;">
+        <div class="frame pixel-corners" style="background: #0f172a; border: 4px solid #000; padding: 18px 24px; box-shadow: 0 -4px 0 0 #3b82f6, 0 4px 0 0 #3b82f6, -4px 0 0 0 #3b82f6, 4px 0 0 0 #3b82f6; cursor: pointer;">
+          <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #334155; padding-bottom: 8px; margin-bottom: 12px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="font-size: 18px;">${this.currentNPC.avatar || '👤'}</span>
+              <span style="font-size: 10px; color: #f87171; font-weight: bold;">${this.currentNPC.name}</span>
+              <span style="font-size: 7px; color: #94a3b8;">(${this.currentNPC.role || 'Resident'})</span>
+            </div>
+            <span style="font-size: 7px; color: #facc15;">CLICK / ENTER ➔</span>
           </div>
-          <div class="firered-dialog-text" id="firered-text-body"></div>
-          <div class="firered-dialog-arrow" id="firered-arrow">▼</div>
+          <div id="nes-dialog-text" style="font-size: 9px; line-height: 1.7; color: #f8fafc; min-height: 48px;"></div>
+          <div id="nes-dialog-arrow" style="text-align: right; font-size: 10px; color: #38bdf8; animation: bounce 0.6s infinite alternate;">▼</div>
         </div>
       </div>
     `;
 
-    const textBody = document.getElementById('firered-text-body');
-    const arrow = document.getElementById('firered-arrow');
+    const textBody = document.getElementById('nes-dialog-text');
+    const arrow = document.getElementById('nes-dialog-arrow');
     if (arrow) arrow.style.display = 'none';
 
     if (this.typewriterTimer) clearInterval(this.typewriterTimer);
@@ -75,7 +81,7 @@ export class DialogUI {
     }, 28);
 
     // Click / Advance handler
-    const frame = modal.querySelector('.firered-dialog-frame');
+    const frame = modal.querySelector('.frame');
     frame?.addEventListener('click', () => this.advance());
   }
 
@@ -84,8 +90,8 @@ export class DialogUI {
       // Instantly finish sentence typing
       this.isTyping = false;
       if (this.typewriterTimer) clearInterval(this.typewriterTimer);
-      const textBody = document.getElementById('firered-text-body');
-      const arrow = document.getElementById('firered-arrow');
+      const textBody = document.getElementById('nes-dialog-text');
+      const arrow = document.getElementById('nes-dialog-arrow');
       if (textBody) textBody.textContent = this.fullText;
       if (arrow) arrow.style.display = 'block';
       return;

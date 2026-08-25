@@ -819,8 +819,130 @@ export class WorldMap {
     this.locations = this.allLocations.filter(loc => loc.section === sectionId);
     this.npcs = this.allNPCs.filter(npc => npc.section === sectionId);
 
+    this.initVehiclesForSection();
     this.generateDenseWorld();
     this.buildColliders();
+  }
+
+  initVehiclesForSection() {
+    this.vehicles = [];
+
+    if (this.currentSection === 'main') {
+      this.vehicles.push({
+        id: 'shuttle_main_1',
+        name: 'Campus E-Shuttle 1',
+        x: 100,
+        y: 240,
+        color: 'emerald',
+        speed: 38,
+        direction: 'right',
+        waypoints: [
+          { x: 100, y: 240 },
+          { x: 700, y: 240 },
+          { x: 700, y: 520 },
+          { x: 940, y: 540 },
+          { x: 1540, y: 520 },
+          { x: 940, y: 540 },
+          { x: 700, y: 520 },
+          { x: 700, y: 240 }
+        ],
+        currentWpIdx: 0,
+        isBlinking: false,
+        blinkSide: 'right',
+        blinkerTimer: 0
+      });
+      this.vehicles.push({
+        id: 'shuttle_main_2',
+        name: 'Library Express Cart',
+        x: 700,
+        y: 520,
+        color: 'yellow',
+        speed: 32,
+        direction: 'down',
+        waypoints: [
+          { x: 700, y: 240 },
+          { x: 700, y: 520 },
+          { x: 680, y: 640 },
+          { x: 860, y: 705 },
+          { x: 800, y: 910 },
+          { x: 860, y: 705 },
+          { x: 680, y: 640 },
+          { x: 700, y: 520 }
+        ],
+        currentWpIdx: 1,
+        isBlinking: false,
+        blinkSide: 'left',
+        blinkerTimer: 0
+      });
+    } else if (this.currentSection === 'south') {
+      this.vehicles.push({
+        id: 'shuttle_south_1',
+        name: 'South Campus Buggy',
+        x: 220,
+        y: 470,
+        color: 'blue',
+        speed: 36,
+        direction: 'right',
+        waypoints: [
+          { x: 220, y: 470 },
+          { x: 700, y: 470 },
+          { x: 1100, y: 470 },
+          { x: 1100, y: 800 },
+          { x: 1100, y: 1180 },
+          { x: 1100, y: 800 },
+          { x: 1100, y: 470 },
+          { x: 700, y: 470 }
+        ],
+        currentWpIdx: 0,
+        isBlinking: false,
+        blinkSide: 'right',
+        blinkerTimer: 0
+      });
+    } else if (this.currentSection === 'west') {
+      this.vehicles.push({
+        id: 'shuttle_west_1',
+        name: 'Stadium Shuttle',
+        x: 140,
+        y: 250,
+        color: 'emerald',
+        speed: 38,
+        direction: 'right',
+        waypoints: [
+          { x: 140, y: 250 },
+          { x: 550, y: 250 },
+          { x: 1280, y: 250 },
+          { x: 1280, y: 590 },
+          { x: 1280, y: 250 },
+          { x: 550, y: 250 }
+        ],
+        currentWpIdx: 0,
+        isBlinking: false,
+        blinkSide: 'right',
+        blinkerTimer: 0
+      });
+    } else if (this.currentSection === 'east') {
+      this.vehicles.push({
+        id: 'shuttle_east_1',
+        name: 'Arts & Sukoon Shuttle',
+        x: 180,
+        y: 470,
+        color: 'purple',
+        speed: 35,
+        direction: 'right',
+        waypoints: [
+          { x: 180, y: 470 },
+          { x: 600, y: 470 },
+          { x: 1040, y: 470 },
+          { x: 1040, y: 740 },
+          { x: 1040, y: 470 },
+          { x: 600, y: 470 }
+        ],
+        currentWpIdx: 0,
+        isBlinking: false,
+        blinkSide: 'right',
+        blinkerTimer: 0
+      });
+    }
   }
 
   generateDenseWorld() {
@@ -960,12 +1082,62 @@ export class WorldMap {
     return null;
   }
 
-  updateWildlife(delta) {
+  updateWildlife(delta, player = null) {
     for (const w of this.wildlife) {
       w.timer += delta;
       w.x += w.vx * delta;
       if (Math.abs(w.x - w.startX) > 40) {
         w.vx = -w.vx;
+      }
+    }
+
+    this.updateVehicles(delta, player);
+  }
+
+  updateVehicles(delta, player) {
+    if (!this.vehicles) return;
+
+    for (const v of this.vehicles) {
+      if (!v.waypoints || v.waypoints.length === 0) continue;
+
+      const targetWp = v.waypoints[v.currentWpIdx];
+      const dx = targetWp.x - v.x;
+      const dy = targetWp.y - v.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+
+      // Blinker animation timer
+      v.blinkerTimer = (v.blinkerTimer || 0) + delta;
+      v.isBlinking = (Math.floor(v.blinkerTimer * 4) % 2 === 0);
+
+      // Check pedestrian safety: if player is right in front within 30px, slow down/yield
+      let speed = v.speed;
+      if (player) {
+        const pdist = Math.hypot(player.x - v.x, player.y - v.y);
+        if (pdist < 32) speed = 0;
+      }
+
+      if (dist < 4) {
+        // Arrived at current waypoint, select next
+        v.currentWpIdx = (v.currentWpIdx + 1) % v.waypoints.length;
+        const nextWp = v.waypoints[v.currentWpIdx];
+        const nextDx = nextWp.x - v.x;
+        const nextDy = nextWp.y - v.y;
+
+        if (Math.abs(nextDx) > Math.abs(nextDy)) {
+          v.direction = nextDx > 0 ? 'right' : 'left';
+        } else {
+          v.direction = nextDy > 0 ? 'down' : 'up';
+        }
+      } else {
+        const moveDist = Math.min(speed * delta, dist);
+        v.x += (dx / dist) * moveDist;
+        v.y += (dy / dist) * moveDist;
+
+        if (Math.abs(dx) > Math.abs(dy)) {
+          v.direction = dx > 0 ? 'right' : 'left';
+        } else {
+          v.direction = dy > 0 ? 'down' : 'up';
+        }
       }
     }
   }
@@ -1003,18 +1175,75 @@ export class WorldMap {
     // 10. Custom Architectural Buildings (All 78 Pins with Badges)
     this.drawBuildings(ctx, camera);
 
-    // 11. Fences, Benches, Fountains, Signs
+    // 11. Campus Autonomous E-Shuttles & Traffic
+    this.drawVehicles(ctx, camera, timeSystem);
+
+    // 12. Fences, Benches, Fountains, Signs
     this.drawProps(ctx, camera);
 
-    // 12. Dense Trees & Forest Borders
+    // 13. Dense Trees & Forest Borders
     this.drawDenseForest(ctx, camera);
 
-    // 13. Street Lamps
+    // 14. Street Lamps
     this.drawStreetLamps(ctx, camera, timeSystem);
 
-    // 14. Wildlife & NPCs
+    // 15. Wildlife & NPCs
     this.drawWildlife(ctx, camera);
     this.drawNPCs(ctx, camera);
+  }
+
+  drawVehicles(ctx, camera, timeSystem) {
+    if (!this.vehicles) return;
+    const isNight = timeSystem.ambientMode === 'night' || timeSystem.ambientMode === 'evening';
+
+    for (const v of this.vehicles) {
+      const sx = v.x - camera.x;
+      const sy = v.y - camera.y;
+
+      if (sx < -60 || sx > camera.width + 60 || sy < -60 || sy > camera.height + 60) continue;
+
+      // Draw vehicle headlight beam at evening/night
+      if (isNight) {
+        ctx.save();
+        let hx = sx + 18;
+        let hy = sy + 11;
+        let angle = 0;
+        if (v.direction === 'right') { hx = sx + 34; hy = sy + 11; angle = 0; }
+        else if (v.direction === 'left') { hx = sx + 2; hy = sy + 11; angle = Math.PI; }
+        else if (v.direction === 'down') { hx = sx + 11; hy = sy + 34; angle = Math.PI / 2; }
+        else if (v.direction === 'up') { hx = sx + 11; hy = sy + 2; angle = -Math.PI / 2; }
+
+        ctx.translate(hx, hy);
+        ctx.rotate(angle);
+
+        const beam = ctx.createRadialGradient(0, 0, 5, 45, 0, 50);
+        beam.addColorStop(0, 'rgba(254, 240, 138, 0.6)');
+        beam.addColorStop(0.5, 'rgba(254, 240, 138, 0.2)');
+        beam.addColorStop(1, 'rgba(254, 240, 138, 0)');
+
+        ctx.fillStyle = beam;
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.lineTo(55, -22);
+        ctx.lineTo(55, 22);
+        ctx.closePath();
+        ctx.fill();
+        ctx.restore();
+      }
+
+      const sprite = pixelEngine.getVehicleSprite(v.direction, v.color, v.isBlinking, v.blinkSide);
+      ctx.drawImage(sprite, sx, sy);
+
+      // Vehicle Name Tag
+      ctx.save();
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 7px monospace';
+      ctx.textAlign = 'center';
+      ctx.shadowColor = '#000000';
+      ctx.shadowBlur = 3;
+      ctx.fillText(v.name, sx + (v.direction === 'left' || v.direction === 'right' ? 18 : 11), sy - 4);
+      ctx.restore();
+    }
   }
 
   drawTerrain(ctx, camera) {

@@ -164,21 +164,54 @@ export class Player {
   drawInteractBubble(ctx, sx, sy) {
     const bob = Math.sin(Date.now() / 160) * 2;
     const bubbleX = sx + 12;
-    const bubbleY = sy - 12 + bob;
+    const bubbleY = sy - 14 + bob;
 
-    ctx.fillStyle = '#2858b8';
-    ctx.beginPath();
-    ctx.arc(bubbleX, bubbleY, 9, 0, Math.PI * 2);
-    ctx.fill();
+    let label = 'E';
+    let action = '';
+    if (this.nearbyInteractable) {
+      if (this.nearbyInteractable.type === 'npc' || this.nearbyInteractable.type === 'interior_npc') {
+        action = 'TALK';
+      } else if (this.nearbyInteractable.type === 'bed') {
+        action = 'REST';
+      } else if (this.nearbyInteractable.type === 'quiz') {
+        action = 'QUIZ';
+      } else if (this.nearbyInteractable.type === 'exit_door') {
+        action = 'EXIT';
+      } else if (this.nearbyInteractable.data?.hasInterior) {
+        action = 'ENTER';
+      } else if (this.nearbyInteractable.data?.isNightCanteen) {
+        action = 'EAT';
+      } else {
+        action = 'INFO';
+      }
+    }
 
-    ctx.strokeStyle = '#ffffff';
-    ctx.lineWidth = 1.5;
-    ctx.stroke();
+    const text = action ? `[E] ${action}` : '[E]';
+    ctx.save();
+    ctx.font = 'bold 7px "Press Start 2P", monospace';
+    const textWidth = ctx.measureText(text).width;
+    const pad = 4;
+    const boxW = Math.max(20, textWidth + pad * 2);
+    const boxH = 14;
+    const boxX = bubbleX - boxW / 2;
+    const boxY = bubbleY - boxH / 2;
 
+    // NES pixel-corner badge background
+    ctx.fillStyle = '#0f172a';
+    ctx.fillRect(boxX, boxY, boxW, boxH);
+    ctx.fillStyle = '#2563eb';
+    ctx.fillRect(boxX + 1, boxY + 1, boxW - 2, boxH - 2);
+
+    // Border highlights
+    ctx.fillStyle = '#60a5fa';
+    ctx.fillRect(boxX + 1, boxY + 1, boxW - 2, 1);
+    ctx.fillRect(boxX + 1, boxY + 1, 1, boxH - 2);
+
+    // Text
     ctx.fillStyle = '#ffffff';
-    ctx.font = 'bold 9px monospace';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText('A', bubbleX, bubbleY);
+    ctx.fillText(text, bubbleX, bubbleY + 1);
+    ctx.restore();
   }
 }

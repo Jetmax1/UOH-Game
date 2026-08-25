@@ -987,6 +987,250 @@ export class PixelArtEngine {
     this.cache.exclamation = canvas;
     return canvas;
   }
+
+  // =========================================================================
+  // 5. CAMPUS VEHICLES & E-SHUTTLES (peteroravec.com style traffic system)
+  // =========================================================================
+
+  getVehicleSprite(direction = 'right', color = 'emerald', isBlinking = false, blinkSide = 'right') {
+    const key = `vehicle_${direction}_${color}_${isBlinking ? blinkSide : 'none'}`;
+    if (this.cache[key]) return this.cache[key];
+
+    const isHorizontal = direction === 'left' || direction === 'right';
+    const width = isHorizontal ? 36 : 22;
+    const height = isHorizontal ? 22 : 36;
+    const { canvas, ctx } = this.createCanvas(width, height);
+
+    const bodyColors = {
+      emerald: { main: '#059669', dark: '#047857', light: '#34d399', roof: '#10b981' },
+      blue: { main: '#2563eb', dark: '#1d4ed8', light: '#60a5fa', roof: '#3b82f6' },
+      yellow: { main: '#d97706', dark: '#b45309', light: '#fcd34d', roof: '#f59e0b' },
+      purple: { main: '#7c3aed', dark: '#6d28d9', light: '#a78bfa', roof: '#8b5cf6' }
+    };
+    const c = bodyColors[color] || bodyColors.emerald;
+
+    if (isHorizontal) {
+      const isRight = direction === 'right';
+      // Chassis shadow
+      ctx.fillStyle = 'rgba(0,0,0,0.4)';
+      ctx.fillRect(2, 18, 32, 4);
+
+      // Main Vehicle Body (Campus E-Shuttle Buggy)
+      ctx.fillStyle = c.dark;
+      ctx.fillRect(2, 6, 32, 12);
+      ctx.fillStyle = c.main;
+      ctx.fillRect(3, 7, 30, 10);
+
+      // Canopy / Roof Pillars
+      ctx.fillStyle = '#e2e8f0';
+      ctx.fillRect(5, 2, 2, 6);
+      ctx.fillRect(17, 2, 2, 6);
+      ctx.fillRect(29, 2, 2, 6);
+      ctx.fillStyle = c.roof;
+      ctx.fillRect(3, 0, 30, 3);
+      ctx.fillStyle = c.light;
+      ctx.fillRect(4, 1, 28, 1);
+
+      // Windshield & Side Windows
+      ctx.fillStyle = '#67e8f9';
+      if (isRight) {
+        ctx.fillRect(26, 4, 6, 4); // Front windshield
+        ctx.fillStyle = '#bae6fd';
+        ctx.fillRect(27, 4, 3, 3);
+        ctx.fillStyle = '#38bdf8';
+        ctx.fillRect(7, 4, 18, 4); // Side passenger window
+      } else {
+        ctx.fillRect(4, 4, 6, 4); // Front windshield
+        ctx.fillStyle = '#bae6fd';
+        ctx.fillRect(6, 4, 3, 3);
+        ctx.fillStyle = '#38bdf8';
+        ctx.fillRect(11, 4, 18, 4); // Side passenger window
+      }
+
+      // Wheels (Rubber tires with metal rims)
+      const drawWheel = (wx, wy) => {
+        ctx.fillStyle = '#1e293b';
+        ctx.fillRect(wx, wy, 7, 6);
+        ctx.fillStyle = '#64748b';
+        ctx.fillRect(wx + 1, wy + 1, 5, 4);
+        ctx.fillStyle = '#cbd5e1';
+        ctx.fillRect(wx + 2, wy + 2, 3, 2);
+      };
+      drawWheel(5, 14);
+      drawWheel(24, 14);
+
+      // Lights
+      if (isRight) {
+        // Headlights (Front right)
+        ctx.fillStyle = '#fef08a';
+        ctx.fillRect(33, 9, 2, 3);
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(34, 10, 1, 1);
+        // Taillights (Rear left)
+        ctx.fillStyle = '#ef4444';
+        ctx.fillRect(2, 9, 2, 3);
+        // Blinkers
+        if (isBlinking) {
+          ctx.fillStyle = '#f59e0b';
+          ctx.fillRect(33, 7, 2, 2);
+        }
+      } else {
+        // Headlights (Front left)
+        ctx.fillStyle = '#fef08a';
+        ctx.fillRect(1, 9, 2, 3);
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(1, 10, 1, 1);
+        // Taillights (Rear right)
+        ctx.fillStyle = '#ef4444';
+        ctx.fillRect(32, 9, 2, 3);
+        // Blinkers
+        if (isBlinking) {
+          ctx.fillStyle = '#f59e0b';
+          ctx.fillRect(1, 7, 2, 2);
+        }
+      }
+    } else {
+      // Vertical (Up or Down)
+      const isDown = direction === 'down';
+      // Chassis shadow
+      ctx.fillStyle = 'rgba(0,0,0,0.4)';
+      ctx.fillRect(1, 4, 20, 30);
+
+      // Body
+      ctx.fillStyle = c.dark;
+      ctx.fillRect(2, 2, 18, 32);
+      ctx.fillStyle = c.main;
+      ctx.fillRect(3, 3, 16, 30);
+
+      // Roof
+      ctx.fillStyle = c.roof;
+      ctx.fillRect(4, 8, 14, 20);
+      ctx.fillStyle = c.light;
+      ctx.fillRect(5, 9, 12, 2);
+
+      // Windshield
+      ctx.fillStyle = '#67e8f9';
+      if (isDown) {
+        ctx.fillRect(4, 28, 14, 3);
+        ctx.fillStyle = '#bae6fd';
+        ctx.fillRect(6, 29, 10, 1);
+        // Headlights (Bottom)
+        ctx.fillStyle = '#fef08a';
+        ctx.fillRect(3, 33, 3, 2);
+        ctx.fillRect(16, 33, 3, 2);
+        // Taillights (Top)
+        ctx.fillStyle = '#ef4444';
+        ctx.fillRect(3, 1, 3, 2);
+        ctx.fillRect(16, 1, 3, 2);
+      } else {
+        ctx.fillRect(4, 5, 14, 3);
+        ctx.fillStyle = '#bae6fd';
+        ctx.fillRect(6, 6, 10, 1);
+        // Headlights (Top)
+        ctx.fillStyle = '#fef08a';
+        ctx.fillRect(3, 1, 3, 2);
+        ctx.fillRect(16, 1, 3, 2);
+        // Taillights (Bottom)
+        ctx.fillStyle = '#ef4444';
+        ctx.fillRect(3, 33, 3, 2);
+        ctx.fillRect(16, 33, 3, 2);
+      }
+
+      // Wheels
+      ctx.fillStyle = '#1e293b';
+      ctx.fillRect(0, 5, 3, 6);
+      ctx.fillRect(19, 5, 3, 6);
+      ctx.fillRect(0, 25, 3, 6);
+      ctx.fillRect(19, 25, 3, 6);
+
+      // Blinkers
+      if (isBlinking) {
+        ctx.fillStyle = '#f59e0b';
+        if (blinkSide === 'left') {
+          ctx.fillRect(2, isDown ? 31 : 3, 3, 2);
+        } else {
+          ctx.fillRect(17, isDown ? 31 : 3, 3, 2);
+        }
+      }
+    }
+
+    this.cache[key] = canvas;
+    return canvas;
+  }
+
+  // Preloader & Mascot Pixel Art Frame Generator
+  getMascotSprite(frame = 0) {
+    const key = `mascot_${frame % 4}`;
+    if (this.cache[key]) return this.cache[key];
+
+    const { canvas, ctx } = this.createCanvas(32, 32);
+    const bounce = (frame % 2 === 1) ? 1 : 0;
+
+    // Shadow
+    ctx.fillStyle = 'rgba(0,0,0,0.3)';
+    ctx.beginPath();
+    ctx.ellipse(16, 28, 10, 3, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Red Graduation Cap / Student Beanie
+    ctx.fillStyle = '#dc2626';
+    ctx.fillRect(8, 4 + bounce, 16, 6);
+    ctx.fillStyle = '#f87171';
+    ctx.fillRect(9, 3 + bounce, 14, 2);
+    ctx.fillStyle = '#f59e0b';
+    ctx.fillRect(15, 2 + bounce, 2, 2); // Tassel button
+    ctx.fillRect(21, 4 + bounce, 2, 6); // Tassel drop
+
+    // Face / Skin
+    ctx.fillStyle = '#f8b888';
+    ctx.fillRect(9, 10 + bounce, 14, 9);
+    // Hair
+    ctx.fillStyle = '#3e2723';
+    ctx.fillRect(8, 9 + bounce, 3, 6);
+    ctx.fillRect(21, 9 + bounce, 3, 6);
+    // Eyes
+    ctx.fillStyle = '#0f172a';
+    ctx.fillRect(11, 13 + bounce, 2, 3);
+    ctx.fillRect(19, 13 + bounce, 2, 3);
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(11, 13 + bounce, 1, 1);
+    ctx.fillRect(19, 13 + bounce, 1, 1);
+    // Smile
+    ctx.fillStyle = '#dc2626';
+    ctx.fillRect(14, 16 + bounce, 4, 1);
+    ctx.fillRect(15, 17 + bounce, 2, 1);
+
+    // Blue Hoodie / Campus Jacket
+    ctx.fillStyle = '#2563eb';
+    ctx.fillRect(7, 19 + bounce, 18, 7);
+    ctx.fillStyle = '#60a5fa';
+    ctx.fillRect(9, 19 + bounce, 14, 2);
+    ctx.fillStyle = '#f8fafc';
+    ctx.fillRect(15, 21 + bounce, 2, 5); // Zipper
+
+    // Hands Waving
+    if (frame % 4 < 2) {
+      ctx.fillStyle = '#f8b888';
+      ctx.fillRect(4, 16 + bounce, 4, 4);
+    } else {
+      ctx.fillStyle = '#f8b888';
+      ctx.fillRect(24, 16 + bounce, 4, 4);
+    }
+
+    // Jeans & Red Sneakers
+    ctx.fillStyle = '#1e293b';
+    ctx.fillRect(9, 26 + bounce, 6, 2);
+    ctx.fillRect(17, 26 + bounce, 6, 2);
+    ctx.fillStyle = '#ef4444';
+    ctx.fillRect(8, 27 + bounce, 7, 3);
+    ctx.fillRect(17, 27 + bounce, 7, 3);
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(8, 29 + bounce, 7, 1);
+    ctx.fillRect(17, 29 + bounce, 7, 1);
+
+    this.cache[key] = canvas;
+    return canvas;
+  }
 }
 
 export const pixelEngine = new PixelArtEngine();

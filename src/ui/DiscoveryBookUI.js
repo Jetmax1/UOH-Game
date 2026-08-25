@@ -43,44 +43,35 @@ export class DiscoveryBookUI {
     const quests = this.uiManager.game.questSystem.getAllQuestsWithProgress();
 
     modal.innerHTML = `
-      <div class="modal-backdrop">
-        <div class="pokedex-casing">
-          <!-- Pokédex Top Sensor Bar -->
-          <div class="pokedex-top-bar">
-            <div class="pokedex-big-blue-lens"></div>
-            <div class="pokedex-leds">
-              <span class="pokedex-led led-red"></span>
-              <span class="pokedex-led led-yellow"></span>
-              <span class="pokedex-led led-green"></span>
+      <div class="modal-backdrop"></div>
+      <div class="frame-wrp" style="max-width: 920px;">
+        <div class="frame-wrp-inner">
+          <button aria-label="Close" class="nes-btn is-error close-btn-position" id="btn-close-pokedex">×</button>
+          <div class="frame pixel-corners">
+            <!-- Header -->
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #334155; padding-bottom: 10px; margin-bottom: 12px;">
+              <div>
+                <h2 style="font-size: 13px; color: #f87171; margin-bottom: 4px;">📖 Campus Discovery Book</h2>
+                <p style="font-size: 8px; color: #94a3b8;">Directory of all 78 registered university landmarks &amp; active missions</p>
+              </div>
+              <span class="chip" style="background: #1e293b; border: 2px solid #000; padding: 4px 8px; font-size: 8px; color: #fef08a;">
+                DISCOVERED: ${stats.discovered} / ${stats.total} (${stats.percent}%) · ${stats.score} PTS
+              </span>
             </div>
-            <div class="pokedex-title-badge">UoH CAMPUSDEX v1.0</div>
-            <button class="pokedex-close-btn" id="btn-close-pokedex">✕</button>
-          </div>
 
-          <!-- Pokédex Navigation Tabs -->
-          <div class="pokedex-tabs-row">
-            <button class="pokedex-tab ${this.currentTab === 'all' ? 'active' : ''}" data-tab="all">ALL (#78)</button>
-            <button class="pokedex-tab ${this.currentTab === 'nature' ? 'active' : ''}" data-tab="nature">LAKES & ROCKS</button>
-            <button class="pokedex-tab ${this.currentTab === 'academic' ? 'active' : ''}" data-tab="academic">ACADEMIC</button>
-            <button class="pokedex-tab ${this.currentTab === 'residential' ? 'active' : ''}" data-tab="residential">HOSTELS</button>
-            <button class="pokedex-tab ${this.currentTab === 'sports' ? 'active' : ''}" data-tab="sports">SPORTS & AMENITIES</button>
-            <button class="pokedex-tab ${this.currentTab === 'quests' ? 'active' : ''}" data-tab="quests">QUESTS (${quests.filter(q => q.isComplete).length}/${quests.length})</button>
-          </div>
-
-          <!-- Main Pokédex Screen -->
-          <div class="pokedex-screen-frame">
-            ${this.currentTab === 'quests' ? this.renderQuestsView(quests) : this.renderPokedexDualPane(stats)}
-          </div>
-
-          <!-- Pokédex Bottom Action Bar -->
-          <div class="pokedex-bottom-bar">
-            <div class="pokedex-dpad-icon">➕</div>
-            <div class="pokedex-stats-readout">
-              DISCOVERED: <strong>${stats.discovered} / ${stats.total}</strong> (${stats.percent}%) &nbsp;|&nbsp; SCORE: <strong>${stats.score} PTS</strong>
+            <!-- Navigation Tabs -->
+            <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px;">
+              <button class="nes-btn ${this.currentTab === 'all' ? 'is-primary' : ''}" data-tab="all">ALL (#78)</button>
+              <button class="nes-btn ${this.currentTab === 'nature' ? 'is-success' : ''}" data-tab="nature">LAKES &amp; ROCKS</button>
+              <button class="nes-btn ${this.currentTab === 'academic' ? 'is-warning' : ''}" data-tab="academic">ACADEMIC</button>
+              <button class="nes-btn ${this.currentTab === 'residential' ? 'is-primary' : ''}" data-tab="residential">HOSTELS</button>
+              <button class="nes-btn ${this.currentTab === 'sports' ? 'is-success' : ''}" data-tab="sports">SPORTS &amp; HUBS</button>
+              <button class="nes-btn ${this.currentTab === 'quests' ? 'is-error' : ''}" data-tab="quests">QUESTS (${quests.filter(q => q.isComplete).length}/${quests.length})</button>
             </div>
-            <div class="pokedex-buttons">
-              <span class="pokedex-btn-pill btn-a">A SELECT</span>
-              <span class="pokedex-btn-pill btn-b">B BACK</span>
+
+            <!-- Screen Frame -->
+            <div class="pokedex-screen-frame">
+              ${this.currentTab === 'quests' ? this.renderQuestsView(quests) : this.renderPokedexDualPane(stats)}
             </div>
           </div>
         </div>
