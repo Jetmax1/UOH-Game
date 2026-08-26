@@ -1,6 +1,10 @@
 import { Game } from './game/Game.js';
 import { UIManager } from './ui/UIManager.js';
 import { soundManager } from './game/AudioSynth.js';
+import { inject } from '@vercel/analytics';
+
+// Initialize Vercel Web Analytics
+inject();
 
 window.addEventListener('DOMContentLoaded', () => {
   const canvas = document.getElementById('game-canvas');
