@@ -945,12 +945,6 @@ export class WorldMap {
     if (aquaLoc) {
       pixelEngine.drawRockMonolith(ctx, aquaLoc.x - camera.x, aquaLoc.y - camera.y, aquaLoc.shortName, 'aquarium');
     }
-
-    // 5. Mushroom Rock (#98)
-    const mushLoc = this.locations.find(l => l.id === 98);
-    if (mushLoc) {
-      pixelEngine.drawRockMonolith(ctx, mushLoc.x - camera.x, mushLoc.y - camera.y, mushLoc.shortName, 'mushroom');
-    }
   }
 
   drawBuildings(ctx, camera) {

@@ -103,7 +103,6 @@ export class CampusMapUI {
                   <button class="nes-btn is-error sec-east-btn" data-travel="87" style="text-align: left; font-size: 7px;">🎯 SATG Shooting Ranges (#87)</button>
                   <button class="nes-btn is-error sec-east-btn" data-travel="86" style="text-align: left; font-size: 7px;">🏛️ UoH Monument (#86)</button>
                   <button class="nes-btn is-error sec-east-btn" data-travel="61" style="text-align: left; font-size: 7px;">🧪 Chemistry Annex (#61)</button>
-                  <button class="nes-btn is-error sec-east-btn" data-travel="98" style="text-align: left; font-size: 7px;">🪨 Mushroom Rock (#98)</button>
                 </div>
               </div>
             </div>
