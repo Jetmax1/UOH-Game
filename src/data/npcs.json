@@ -116,27 +116,54 @@
     "name": "Raju Bhai",
     "role": "Sukoon Canteen Master",
     "section": "east",
-    "x": 280,
-    "y": 530,
+    "x": 1040,
+    "y": 820,
     "avatar": "☕",
     "dialogue": [
       "Bhaiya! Welcome to Sukoon Canteen (Pin 59) on East Campus!",
       "When evening sets in and night falls, we serve the crispiest samosas, hot Irani chai, and spicy Maggi.",
-      "Scholars from Chemistry, Mathematics, and Arts & Communication gather here every evening!"
+      "Scholars from Computer Science (SCIS), Mathematics (CR Rao), and Chemistry gather here every evening!"
     ]
   },
   {
     "id": "guard_smallgate",
     "name": "Guard Shankar",
-    "role": "East Small Gate Security",
+    "role": "HCU Small Gate Security",
     "section": "east",
-    "x": 1420,
-    "y": 345,
+    "x": 1460,
+    "y": 460,
     "avatar": "👮",
     "dialogue": [
-      "Welcome to the East Campus entrance (Pin 41)!",
-      "Head west along this avenue to reach Chemistry, CR Rao Institute of Mathematics (Pin 62), and the Arts studios.",
-      "Karthik Xerox and Sim cards (Pin 42) is right here for all your printouts."
+      "Welcome to the East Campus entrance at HCU Small Gate (Pin 41)!",
+      "Head down this main highway to reach CR Rao Institute of Mathematics (Pin 62), Overhead Water Tank (Pin 91), and Gachibowli Stadium (Pin 93).",
+      "Karthik Xerox and Sim cards (Pin 42) is right across the avenue for all your printouts."
+    ]
+  },
+  {
+    "id": "prof_cr_rao",
+    "name": "Prof. Narayana",
+    "role": "Chief Scientist, CR Rao AIMSCS",
+    "section": "east",
+    "x": 1640,
+    "y": 1040,
+    "avatar": "👨‍🏫",
+    "dialogue": [
+      "Welcome to the CR Rao Advanced Institute of Mathematics, Statistics and Computer Science (Pin 62)!",
+      "We pursue fundamental breakthroughs in mathematical modeling, statistical cryptography, and data science.",
+      "Take the south avenue to visit the iconic GMC Balayogi Sports Complex and Gachibowli Stadium!"
+    ]
+  },
+  {
+    "id": "priest_shastri",
+    "name": "Pandit Shastri",
+    "role": "Sai Baba Temple Caretaker",
+    "section": "east",
+    "x": 2020,
+    "y": 240,
+    "avatar": "🛕",
+    "dialogue": [
+      "Om Sai Ram! Welcome to the sacred Sri Sai Baba Temple (Pin 89).",
+      "Enjoy the quiet serenity and birdsong from the northern woodland ridge."
     ]
   },
   {

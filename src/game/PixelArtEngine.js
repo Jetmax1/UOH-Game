@@ -110,6 +110,33 @@ export class PixelArtEngine {
     return canvas;
   }
 
+  getFieldTile() {
+    if (this.cache.field) return this.cache.field;
+    const { canvas, ctx } = this.createCanvas(16, 16);
+
+    ctx.fillStyle = '#a67c48';
+    ctx.fillRect(0, 0, 16, 16);
+
+    // Earthen furrows and subtle dirt specks
+    ctx.fillStyle = '#8c6230';
+    ctx.fillRect(1, 3, 14, 2);
+    ctx.fillRect(1, 8, 14, 2);
+    ctx.fillRect(1, 13, 14, 2);
+
+    ctx.fillStyle = '#c09860';
+    ctx.fillRect(2, 2, 4, 1);
+    ctx.fillRect(9, 2, 5, 1);
+    ctx.fillRect(4, 7, 6, 1);
+    ctx.fillRect(3, 12, 5, 1);
+
+    ctx.fillStyle = '#6a461e';
+    ctx.fillRect(6, 4, 2, 1);
+    ctx.fillRect(12, 9, 2, 1);
+
+    this.cache.field = canvas;
+    return canvas;
+  }
+
   getTreeSprite() {
     if (this.cache.tree) return this.cache.tree;
     const { canvas, ctx } = this.createCanvas(32, 32);
@@ -529,6 +556,1242 @@ export class PixelArtEngine {
     ctx.font = 'bold 7px monospace';
     ctx.textAlign = 'center';
     ctx.fillText('TENNIS', midX, sy + 10);
+
+    ctx.restore();
+  }
+
+  // =========================================================================
+  // 2B. EAST CAMPUS & UOH RETRO 8-BIT / 16-BIT LANDMARKS (REFERENCE MAP)
+  // =========================================================================
+
+  // 1. Overhead Water Tank (Elevated cylindrical steel water tower on 4 legs)
+  drawWaterTank(ctx, sx, sy, width = 64, height = 76) {
+    ctx.save();
+    const cx = sx + width / 2;
+
+    // Drop shadow
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.35)';
+    ctx.beginPath();
+    ctx.ellipse(cx, sy + height - 4, width / 2, 8, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // 4 Steel Truss Legs (Stilts with cross bracing)
+    const legTopY = sy + 36;
+    const legBotY = sy + height - 8;
+    const legSpread = 24;
+
+    ctx.strokeStyle = '#475569';
+    ctx.lineWidth = 3;
+    // Left legs
+    ctx.beginPath();
+    ctx.moveTo(cx - 16, legTopY);
+    ctx.lineTo(cx - legSpread, legBotY);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(cx - 8, legTopY);
+    ctx.lineTo(cx - 14, legBotY);
+    ctx.stroke();
+
+    // Right legs
+    ctx.beginPath();
+    ctx.moveTo(cx + 16, legTopY);
+    ctx.lineTo(cx + legSpread, legBotY);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(cx + 8, legTopY);
+    ctx.lineTo(cx + 14, legBotY);
+    ctx.stroke();
+
+    // Steel Cross Bracing
+    ctx.strokeStyle = '#64748b';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(cx - 22, sy + 50);
+    ctx.lineTo(cx + 22, sy + 64);
+    ctx.moveTo(cx + 22, sy + 50);
+    ctx.lineTo(cx - 22, sy + 64);
+    ctx.stroke();
+
+    // Central Feed Pipe
+    ctx.fillStyle = '#334155';
+    ctx.fillRect(cx - 3, legTopY, 6, legBotY - legTopY);
+
+    // Concrete Footings
+    ctx.fillStyle = '#94a3b8';
+    ctx.fillRect(cx - legSpread - 4, legBotY, 8, 5);
+    ctx.fillRect(cx + legSpread - 4, legBotY, 8, 5);
+    ctx.fillRect(cx - 16, legBotY, 6, 5);
+    ctx.fillRect(cx + 10, legBotY, 6, 5);
+
+    // Tank Cylindrical Body
+    const tankR = 24;
+    const tankH = 26;
+    const tankY = sy + 10;
+
+    // Tank base rim
+    ctx.fillStyle = '#0369a1';
+    ctx.beginPath();
+    ctx.ellipse(cx, tankY + tankH, tankR, 6, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Tank cylinder gradient fill
+    const grad = ctx.createLinearGradient(cx - tankR, 0, cx + tankR, 0);
+    grad.addColorStop(0, '#0284c7');
+    grad.addColorStop(0.3, '#38bdf8');
+    grad.addColorStop(0.7, '#7dd3fc');
+    grad.addColorStop(1, '#0369a1');
+
+    ctx.fillStyle = grad;
+    ctx.fillRect(cx - tankR, tankY, tankR * 2, tankH);
+
+    // Metal seams & bands
+    ctx.strokeStyle = '#075985';
+    ctx.lineWidth = 1.5;
+    ctx.strokeRect(cx - tankR, tankY, tankR * 2, tankH);
+    ctx.beginPath();
+    ctx.moveTo(cx - tankR, tankY + tankH / 2);
+    ctx.lineTo(cx + tankR, tankY + tankH / 2);
+    ctx.stroke();
+
+    // Conical Roof Cap
+    ctx.fillStyle = '#0284c7';
+    ctx.beginPath();
+    ctx.moveTo(cx - tankR - 2, tankY);
+    ctx.lineTo(cx, sy + 2);
+    ctx.lineTo(cx + tankR + 2, tankY);
+    ctx.closePath();
+    ctx.fill();
+    ctx.strokeStyle = '#bae6fd';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    // Roof Finial & Warning Light
+    ctx.fillStyle = '#ef4444';
+    ctx.fillRect(cx - 2, sy - 2, 4, 4);
+
+    // Access Ladder on right side
+    ctx.strokeStyle = '#cbd5e1';
+    ctx.lineWidth = 1;
+    for (let ly = tankY; ly < legBotY; ly += 6) {
+      ctx.beginPath();
+      ctx.moveTo(cx + 17, ly);
+      ctx.lineTo(cx + 21, ly);
+      ctx.stroke();
+    }
+
+    // Name Label
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 8px monospace';
+    ctx.textAlign = 'center';
+    ctx.shadowColor = '#000000';
+    ctx.shadowBlur = 3;
+    ctx.fillText('OVERHEAD WATER TANK', cx, sy - 6);
+
+    ctx.restore();
+  }
+
+  // 2. GMC Balayogi Sports Complex (Circular Colosseum Stone Arena)
+  drawBalayogiSportsComplex(ctx, sx, sy, radius = 52) {
+    ctx.save();
+    const cx = sx + radius;
+    const cy = sy + radius;
+
+    // Drop Shadow
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
+    ctx.beginPath();
+    ctx.arc(cx, cy + 6, radius + 4, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Outer Heavy Masonry Arena Wall
+    ctx.fillStyle = '#b89f74';
+    ctx.beginPath();
+    ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = '#7c6544';
+    ctx.lineWidth = 3;
+    ctx.stroke();
+
+    // Perimeter Arched Vomitoria / Gate Portals (8-Bit radial openings)
+    const numArches = 16;
+    for (let i = 0; i < numArches; i++) {
+      const angle = (i / numArches) * Math.PI * 2;
+      const ax = cx + Math.cos(angle) * (radius - 7);
+      const ay = cy + Math.sin(angle) * (radius - 7);
+      ctx.fillStyle = '#291d10';
+      ctx.beginPath();
+      ctx.arc(ax, ay, 4, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#ecd8b0';
+      ctx.fillRect(ax - 2, ay + 2, 4, 2);
+    }
+
+    // Concentric Spectator Stepped Tiers
+    const tiers = 3;
+    for (let t = tiers; t >= 1; t--) {
+      const r = (radius - 14) * (t / tiers) + 12;
+      ctx.fillStyle = t % 2 === 0 ? '#d4be92' : '#e8d4a8';
+      ctx.beginPath();
+      ctx.arc(cx, cy, r, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = '#9c8052';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    }
+
+    // Center Green Sports Pitch
+    const pitchR = 18;
+    ctx.fillStyle = '#15803d';
+    ctx.beginPath();
+    ctx.arc(cx, cy, pitchR, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+
+    // Center arena markings
+    ctx.fillStyle = '#ffffff';
+    ctx.beginPath();
+    ctx.arc(cx, cy, 5, 0, Math.PI * 2);
+    ctx.stroke();
+
+    // Name Label
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 8px monospace';
+    ctx.textAlign = 'center';
+    ctx.shadowColor = '#000000';
+    ctx.shadowBlur = 3;
+    ctx.fillText('GMC BALAYOGI SPORTS COMPLEX', cx, sy - 5);
+
+    ctx.restore();
+  }
+
+  // 3. Gachibowli Stadium (Large Oval Athletic Stadium with Running Track & Soccer Field)
+  drawGachibowliStadium(ctx, sx, sy, width = 115, height = 80) {
+    ctx.save();
+    const cx = sx + width / 2;
+    const cy = sy + height / 2;
+    const rx = width / 2;
+    const ry = height / 2;
+
+    // Drop shadow
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
+    ctx.beginPath();
+    ctx.ellipse(cx, cy + 6, rx + 4, ry + 4, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Outer Stadium Concrete Shell
+    ctx.fillStyle = '#94a3b8';
+    ctx.beginPath();
+    ctx.ellipse(cx, cy, rx, ry, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = '#475569';
+    ctx.lineWidth = 3;
+    ctx.stroke();
+
+    // Grandstand Spectator Seating (Terraced Tiers)
+    ctx.fillStyle = '#cbd5e1';
+    ctx.beginPath();
+    ctx.ellipse(cx, cy, rx - 6, ry - 6, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Seating rows (Yellow & Blue stadium chair bands)
+    ctx.strokeStyle = '#eab308';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.ellipse(cx, cy, rx - 10, ry - 10, 0, 0, Math.PI * 2);
+    ctx.stroke();
+
+    ctx.strokeStyle = '#2563eb';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.ellipse(cx, cy, rx - 14, ry - 14, 0, 0, Math.PI * 2);
+    ctx.stroke();
+
+    // Red Synthetic Cinder Running Track Oval
+    ctx.fillStyle = '#dc2626';
+    ctx.beginPath();
+    ctx.ellipse(cx, cy, rx - 18, ry - 16, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // White Running Lanes
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.ellipse(cx, cy, rx - 21, ry - 18, 0, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.ellipse(cx, cy, rx - 24, ry - 20, 0, 0, Math.PI * 2);
+    ctx.stroke();
+
+    // Inner Green Natural Grass Football / Athletic Field
+    const fw = (rx - 28) * 2;
+    const fh = (ry - 22) * 2;
+    ctx.fillStyle = '#16a34a';
+    ctx.fillRect(cx - fw / 2, cy - fh / 2, fw, fh);
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 1.5;
+    ctx.strokeRect(cx - fw / 2, cy - fh / 2, fw, fh);
+
+    // Center Field Line & Center Circle
+    ctx.beginPath();
+    ctx.moveTo(cx, cy - fh / 2);
+    ctx.lineTo(cx, cy + fh / 2);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.arc(cx, cy, 6, 0, Math.PI * 2);
+    ctx.stroke();
+
+    // Goal Boxes
+    ctx.strokeRect(cx - fw / 2, cy - 6, 6, 12);
+    ctx.strokeRect(cx + fw / 2 - 6, cy - 6, 6, 12);
+
+    // 4 Corner Stadium Floodlight Masts
+    const floodPositions = [
+      { x: cx - rx + 4, y: cy - ry + 4 },
+      { x: cx + rx - 4, y: cy - ry + 4 },
+      { x: cx - rx + 4, y: cy + ry - 4 },
+      { x: cx + rx - 4, y: cy + ry - 4 }
+    ];
+    floodPositions.forEach(p => {
+      ctx.fillStyle = '#1e293b';
+      ctx.fillRect(p.x - 2, p.y - 2, 4, 4);
+      ctx.fillStyle = '#fef08a';
+      ctx.fillRect(p.x - 1, p.y - 1, 2, 2);
+    });
+
+    // Name Label
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 8px monospace';
+    ctx.textAlign = 'center';
+    ctx.shadowColor = '#000000';
+    ctx.shadowBlur = 3;
+    ctx.fillText('GACHIBOWLI STADIUM', cx, sy - 4);
+
+    ctx.restore();
+  }
+
+  // 4. University of Hyderabad Circular Entrance Monument
+  drawUoHMonument(ctx, sx, sy, radius = 45) {
+    ctx.save();
+    const cx = sx + radius;
+    const cy = sy + radius;
+
+    // Drop shadow
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
+    ctx.beginPath();
+    ctx.arc(cx, cy + 5, radius + 4, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Outer Circular Stone Plaza with Radial Flagstone Rays
+    ctx.fillStyle = '#d4be92';
+    ctx.beginPath();
+    ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = '#8c7048';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Radial spokes
+    ctx.strokeStyle = 'rgba(140, 112, 72, 0.6)';
+    ctx.lineWidth = 1;
+    for (let i = 0; i < 8; i++) {
+      const a = (i / 8) * Math.PI * 2;
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.lineTo(cx + Math.cos(a) * radius, cy + Math.sin(a) * radius);
+      ctx.stroke();
+    }
+
+    // Inner Concentric Tier & Ring of 8 Stone Pillars
+    ctx.fillStyle = '#ebdcc0';
+    ctx.beginPath();
+    ctx.arc(cx, cy, radius - 12, 0, Math.PI * 2);
+    ctx.fill();
+
+    for (let i = 0; i < 8; i++) {
+      const a = (i / 8) * Math.PI * 2;
+      const px = cx + Math.cos(a) * (radius - 16);
+      const py = cy + Math.sin(a) * (radius - 16);
+      ctx.fillStyle = '#786040';
+      ctx.fillRect(px - 3, py - 3, 6, 6);
+      ctx.fillStyle = '#b89868';
+      ctx.fillRect(px - 2, py - 2, 4, 4);
+    }
+
+    // Center Raised Circular Marble Plinth
+    ctx.fillStyle = '#f8fafc';
+    ctx.beginPath();
+    ctx.arc(cx, cy, 14, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = '#cbd5e1';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+
+    // Central University Emblem Pillar / Obelisk
+    ctx.fillStyle = '#1e3a8a';
+    ctx.beginPath();
+    ctx.arc(cx, cy, 8, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = '#fbbf24';
+    ctx.fillRect(cx - 2, cy - 2, 4, 4);
+
+    // Name Label
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 8px monospace';
+    ctx.textAlign = 'center';
+    ctx.shadowColor = '#000000';
+    ctx.shadowBlur = 3;
+    ctx.fillText('UNIVERSITY OF HYDERABAD', cx, sy - 4);
+
+    ctx.restore();
+  }
+
+  // 5. SATG Shooting Ranges & Athletic Track
+  drawShootingRange(ctx, sx, sy, width = 85, height = 65) {
+    ctx.save();
+    const cx = sx + width / 2;
+    const cy = sy + height / 2;
+
+    // Drop shadow
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.35)';
+    ctx.beginPath();
+    ctx.ellipse(cx, cy + 4, width / 2 + 2, height / 2 + 2, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Clay/Dirt Oval Track
+    ctx.fillStyle = '#b47846';
+    ctx.beginPath();
+    ctx.ellipse(cx, cy, width / 2, height / 2, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = '#7c4820';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Inner Green Firing Area
+    ctx.fillStyle = '#4ade80';
+    ctx.beginPath();
+    ctx.ellipse(cx, cy, width / 2 - 12, height / 2 - 10, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Target Baffles & Firing Booths
+    ctx.fillStyle = '#334155';
+    ctx.fillRect(cx - 20, cy - 8, 40, 16);
+    ctx.fillStyle = '#dc2626';
+    ctx.fillRect(cx - 18, cy - 6, 8, 12);
+    ctx.fillRect(cx - 4, cy - 6, 8, 12);
+    ctx.fillRect(cx + 10, cy - 6, 8, 12);
+
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 8px monospace';
+    ctx.textAlign = 'center';
+    ctx.shadowColor = '#000000';
+    ctx.shadowBlur = 3;
+    ctx.fillText('SATG SHOOTING RANGES', cx, sy - 4);
+
+    ctx.restore();
+  }
+
+  // 6. Sai Baba Temple (Ornate Mandapam with Golden Gopuram & Flag)
+  drawSaiBabaTemple(ctx, sx, sy, width = 72, height = 62) {
+    ctx.save();
+    const cx = sx + width / 2;
+    const cy = sy + height / 2;
+
+    // Drop shadow
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.35)';
+    ctx.fillRect(sx + 3, sy + 3, width, height);
+
+    // Stone Courtyard Base Platform
+    ctx.fillStyle = '#e2d4be';
+    ctx.fillRect(sx, sy, width, height);
+    ctx.strokeStyle = '#9c784e';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(sx, sy, width, height);
+
+    // Temple Walls
+    const mw = width - 18;
+    const mh = height - 18;
+    const mx = sx + 9;
+    const my = sy + 12;
+
+    ctx.fillStyle = '#fef3c7';
+    ctx.fillRect(mx, my, mw, mh);
+    ctx.strokeStyle = '#b45309';
+    ctx.lineWidth = 1.5;
+    ctx.strokeRect(mx, my, mw, mh);
+
+    // Golden Tiered Gopuram (Pyramidal Temple Spire)
+    ctx.fillStyle = '#d97706';
+    ctx.beginPath();
+    ctx.moveTo(mx - 2, my);
+    ctx.lineTo(cx, sy - 14);
+    ctx.lineTo(mx + mw + 2, my);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.fillStyle = '#f59e0b';
+    ctx.beginPath();
+    ctx.moveTo(mx + 4, my);
+    ctx.lineTo(cx, sy - 10);
+    ctx.lineTo(mx + mw - 4, my);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.fillStyle = '#fbbf24';
+    ctx.beginPath();
+    ctx.moveTo(mx + 10, my);
+    ctx.lineTo(cx, sy - 6);
+    ctx.lineTo(mx + mw - 10, my);
+    ctx.closePath();
+    ctx.fill();
+
+    // Gold Kalasam & Saffron Flag
+    ctx.fillStyle = '#fef08a';
+    ctx.fillRect(cx - 3, sy - 18, 6, 5);
+    ctx.fillStyle = '#ea580c';
+    ctx.beginPath();
+    ctx.moveTo(cx, sy - 18);
+    ctx.lineTo(cx + 8, sy - 22);
+    ctx.lineTo(cx, sy - 26);
+    ctx.closePath();
+    ctx.fill();
+
+    // Sanctum Entry & Oil Lamp Glow
+    ctx.fillStyle = '#451a03';
+    ctx.fillRect(cx - 8, my + mh - 12, 16, 12);
+    ctx.fillStyle = '#f59e0b';
+    ctx.beginPath();
+    ctx.arc(cx, my + mh - 4, 3, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Name Label
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 8px monospace';
+    ctx.textAlign = 'center';
+    ctx.shadowColor = '#000000';
+    ctx.shadowBlur = 3;
+    ctx.fillText('SAI BABA TEMPLE', cx, sy - 8);
+
+    ctx.restore();
+  }
+
+  // 7. Indian Immunologicals Limited (Biotech/Pharma Industrial Campus)
+  drawIndianImmunologicals(ctx, sx, sy, width = 100, height = 75) {
+    ctx.save();
+    const cx = sx + width / 2;
+
+    // Drop shadow
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.35)';
+    ctx.fillRect(sx + 4, sy + 4, width, height);
+
+    // Foundation Base
+    ctx.fillStyle = '#475569';
+    ctx.fillRect(sx, sy, width, height);
+
+    // Modern Teal/Steel R&D Facade
+    ctx.fillStyle = '#0f766e';
+    ctx.fillRect(sx + 2, sy + 2, width - 4, height - 16);
+
+    ctx.fillStyle = '#14b8a6';
+    ctx.fillRect(sx + 4, sy + 4, width - 8, 12);
+
+    // Laboratory Ribbon Windows
+    ctx.fillStyle = '#0284c7';
+    for (let wx = sx + 8; wx < sx + width - 12; wx += 16) {
+      ctx.fillRect(wx, sy + 22, 10, 8);
+      ctx.fillStyle = '#bae6fd';
+      ctx.fillRect(wx + 1, sy + 23, 4, 3);
+      ctx.fillStyle = '#0284c7';
+    }
+
+    // Fermentation Silos / Biotech Tanks on side
+    ctx.fillStyle = '#cbd5e1';
+    ctx.fillRect(sx + width - 24, sy + 36, 8, 20);
+    ctx.fillRect(sx + width - 14, sy + 36, 8, 20);
+    ctx.fillStyle = '#94a3b8';
+    ctx.beginPath();
+    ctx.ellipse(sx + width - 20, sy + 36, 4, 2, 0, 0, Math.PI * 2);
+    ctx.ellipse(sx + width - 10, sy + 36, 4, 2, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Security Gate & Corporate Entrance
+    ctx.fillStyle = '#1e293b';
+    ctx.fillRect(sx + 10, sy + height - 14, 20, 12);
+    ctx.fillStyle = '#38bdf8';
+    ctx.fillRect(sx + 12, sy + height - 12, 16, 8);
+
+    // Name Label
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 8px monospace';
+    ctx.textAlign = 'center';
+    ctx.shadowColor = '#000000';
+    ctx.shadowBlur = 3;
+    ctx.fillText('INDIAN IMMUNOLOGICALS', cx, sy - 4);
+
+    ctx.restore();
+  }
+
+  // 8. Health Center (Medical Clinic with Red Cross 'H' Sign)
+  drawHealthCenter(ctx, sx, sy, width = 68, height = 52) {
+    ctx.save();
+    const cx = sx + width / 2;
+
+    // Drop shadow
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.35)';
+    ctx.fillRect(sx + 3, sy + 3, width, height);
+
+    // Clinic White/Cream Walls
+    ctx.fillStyle = '#f8fafc';
+    ctx.fillRect(sx, sy + 14, width, height - 14);
+
+    // Red Terracotta Pitched Roof
+    ctx.fillStyle = '#991b1b';
+    ctx.fillRect(sx - 2, sy, width + 4, 16);
+    ctx.fillStyle = '#dc2626';
+    ctx.fillRect(sx, sy + 2, width, 12);
+    ctx.fillStyle = '#f87171';
+    ctx.fillRect(sx + 2, sy + 2, width - 4, 3);
+
+    // Red Cross / 'H' Medical Emblem Sign
+    const signW = 16;
+    const signH = 14;
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(cx - signW / 2, sy + 8, signW, signH);
+    ctx.strokeStyle = '#dc2626';
+    ctx.lineWidth = 1.5;
+    ctx.strokeRect(cx - signW / 2, sy + 8, signW, signH);
+
+    ctx.fillStyle = '#dc2626';
+    ctx.font = 'bold 9px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('H', cx, sy + 15);
+
+    // Clinic Glass Windows
+    ctx.fillStyle = '#67e8f9';
+    ctx.fillRect(sx + 6, sy + 28, 12, 10);
+    ctx.fillRect(sx + width - 18, sy + 28, 12, 10);
+
+    // Emergency Entrance Portico
+    ctx.fillStyle = '#e2e8f0';
+    ctx.fillRect(cx - 10, sy + height - 14, 20, 14);
+    ctx.fillStyle = '#0284c7';
+    ctx.fillRect(cx - 8, sy + height - 12, 16, 12);
+
+    // Name Label
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 8px monospace';
+    ctx.textAlign = 'center';
+    ctx.shadowColor = '#000000';
+    ctx.shadowBlur = 3;
+    ctx.fillText('HEALTH CENTER', cx, sy - 4);
+
+    ctx.restore();
+  }
+
+  // 9. Administration Building (Stately Palace with Blue Roof, Dome & Pillars)
+  drawAdminBuilding(ctx, sx, sy, width = 108, height = 75) {
+    ctx.save();
+    const cx = sx + width / 2;
+
+    // Drop shadow
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
+    ctx.fillRect(sx + 4, sy + 4, width, height);
+
+    // Foundation Base
+    ctx.fillStyle = '#64748b';
+    ctx.fillRect(sx, sy + height - 8, width, 8);
+
+    // Ivory Classical Walls
+    ctx.fillStyle = '#f8fafc';
+    ctx.fillRect(sx + 2, sy + 22, width - 4, height - 30);
+
+    // Royal Blue Grand Hipped Roof
+    ctx.fillStyle = '#1e3a8a';
+    ctx.fillRect(sx - 2, sy + 6, width + 4, 18);
+    ctx.fillStyle = '#2563eb';
+    ctx.fillRect(sx, sy + 8, width, 14);
+    ctx.fillStyle = '#60a5fa';
+    ctx.fillRect(sx + 4, sy + 8, width - 8, 3);
+
+    // Central Dome / Clock Tower
+    ctx.fillStyle = '#1e3a8a';
+    ctx.beginPath();
+    ctx.arc(cx, sy + 6, 12, Math.PI, 0);
+    ctx.fill();
+    ctx.fillStyle = '#3b82f6';
+    ctx.beginPath();
+    ctx.arc(cx, sy + 6, 10, Math.PI, 0);
+    ctx.fill();
+    ctx.fillStyle = '#fbbf24';
+    ctx.fillRect(cx - 1, sy - 8, 2, 8);
+
+    // Classical Pillars Portico (4-6 white columns)
+    const porticoW = 44;
+    ctx.fillStyle = '#e2e8f0';
+    ctx.fillRect(cx - porticoW / 2, sy + 18, porticoW, 6);
+
+    for (let col = 0; col < 4; col++) {
+      const colX = (cx - porticoW / 2 + 4) + col * 12;
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(colX, sy + 24, 4, height - 32);
+      ctx.fillStyle = '#cbd5e1';
+      ctx.fillRect(colX + 3, sy + 24, 1, height - 32);
+    }
+
+    // Grand Entrance Doors
+    ctx.fillStyle = '#3e2723';
+    ctx.fillRect(cx - 8, sy + height - 16, 16, 12);
+    ctx.fillStyle = '#f59e0b';
+    ctx.fillRect(cx - 2, sy + height - 10, 4, 2);
+
+    // Windows with Arches
+    ctx.fillStyle = '#93c5fd';
+    ctx.fillRect(sx + 8, sy + 30, 10, 12);
+    ctx.fillRect(sx + width - 18, sy + 30, 10, 12);
+
+    // Name Label
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 8px monospace';
+    ctx.textAlign = 'center';
+    ctx.shadowColor = '#000000';
+    ctx.shadowBlur = 3;
+    ctx.fillText('ADMINISTRATION BUILDING', cx, sy - 10);
+
+    ctx.restore();
+  }
+
+  // 10. School of Computer and Information Sciences (SCIS)
+  drawSCISBuilding(ctx, sx, sy, width = 95, height = 70) {
+    ctx.save();
+    const cx = sx + width / 2;
+
+    // Drop shadow
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.35)';
+    ctx.fillRect(sx + 4, sy + 4, width, height);
+
+    // Building Base & Walls
+    ctx.fillStyle = '#475569';
+    ctx.fillRect(sx, sy + height - 6, width, 6);
+    ctx.fillStyle = '#f1f5f9';
+    ctx.fillRect(sx + 2, sy + 18, width - 4, height - 24);
+
+    // Sapphire Tech Roof
+    ctx.fillStyle = '#1e3a8a';
+    ctx.fillRect(sx, sy + 2, width, 18);
+    ctx.fillStyle = '#2563eb';
+    ctx.fillRect(sx + 2, sy + 4, width - 4, 14);
+
+    // Rooftop Solar Array Panels
+    ctx.fillStyle = '#0284c7';
+    ctx.fillRect(sx + 8, sy + 6, 20, 8);
+    ctx.fillRect(sx + width - 28, sy + 6, 20, 8);
+    ctx.strokeStyle = '#bae6fd';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(sx + 8, sy + 6, 20, 8);
+    ctx.strokeRect(sx + width - 28, sy + 6, 20, 8);
+
+    // CS Lab Glass Ribbon Windows
+    for (let wx = sx + 8; wx < sx + width - 12; wx += 15) {
+      ctx.fillStyle = '#1e293b';
+      ctx.fillRect(wx, sy + 26, 10, 10);
+      ctx.fillStyle = '#38bdf8';
+      ctx.fillRect(wx + 1, sy + 27, 8, 8);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(wx + 2, sy + 28, 2, 2);
+    }
+
+    // Glass Atrium Entrance
+    ctx.fillStyle = '#0284c7';
+    ctx.fillRect(cx - 10, sy + height - 16, 20, 14);
+    ctx.fillStyle = '#67e8f9';
+    ctx.fillRect(cx - 8, sy + height - 14, 16, 12);
+
+    // Name Label
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 8px monospace';
+    ctx.textAlign = 'center';
+    ctx.shadowColor = '#000000';
+    ctx.shadowBlur = 3;
+    ctx.fillText('SCHOOL OF COMPUTER SCIENCES', cx, sy - 4);
+
+    ctx.restore();
+  }
+
+  // 11. IGM Library, UoH (Lakeside Academic Library Complex)
+  drawIGMLibrary(ctx, sx, sy, width = 110, height = 80) {
+    ctx.save();
+    const cx = sx + width / 2;
+
+    // Drop shadow
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
+    ctx.fillRect(sx + 4, sy + 4, width, height);
+
+    // Granite Foundation
+    ctx.fillStyle = '#475569';
+    ctx.fillRect(sx, sy + height - 8, width, 8);
+
+    // Academic Ivory Walls
+    ctx.fillStyle = '#f8fafc';
+    ctx.fillRect(sx + 2, sy + 20, width - 4, height - 28);
+
+    // Deep Indigo Academic Roof with Skylights
+    ctx.fillStyle = '#172554';
+    ctx.fillRect(sx, sy + 2, width, 20);
+    ctx.fillStyle = '#1e40af';
+    ctx.fillRect(sx + 2, sy + 4, width - 4, 16);
+    ctx.fillStyle = '#60a5fa';
+    ctx.fillRect(sx + 4, sy + 4, width - 8, 3);
+
+    // Skylight Glass Strips
+    ctx.fillStyle = '#67e8f9';
+    ctx.fillRect(sx + 14, sy + 8, 24, 6);
+    ctx.fillRect(sx + width - 38, sy + 8, 24, 6);
+
+    // Reading Room Panoramic Windows
+    for (let wx = sx + 8; wx < sx + width - 10; wx += 18) {
+      ctx.fillStyle = '#0f172a';
+      ctx.fillRect(wx, sy + 28, 12, 16);
+      ctx.fillStyle = '#93c5fd';
+      ctx.fillRect(wx + 1, sy + 29, 10, 14);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(wx + 2, sy + 30, 2, 4);
+    }
+
+    // Grand Entrance Portal
+    ctx.fillStyle = '#312e81';
+    ctx.fillRect(cx - 12, sy + height - 16, 24, 14);
+    ctx.fillStyle = '#60a5fa';
+    ctx.fillRect(cx - 10, sy + height - 14, 20, 12);
+
+    // Name Label
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 8px monospace';
+    ctx.textAlign = 'center';
+    ctx.shadowColor = '#000000';
+    ctx.shadowBlur = 3;
+    ctx.fillText('IGM LIBRARY, UOH', cx, sy - 4);
+
+    ctx.restore();
+  }
+
+  // 12. HCU Small Gate / Security Office (Barrier Gatehouse)
+  drawSecurityGateOffice(ctx, sx, sy, width = 55, height = 40) {
+    ctx.save();
+    const cx = sx + width / 2;
+
+    // Drop shadow
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.35)';
+    ctx.fillRect(sx + 3, sy + 3, width, height);
+
+    // Security Cabin Walls
+    ctx.fillStyle = '#f8fafc';
+    ctx.fillRect(sx, sy + 10, width, height - 10);
+    ctx.strokeStyle = '#2563eb';
+    ctx.lineWidth = 1.5;
+    ctx.strokeRect(sx, sy + 10, width, height - 10);
+
+    // Blue Sentry Roof
+    ctx.fillStyle = '#1e40af';
+    ctx.fillRect(sx - 2, sy, width + 4, 12);
+    ctx.fillStyle = '#3b82f6';
+    ctx.fillRect(sx, sy + 2, width, 8);
+
+    // Security Lookout Window
+    ctx.fillStyle = '#38bdf8';
+    ctx.fillRect(sx + 6, sy + 18, 14, 10);
+
+    // Sentry Door
+    ctx.fillStyle = '#1e293b';
+    ctx.fillRect(sx + width - 18, sy + 18, 12, height - 18);
+
+    // Road Boom Barrier Arm (Striped red & white)
+    ctx.fillStyle = '#dc2626';
+    ctx.fillRect(sx - 20, sy + height - 8, 22, 4);
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(sx - 16, sy + height - 8, 4, 4);
+    ctx.fillRect(sx - 8, sy + height - 8, 4, 4);
+
+    // Name Label
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 8px monospace';
+    ctx.textAlign = 'center';
+    ctx.shadowColor = '#000000';
+    ctx.shadowBlur = 3;
+    ctx.fillText('HCU SMALL GATE', cx, sy - 4);
+
+    ctx.restore();
+  }
+
+  // 13. Karthik SIM Cards and Xerox Shop
+  drawKarthikXerox(ctx, sx, sy, width = 56, height = 44) {
+    ctx.save();
+    const cx = sx + width / 2;
+
+    // Drop shadow
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.35)';
+    ctx.fillRect(sx + 3, sy + 3, width, height);
+
+    // Shop Walls
+    ctx.fillStyle = '#fef3c7';
+    ctx.fillRect(sx, sy + 12, width, height - 12);
+
+    // Blue & White Striped Storefront Awning
+    ctx.fillStyle = '#2563eb';
+    ctx.fillRect(sx - 2, sy, width + 4, 14);
+    ctx.fillStyle = '#ffffff';
+    for (let ax = sx; ax < sx + width; ax += 10) {
+      ctx.fillRect(ax, sy, 5, 14);
+    }
+
+    // Storefront Counter & Xerox Machine
+    ctx.fillStyle = '#475569';
+    ctx.fillRect(sx + 6, sy + 22, width - 12, height - 24);
+    ctx.fillStyle = '#0284c7';
+    ctx.fillRect(sx + 8, sy + 24, 16, 10); // Xerox machine
+
+    // Signboard
+    ctx.fillStyle = '#dc2626';
+    ctx.fillRect(sx + 2, sy + 14, width - 4, 7);
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 6px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('XEROX & SIM', cx, sy + 20);
+
+    // Name Label
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 8px monospace';
+    ctx.textAlign = 'center';
+    ctx.shadowColor = '#000000';
+    ctx.shadowBlur = 3;
+    ctx.fillText('KARTHIK XEROX', cx, sy - 4);
+
+    ctx.restore();
+  }
+
+  // 14. India Post (Postal Office)
+  drawIndiaPost(ctx, sx, sy, width = 60, height = 46) {
+    ctx.save();
+    const cx = sx + width / 2;
+
+    // Drop shadow
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.35)';
+    ctx.fillRect(sx + 3, sy + 3, width, height);
+
+    // Building Walls
+    ctx.fillStyle = '#f8fafc';
+    ctx.fillRect(sx, sy + 12, width, height - 12);
+
+    // Red Post Office Roof
+    ctx.fillStyle = '#b91c1c';
+    ctx.fillRect(sx - 2, sy, width + 4, 14);
+    ctx.fillStyle = '#ef4444';
+    ctx.fillRect(sx, sy + 2, width, 10);
+
+    // Postal Emblem Badge
+    ctx.fillStyle = '#fef08a';
+    ctx.fillRect(cx - 8, sy + 14, 16, 8);
+    ctx.fillStyle = '#b91c1c';
+    ctx.font = 'bold 6px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('POST', cx, sy + 20);
+
+    // Red Mailbox outside
+    ctx.fillStyle = '#dc2626';
+    ctx.fillRect(sx + 6, sy + height - 14, 6, 12);
+    ctx.fillStyle = '#f8fafc';
+    ctx.fillRect(sx + 7, sy + height - 12, 4, 2);
+
+    // Service Door & Counter
+    ctx.fillStyle = '#334155';
+    ctx.fillRect(cx, sy + 26, 16, height - 26);
+
+    // Name Label
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 8px monospace';
+    ctx.textAlign = 'center';
+    ctx.shadowColor = '#000000';
+    ctx.shadowBlur = 3;
+    ctx.fillText('INDIA POST', cx, sy - 4);
+
+    ctx.restore();
+  }
+
+  // 15. Sukoon Canteen (Cozy Open-Air Glade Pavilion with Umbrella Seating)
+  drawSukoonCanteen(ctx, sx, sy, width = 76, height = 55) {
+    ctx.save();
+    const cx = sx + width / 2;
+
+    // Drop shadow
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.35)';
+    ctx.fillRect(sx + 3, sy + 3, width, height);
+
+    // Sandstone Ground Deck
+    ctx.fillStyle = '#d4be92';
+    ctx.fillRect(sx, sy, width, height);
+    ctx.strokeStyle = '#947848';
+    ctx.lineWidth = 1.5;
+    ctx.strokeRect(sx, sy, width, height);
+
+    // Wooden Timber Canteen Cabin
+    ctx.fillStyle = '#854d0e';
+    ctx.fillRect(sx + 6, sy + 6, 32, 28);
+    ctx.fillStyle = '#15803d'; // Green pitched roof
+    ctx.fillRect(sx + 4, sy + 4, 36, 10);
+
+    // Chai / Food Serving Counter
+    ctx.fillStyle = '#ca8a04';
+    ctx.fillRect(sx + 10, sy + 18, 24, 12);
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(sx + 14, sy + 20, 6, 4); // Steaming tea kettle
+
+    // Outdoor Striped Umbrellas & Picnic Benches
+    const drawUmbrella = (ux, uy, color1 = '#ef4444', color2 = '#ffffff') => {
+      // Umbrella stand
+      ctx.fillStyle = '#475569';
+      ctx.fillRect(ux - 1, uy, 2, 14);
+      // Umbrella canopy
+      ctx.fillStyle = color1;
+      ctx.beginPath();
+      ctx.arc(ux, uy, 10, Math.PI, 0);
+      ctx.fill();
+      ctx.fillStyle = color2;
+      ctx.beginPath();
+      ctx.arc(ux, uy, 6, Math.PI, 0);
+      ctx.fill();
+      // Table
+      ctx.fillStyle = '#854d0e';
+      ctx.fillRect(ux - 6, uy + 10, 12, 4);
+    };
+
+    drawUmbrella(sx + width - 16, sy + 18, '#ef4444', '#f8fafc');
+    drawUmbrella(sx + width - 16, sy + 40, '#3b82f6', '#f8fafc');
+    drawUmbrella(sx + 20, sy + 40, '#f59e0b', '#f8fafc');
+
+    // Name Label
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 8px monospace';
+    ctx.textAlign = 'center';
+    ctx.shadowColor = '#000000';
+    ctx.shadowBlur = 3;
+    ctx.fillText('SUKOON', cx, sy - 4);
+
+    ctx.restore();
+  }
+
+  // 16. RV Panchajanya Kondapur (Modern Dense Apartment Complex)
+  drawRVPanchajanya(ctx, sx, sy, width = 95, height = 65) {
+    ctx.save();
+    const cx = sx + width / 2;
+
+    // Drop shadow
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
+    ctx.fillRect(sx + 4, sy + 4, width, height);
+
+    // Concrete Base & Twin High-Rise Blocks
+    ctx.fillStyle = '#475569';
+    ctx.fillRect(sx, sy + 10, width, height - 10);
+
+    // Left Block
+    ctx.fillStyle = '#94a3b8';
+    ctx.fillRect(sx + 2, sy + 6, width / 2 - 4, height - 16);
+    // Right Block
+    ctx.fillStyle = '#cbd5e1';
+    ctx.fillRect(sx + width / 2 + 2, sy + 2, width / 2 - 4, height - 12);
+
+    // Grids of Balcony Windows
+    ctx.fillStyle = '#1e293b';
+    for (let r = 0; r < 3; r++) {
+      for (let c = 0; c < 4; c++) {
+        ctx.fillRect(sx + 6 + c * 10, sy + 16 + r * 12, 6, 6);
+        ctx.fillRect(sx + width / 2 + 6 + c * 10, sy + 12 + r * 12, 6, 6);
+      }
+    }
+
+    // Rooftop Water Tanks
+    ctx.fillStyle = '#0284c7';
+    ctx.fillRect(sx + 10, sy + 2, 8, 5);
+    ctx.fillRect(sx + width - 18, sy - 2, 8, 5);
+
+    // Name Label
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 8px monospace';
+    ctx.textAlign = 'center';
+    ctx.shadowColor = '#000000';
+    ctx.shadowBlur = 3;
+    ctx.fillText('RV PANCHAJANYA', cx, sy - 6);
+
+    ctx.restore();
+  }
+
+  // 17. Green Football Turf / Sports Ground
+  drawFootballField(ctx, sx, sy, width = 70, height = 50) {
+    ctx.save();
+    // Green Turf
+    ctx.fillStyle = '#15803d';
+    ctx.fillRect(sx, sy, width, height);
+
+    // Outer line
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 1.5;
+    ctx.strokeRect(sx + 2, sy + 2, width - 4, height - 4);
+
+    // Center Line & Circle
+    const midX = sx + width / 2;
+    ctx.beginPath();
+    ctx.moveTo(midX, sy + 2);
+    ctx.lineTo(midX, sy + height - 2);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.arc(midX, sy + height / 2, 6, 0, Math.PI * 2);
+    ctx.stroke();
+
+    // Goal Penalty Areas
+    ctx.strokeRect(sx + 2, sy + height / 2 - 8, 8, 16);
+    ctx.strokeRect(sx + width - 10, sy + height / 2 - 8, 8, 16);
+
+    ctx.restore();
+  }
+
+  // 18. Parking Area with Blue "P" Sign & Pixel Cars
+  drawParkingArea(ctx, sx, sy, width = 50, height = 40) {
+    ctx.save();
+    // Asphalt Pavement
+    ctx.fillStyle = '#334155';
+    ctx.fillRect(sx, sy, width, height);
+
+    // White Parking Bays
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 1;
+    for (let py = sy + 6; py < sy + height; py += 10) {
+      ctx.beginPath();
+      ctx.moveTo(sx + 4, py);
+      ctx.lineTo(sx + 18, py);
+      ctx.moveTo(sx + 26, py);
+      ctx.lineTo(sx + width - 4, py);
+      ctx.stroke();
+    }
+
+    // Parked Mini Pixel Cars
+    const drawMiniCar = (mx, my, color) => {
+      ctx.fillStyle = color;
+      ctx.fillRect(mx, my, 12, 6);
+      ctx.fillStyle = '#93c5fd';
+      ctx.fillRect(mx + 2, my + 1, 4, 4);
+      ctx.fillStyle = '#0f172a';
+      ctx.fillRect(mx - 1, my, 2, 2);
+      ctx.fillRect(mx - 1, my + 4, 2, 2);
+      ctx.fillRect(mx + 11, my, 2, 2);
+      ctx.fillRect(mx + 11, my + 4, 2, 2);
+    };
+
+    drawMiniCar(sx + 5, sy + 8, '#ef4444');
+    drawMiniCar(sx + 30, sy + 18, '#3b82f6');
+    drawMiniCar(sx + 5, sy + 28, '#f59e0b');
+
+    // Blue "P" Sign Badge
+    ctx.fillStyle = '#1d4ed8';
+    ctx.fillRect(sx + width - 16, sy + 4, 12, 12);
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(sx + width - 16, sy + 4, 12, 12);
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 8px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('P', sx + width - 10, sy + 13);
+
+    ctx.restore();
+  }
+
+  // 19. Authentic 8-Bit Map Legend Box
+  drawMapLegend(ctx, sx, sy) {
+    ctx.save();
+    const w = 115;
+    const h = 135;
+
+    // Dark parchment background
+    ctx.fillStyle = 'rgba(15, 23, 42, 0.92)';
+    ctx.fillRect(sx, sy, w, h);
+
+    // Gold Double Border
+    ctx.strokeStyle = '#f59e0b';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(sx, sy, w, h);
+    ctx.strokeStyle = '#d97706';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(sx + 3, sy + 3, w - 6, h - 6);
+
+    // Title
+    ctx.fillStyle = '#fef08a';
+    ctx.font = 'bold 9px monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText('LEGEND', sx + w / 2, sy + 15);
+
+    // Divider
+    ctx.strokeStyle = '#f59e0b';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(sx + 10, sy + 20);
+    ctx.lineTo(sx + w - 10, sy + 20);
+    ctx.stroke();
+
+    const items = [
+      { name: 'FOREST', color: '#15803d', icon: 'tree' },
+      { name: 'GRASS', color: '#58b848', icon: 'square' },
+      { name: 'FIELD', color: '#a67c48', icon: 'square' },
+      { name: 'ROAD', color: '#374151', icon: 'road' },
+      { name: 'PATH', color: '#9a7b56', icon: 'path' },
+      { name: 'WATER', color: '#2563eb', icon: 'water' },
+      { name: 'BUILDING', color: '#2563eb', icon: 'building' }
+    ];
+
+    let iy = sy + 32;
+    items.forEach(item => {
+      ctx.textAlign = 'left';
+
+      // Swatch
+      if (item.icon === 'tree') {
+        ctx.fillStyle = '#15803d';
+        ctx.beginPath();
+        ctx.arc(sx + 16, iy - 3, 5, 0, Math.PI * 2);
+        ctx.fill();
+      } else if (item.icon === 'road') {
+        ctx.fillStyle = '#374151';
+        ctx.fillRect(sx + 11, iy - 7, 12, 8);
+        ctx.strokeStyle = '#fbbf24';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(sx + 11, iy - 3);
+        ctx.lineTo(sx + 23, iy - 3);
+        ctx.stroke();
+      } else if (item.icon === 'path') {
+        ctx.fillStyle = '#9a7b56';
+        ctx.fillRect(sx + 11, iy - 7, 12, 8);
+      } else if (item.icon === 'water') {
+        ctx.fillStyle = '#2563eb';
+        ctx.fillRect(sx + 11, iy - 7, 12, 8);
+      } else if (item.icon === 'building') {
+        ctx.fillStyle = '#1e40af';
+        ctx.fillRect(sx + 11, iy - 7, 12, 8);
+        ctx.fillStyle = '#67e8f9';
+        ctx.fillRect(sx + 13, iy - 5, 3, 3);
+      } else {
+        ctx.fillStyle = item.color;
+        ctx.fillRect(sx + 11, iy - 7, 12, 8);
+      }
+
+      ctx.strokeStyle = '#000000';
+      ctx.lineWidth = 1;
+      ctx.strokeRect(sx + 11, iy - 7, 12, 8);
+
+      ctx.fillStyle = '#f8fafc';
+      ctx.font = 'bold 8px monospace';
+      ctx.fillText(item.name, sx + 30, iy);
+
+      iy += 15;
+    });
 
     ctx.restore();
   }

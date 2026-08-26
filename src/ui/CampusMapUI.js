@@ -94,8 +94,15 @@ export class CampusMapUI {
                   <button class="nes-btn is-warning sec-west-btn" data-travel="75" style="text-align: left; font-size: 7px;">⛩️ Gate 3 IDC (#75)</button>
                   <!-- East Campus -->
                   <button class="nes-btn is-error sec-east-btn" data-travel="59" style="text-align: left; font-size: 7px;">☕ Sukoon Canteen (#59)</button>
+                  <button class="nes-btn is-error sec-east-btn" data-travel="62" style="text-align: left; font-size: 7px;">📐 CR Rao AIMSCS (#62)</button>
+                  <button class="nes-btn is-error sec-east-btn" data-travel="91" style="text-align: left; font-size: 7px;">🚰 Overhead Water Tank (#91)</button>
+                  <button class="nes-btn is-error sec-east-btn" data-travel="92" style="text-align: left; font-size: 7px;">🏟️ Balayogi Complex (#92)</button>
+                  <button class="nes-btn is-error sec-east-btn" data-travel="93" style="text-align: left; font-size: 7px;">🏃 Gachibowli Stadium (#93)</button>
+                  <button class="nes-btn is-error sec-east-btn" data-travel="89" style="text-align: left; font-size: 7px;">🛕 Sai Baba Temple (#89)</button>
+                  <button class="nes-btn is-error sec-east-btn" data-travel="90" style="text-align: left; font-size: 7px;">🧬 Indian Immunologicals (#90)</button>
+                  <button class="nes-btn is-error sec-east-btn" data-travel="87" style="text-align: left; font-size: 7px;">🎯 SATG Shooting Ranges (#87)</button>
+                  <button class="nes-btn is-error sec-east-btn" data-travel="86" style="text-align: left; font-size: 7px;">🏛️ UoH Monument (#86)</button>
                   <button class="nes-btn is-error sec-east-btn" data-travel="61" style="text-align: left; font-size: 7px;">🧪 Chemistry Annex (#61)</button>
-                  <button class="nes-btn is-error sec-east-btn" data-travel="56" style="text-align: left; font-size: 7px;">🎨 SN School Arts (#56)</button>
                 </div>
               </div>
             </div>
@@ -135,6 +142,15 @@ export class CampusMapUI {
     // 1. Lush Section Terrain Ground
     ctx.fillStyle = '#4a7c36';
     ctx.fillRect(0, 0, w, h);
+
+    // 1B. Earthen Agricultural Field Blocks
+    for (const fb of secCfg.fieldBlocks || []) {
+      ctx.fillStyle = '#8c6230';
+      ctx.fillRect(fb.x * sx, fb.y * sy, fb.w * sx, fb.h * sy);
+      ctx.strokeStyle = '#6a461e';
+      ctx.lineWidth = 1;
+      ctx.strokeRect(fb.x * sx, fb.y * sy, fb.w * sx, fb.h * sy);
+    }
 
     // Subtle grid lines
     ctx.fillStyle = 'rgba(255, 255, 255, 0.03)';

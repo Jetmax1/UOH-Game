@@ -67,7 +67,7 @@ export class WorldMap {
             shortLabel: '⛩️ East Gate',
             targetSection: 'east',
             targetX: 160,
-            targetY: 480,
+            targetY: 520,
             targetDirection: 'right',
             x: 1560,
             y: 480,
@@ -451,116 +451,215 @@ export class WorldMap {
       },
 
       // =======================================================================
-      // 4. EAST CAMPUS (Chemistry, CR Rao, Arts & Comm, Hostels, Sukoon)
+      // 4. EAST CAMPUS (Detailed Retro 8-Bit Map Based on Reference)
       // =======================================================================
       east: {
         id: 'east',
         name: 'EAST CAMPUS',
-        sub: 'Science Valley, School of Arts & Comm, Eastern Hostels & Sukoon',
+        sub: 'Academic Core, Science Valley, Sports Enclave, Lakes & Heritage Woods',
         themeColor: '#a855f7',
-        width: 1650,
-        height: 1350,
-        waterBodies: [],
+        width: 2400,
+        height: 1600,
+        waterBodies: [
+          // 1. Peacock Lake (Bottom Center) - Large elongated reservoir with natural sandy shores
+          { id: 28, name: 'Peacock Lake', x: 1280, y: 1400, radiusX: 260, radiusY: 100, color: '#1e40af' },
+          // 2. IGM Library Lake (West-Central) - Scenic natural lake wrapping around library
+          { id: 96, name: 'Library Lake', x: 420, y: 990, radiusX: 140, radiusY: 100, color: '#2563eb' },
+          // 3. Kondapur Lake / Northeast Pond (Northeast)
+          { id: 97, name: 'Kondapur Lake', x: 1750, y: 190, radiusX: 75, radiusY: 60, color: '#3880b8' }
+        ],
         checkpoints: [
           {
             id: 'cp_east_to_main',
-            name: '⛩️ Main Gate (to Main Campus)',
-            shortLabel: '⛩️ Main Gate',
+            name: '⛩️ West Gate (to Main Campus)',
+            shortLabel: '⛩️ West Gate',
             targetSection: 'main',
             targetX: 1500,
             targetY: 530,
             targetDirection: 'left',
-            x: 80,
-            y: 440,
+            x: 40,
+            y: 490,
             width: 40,
             height: 100,
             isVertical: true
           }
         ],
         roads: [
-          // West-to-East Main Science Avenue
-          [80, 490, 280, 490, 26, false],
-          [280, 490, 580, 510, 26, false],
-          [580, 510, 760, 515, 24, false],
-          [760, 515, 1020, 595, 24, false],
-          [1020, 595, 1420, 310, 22, false], // To Small Gate & Xerox
-          [1420, 310, 1420, 450, 20, false],
-          // Faculty & Sports Loop
-          [280, 490, 260, 245, 20, false],
-          [260, 245, 520, 230, 20, false],
-          [520, 230, 750, 255, 22, false],
-          [750, 255, 940, 290, 20, false],
-          [940, 290, 960, 450, 20, false],
-          [960, 450, 760, 515, 20, false],
-          // Arts & Eastern Hostels Avenue
-          [580, 510, 440, 710, 22, false],
-          [440, 710, 620, 730, 22, false],
-          [620, 730, 820, 750, 22, false],
-          [820, 750, 1040, 790, 22, false],
-          [820, 750, 820, 910, 20, false],
-          [440, 710, 440, 870, 20, false],
-          [1040, 790, 1040, 995, 22, false],
-          [1040, 995, 1240, 1020, 22, false],
-          [1040, 790, 1260, 850, 20, false],
-          // Nature & Rock Trails
-          [940, 290, 1160, 270, 14, true],
-          [1160, 270, 1160, 410, 14, true],
-          [1020, 595, 1320, 630, 14, true]
+          // 1. MAIN DIAGONAL HIGHWAY (Multi-lane arterial running NW to SE past Small Gate to Stadium)
+          [900, 40, 1180, 180, 32, false],
+          [1180, 180, 1440, 420, 32, false],
+          [1440, 420, 1720, 680, 32, false],
+          [1720, 680, 1980, 960, 32, false],
+          [1980, 960, 2220, 1260, 32, false],
+          [2220, 1260, 2380, 1540, 32, false],
+
+          // Highway Secondary Branches (To Kondapur, Sai Baba Temple & Indian Immunologicals)
+          [1720, 680, 2060, 840, 24, false], // To Indian Immunologicals
+          [1440, 420, 1800, 180, 24, false], // To Kondapur / Sai Baba Temple
+          [1800, 180, 2000, 200, 22, false], // To Sai Baba Temple
+          [1800, 180, 1840, 80, 22, false],  // To RV Panchajanya
+
+          // 2. MAIN WEST-EAST ACADEMIC SPINE (UoH Monument -> SCIS -> Sukoon -> CR Rao)
+          [40, 520, 160, 520, 26, false],
+          [160, 520, 440, 520, 26, false],
+          [440, 520, 740, 660, 26, false],  // To SCIS
+          [740, 660, 1020, 760, 26, false], // To Sukoon
+          [1020, 760, 1360, 860, 26, false],
+          [1360, 860, 1620, 960, 26, false], // To CR Rao AIMSCS
+          [1620, 960, 1980, 960, 26, false], // Connecting CR Rao to Main Diagonal Highway
+
+          // 3. NORTH-WEST HIGHWAY & SHOOTING RANGE LOOP
+          [160, 520, 160, 220, 22, false],
+          [160, 220, 240, 100, 22, false],
+          [240, 100, 440, 100, 22, false],
+          [440, 100, 740, 220, 24, false],
+          [740, 220, 940, 180, 24, false],  // To Admin Building
+          [940, 180, 1180, 180, 26, false], // To Main Diagonal Highway
+
+          // 4. CENTRAL ADMIN & HEALTH CENTER CORRIDOR
+          [1000, 180, 1000, 360, 24, false], // Admin to Health Center
+          [1000, 360, 1020, 760, 24, false], // Health Center to Sukoon
+          [1000, 360, 1200, 440, 22, false], // To Horticulture Nursery
+          [1200, 440, 1440, 420, 22, false], // To Small Gate on Highway
+
+          // 5. LIBRARY & SOUTH-WEST LAKESIDE AVENUE
+          [740, 660, 580, 860, 24, false],  // SCIS to IGM Library
+          [580, 860, 680, 1020, 22, false], // Library Lake Loop
+          [680, 1020, 780, 860, 20, false], // To Ladies Hostels
+          [780, 860, 1020, 760, 22, false], // Hostels to Sukoon
+
+          // 6. SUKOON TO PEACOCK LAKE & SOUTH SPORTS COMPLEX
+          [1020, 760, 1040, 1240, 24, false], // Sukoon down to Peacock Lake
+          [1040, 1240, 1360, 1240, 22, false],
+          [1360, 1240, 1600, 1260, 24, false], // To Balayogi Sports Complex
+          [1600, 1260, 1850, 1380, 24, false], // To Gachibowli Stadium
+          [1850, 1380, 2060, 1320, 22, false], // To Sports Turf
+          [2060, 1320, 2240, 1240, 22, false], // To Parking Area
+          [1620, 960, 1600, 1260, 22, false],  // CR Rao down to Balayogi
+
+          // 7. GRAVEL & EARTHEN NATURE TRAILS (Matching Reference Map)
+          // Southwest field nature trails
+          [160, 1300, 460, 1150, 14, true],
+          [460, 1150, 700, 1280, 14, true],
+          [700, 1280, 1040, 1240, 14, true],
+          [160, 1450, 400, 1400, 14, true],
+          [400, 1400, 780, 1460, 14, true],
+          [780, 1460, 1040, 1480, 14, true],
+          [1040, 1480, 1500, 1480, 14, true], // Trail along southern shore of Peacock Lake
+          // Forest trails around rocks & temples
+          [1360, 860, 1420, 760, 14, true],   // To Cherry Rock & Aquarium Rock
+          [1420, 760, 1620, 760, 14, true],
+          [1750, 260, 1950, 240, 14, true],   // Trail around Kondapur Lake
+          [240, 100, 440, 40, 14, true]       // Trail to SATG shooting track
+        ],
+        fieldBlocks: [
+          // Southwest agricultural & rocky brown field blocks
+          { x: 60, y: 1100, w: 720, h: 460 },
+          { x: 300, y: 1000, w: 380, h: 180 },
+          { x: 740, y: 1400, w: 560, h: 160 }
         ],
         plazas: [
-          { x: 240, y: 430, w: 100, h: 60 },  // Sukoon Canteen Plaza
-          { x: 720, y: 450, w: 110, h: 60 },  // Chemistry Quad
-          { x: 990, y: 930, w: 120, h: 60 }   // Arts & Comm Plaza
+          { x: 920, y: 80, w: 190, h: 80 },    // Administration Grand Plaza
+          { x: 500, y: 840, w: 160, h: 75 },   // Library Lake Promenade
+          { x: 980, y: 740, w: 140, h: 70 },   // Sukoon Canteen Courtyard
+          { x: 1580, y: 940, w: 180, h: 80 },  // CR Rao Science Square
+          { x: 1960, y: 180, w: 140, h: 70 },  // Sai Baba Temple Courtyard
+          { x: 1560, y: 1280, w: 160, h: 75 }, // Balayogi Sports Plaza
+          { x: 1800, y: 1380, w: 180, h: 75 }  // Gachibowli Stadium Gateway
         ],
         zebraCrossings: [
-          { x: 260, y: 480, w: 26, h: 18, isVertical: true },
-          { x: 740, y: 505, w: 26, h: 18, isVertical: true },
-          { x: 1000, y: 585, w: 26, h: 18, isVertical: true }
+          { x: 1180, y: 170, w: 32, h: 20, isVertical: false },
+          { x: 1440, y: 410, w: 32, h: 20, isVertical: false },
+          { x: 1720, y: 670, w: 32, h: 20, isVertical: false },
+          { x: 1980, y: 950, w: 32, h: 20, isVertical: false },
+          { x: 720, y: 650, w: 26, h: 20, isVertical: true },
+          { x: 1000, y: 750, w: 26, h: 20, isVertical: true },
+          { x: 1600, y: 950, w: 26, h: 20, isVertical: true }
         ],
         benches: [
-          { x: 260, y: 520 }, { x: 310, y: 520 },
-          { x: 740, y: 550 }, { x: 800, y: 550 },
-          { x: 1020, y: 830 }, { x: 1080, y: 830 }
+          { x: 960, y: 170 }, { x: 1060, y: 170 },
+          { x: 1000, y: 810 }, { x: 1070, y: 810 },
+          { x: 560, y: 920 }, { x: 620, y: 920 },
+          { x: 1640, y: 1030 }, { x: 1710, y: 1030 },
+          { x: 2020, y: 260 }, { x: 2080, y: 260 },
+          { x: 1620, y: 1370 }, { x: 1680, y: 1370 }
         ],
         fountains: [
-          { x: 260, y: 400 },
-          { x: 780, y: 420 }
+          { x: 1000, y: 70 },
+          { x: 580, y: 860 },
+          { x: 1680, y: 950 }
         ],
         hedges: [
-          { x: 220, y: 410, tilesX: 4, tilesY: 1 },
-          { x: 700, y: 430, tilesX: 5, tilesY: 1 }
+          { x: 920, y: 60, tilesX: 12, tilesY: 1 },
+          { x: 500, y: 820, tilesX: 10, tilesY: 1 },
+          { x: 1580, y: 920, tilesX: 11, tilesY: 1 }
         ],
         fences: [
-          { x: 60, y: 420, length: 6 },
-          { x: 60, y: 550, length: 6 },
-          { x: 1400, y: 250, length: 5 },
-          { x: 1400, y: 370, length: 5 }
+          { x: 40, y: 460, length: 6 },
+          { x: 40, y: 590, length: 6 },
+          { x: 1420, y: 400, length: 5 },
+          { x: 1420, y: 500, length: 5 },
+          { x: 2040, y: 800, length: 8 },
+          { x: 2040, y: 1380, length: 8 }
         ],
         signposts: [
-          { x: 130, y: 460, text: 'CHECKPOINT — Westbound to Administration & Central Campus' },
-          { x: 250, y: 430, text: 'SUKOON PLAZA — Sukoon Canteen & Student Gathering' },
-          { x: 730, y: 450, text: 'SCIENCE VALLEY — School of Chemistry & CR Rao AIMSCS' },
-          { x: 1010, y: 930, text: 'CREATIVE ARTS — Sarojini Naidu School of Arts & Communication' },
-          { x: 1390, y: 250, text: 'EAST GATE — HCU Small Gate to Gachibowli Road' }
+          { x: 90, y: 490, text: 'CHECKPOINT — Westbound to Main Campus' },
+          { x: 1000, y: 130, text: 'NORTH QUAD — Administration Headquarters & Central Dome' },
+          { x: 1000, y: 320, text: 'HEALTH CENTER — 24x7 Emergency Medical Care' },
+          { x: 740, y: 610, text: 'SCIS — School of Computer and Information Sciences' },
+          { x: 540, y: 850, text: 'IGM LIBRARY — 400,000 Reference Volumes & Lakeshore Study' },
+          { x: 1020, y: 750, text: 'SUKOON GLADE — Chai, Samosas & Scholar Gathering' },
+          { x: 1620, y: 960, text: 'CR RAO AIMSCS — Advanced Mathematical Sciences' },
+          { x: 1440, y: 420, text: 'EAST GATE — HCU Small Gate to Gachibowli Road' },
+          { x: 1940, y: 1070, text: 'CAMPUS UTILITY — Overhead Water Tank Tower' },
+          { x: 1600, y: 1280, text: 'SPORTS ENCLAVE — GMC Balayogi Sports Complex' },
+          { x: 1850, y: 1380, text: 'ATHLETIC ARENA — Gachibowli Stadium' },
+          { x: 1040, y: 1280, text: 'ECOLOGICAL GEM — Peacock Lake Wetland Sanctuary' },
+          { x: 2000, y: 170, text: 'HERITAGE SANCTUARY — Sri Sai Baba Temple' },
+          { x: 120, y: 50, text: 'MARKSMANSHIP GROUNDS — SATG Shooting Ranges' },
+          { x: 2060, y: 810, text: 'BIOTECH ENCLAVE — Indian Immunologicals Limited' }
         ],
         streetLamps: [
-          { x: 180, y: 475 }, { x: 400, y: 495 }, { x: 650, y: 505 }, { x: 880, y: 550 },
-          { x: 1100, y: 575 }, { x: 1350, y: 350 }, { x: 440, y: 690 }, { x: 820, y: 730 },
-          { x: 1040, y: 770 }, { x: 1040, y: 975 }
+          // Highway street lamps
+          { x: 920, y: 25 }, { x: 1180, y: 160 }, { x: 1440, y: 400 },
+          { x: 1720, y: 660 }, { x: 1980, y: 940 }, { x: 2220, y: 1240 }, { x: 2360, y: 1520 },
+          // Avenues street lamps
+          { x: 260, y: 500 }, { x: 520, y: 500 }, { x: 740, y: 640 },
+          { x: 1000, y: 160 }, { x: 1000, y: 340 }, { x: 1020, y: 740 },
+          { x: 1360, y: 840 }, { x: 1620, y: 940 }, { x: 1040, y: 1220 },
+          { x: 1600, y: 1240 }, { x: 1850, y: 1360 }, { x: 580, y: 840 }
         ],
         wildlife: [
-          { type: 'butterfly', x: 260, y: 400, startX: 260, startY: 400, vx: 15, timer: 0 },
-          { type: 'deer', x: 1200, y: 350, startX: 1200, startY: 350, vx: 8, timer: 0 }
+          { type: 'peacock', x: 1080, y: 1320, startX: 1080, startY: 1320, vx: 12, timer: 0 },
+          { type: 'peacock', x: 1240, y: 1340, startX: 1240, startY: 1340, vx: -10, timer: 0 },
+          { type: 'deer', x: 1380, y: 720, startX: 1380, startY: 720, vx: 8, timer: 0 },
+          { type: 'deer', x: 480, y: 1200, startX: 480, startY: 1200, vx: 10, timer: 0 },
+          { type: 'butterfly', x: 1020, y: 760, startX: 1020, startY: 760, vx: 14, timer: 0 },
+          { type: 'butterfly', x: 2000, y: 220, startX: 2000, startY: 220, vx: 12, timer: 0 }
         ],
         forestBlocks: [
-          { x: 80, y: 80, w: 1450, h: 80 },
-          { x: 1450, y: 500, w: 150, h: 700 },
-          { x: 80, y: 600, w: 140, h: 650 },
-          { x: 300, y: 1100, w: 900, h: 180 }
+          // Dense forest framing matching reference map
+          { x: 60, y: 40, w: 800, h: 120 },
+          { x: 60, y: 180, w: 120, h: 280 },
+          { x: 260, y: 180, w: 460, h: 300 },
+          { x: 1240, y: 40, w: 500, h: 140 },
+          { x: 1840, y: 280, w: 480, h: 480 },
+          { x: 2180, y: 980, w: 180, h: 580 },
+          { x: 740, y: 440, w: 220, h: 180 },
+          { x: 1160, y: 440, w: 240, h: 280 },
+          { x: 1480, y: 460, w: 220, h: 260 },
+          { x: 60, y: 640, w: 320, h: 320 },
+          { x: 1240, y: 840, w: 100, h: 140 },
+          { x: 1480, y: 760, w: 120, h: 140 },
+          { x: 1780, y: 760, w: 180, h: 180 },
+          { x: 1540, y: 1460, w: 260, h: 100 }
         ],
         tallGrassPatches: [
-          { x: 1120, y: 290, w: 5, h: 3 },
-          { x: 1280, y: 650, w: 6, h: 4 }
+          { x: 1080, y: 1300, w: 6, h: 4 },
+          { x: 1320, y: 1320, w: 6, h: 4 },
+          { x: 1420, y: 740, w: 5, h: 3 },
+          { x: 440, y: 1180, w: 6, h: 4 },
+          { x: 1980, y: 240, w: 5, h: 3 }
         ]
       },
 
@@ -813,6 +912,7 @@ export class WorldMap {
     this.streetLamps = cfg.streetLamps || [];
     this.wildlife = cfg.wildlife || [];
     this.forestBlocks = cfg.forestBlocks || [];
+    this.fieldBlocks = cfg.fieldBlocks || [];
     this.tallGrassPatches = cfg.tallGrassPatches || [];
 
     // Filter locations & NPCs belonging to this section
@@ -923,23 +1023,57 @@ export class WorldMap {
     } else if (this.currentSection === 'east') {
       this.vehicles.push({
         id: 'shuttle_east_1',
-        name: 'Arts & Sukoon Shuttle',
-        x: 180,
-        y: 470,
+        name: 'Science & Sukoon Shuttle',
+        x: 80,
+        y: 520,
         color: 'purple',
-        speed: 35,
+        speed: 40,
         direction: 'right',
         waypoints: [
-          { x: 180, y: 470 },
-          { x: 600, y: 470 },
-          { x: 1040, y: 470 },
-          { x: 1040, y: 740 },
-          { x: 1040, y: 470 },
-          { x: 600, y: 470 }
+          { x: 80, y: 520 },
+          { x: 440, y: 520 },
+          { x: 740, y: 660 },
+          { x: 1020, y: 760 },
+          { x: 1360, y: 860 },
+          { x: 1620, y: 960 },
+          { x: 1980, y: 960 },
+          { x: 1720, y: 680 },
+          { x: 1440, y: 420 },
+          { x: 1180, y: 180 },
+          { x: 1000, y: 360 },
+          { x: 740, y: 660 },
+          { x: 440, y: 520 },
+          { x: 80, y: 520 }
         ],
         currentWpIdx: 0,
         isBlinking: false,
         blinkSide: 'right',
+        blinkerTimer: 0
+      });
+      this.vehicles.push({
+        id: 'shuttle_east_2',
+        name: 'Gachibowli Express Buggy',
+        x: 1440,
+        y: 420,
+        color: 'emerald',
+        speed: 42,
+        direction: 'down',
+        waypoints: [
+          { x: 1440, y: 420 },
+          { x: 1720, y: 680 },
+          { x: 1980, y: 960 },
+          { x: 2220, y: 1260 },
+          { x: 2060, y: 1320 },
+          { x: 1850, y: 1380 },
+          { x: 1600, y: 1260 },
+          { x: 1620, y: 960 },
+          { x: 1980, y: 960 },
+          { x: 1720, y: 680 },
+          { x: 1440, y: 420 }
+        ],
+        currentWpIdx: 0,
+        isBlinking: false,
+        blinkSide: 'left',
         blinkerTimer: 0
       });
     }
@@ -1250,6 +1384,7 @@ export class WorldMap {
     const grassTile = pixelEngine.getGrassTile();
     const flowerRed = pixelEngine.getFlowerTile('red');
     const flowerYellow = pixelEngine.getFlowerTile('yellow');
+    const fieldTile = pixelEngine.getFieldTile();
 
     const tileSize = 16;
     const startTileX = Math.floor(camera.x / tileSize);
@@ -1259,10 +1394,26 @@ export class WorldMap {
 
     for (let ty = startTileY; ty <= endTileY; ty++) {
       for (let tx = startTileX; tx <= endTileX; tx++) {
-        const sx = tx * tileSize - camera.x;
-        const sy = ty * tileSize - camera.y;
+        const wx = tx * tileSize;
+        const wy = ty * tileSize;
+        const sx = wx - camera.x;
+        const sy = wy - camera.y;
 
-        if ((tx * 7 + ty * 13) % 23 === 0) {
+        // Check if tile falls within field / agricultural dirt patches
+        let isField = false;
+        if (this.fieldBlocks && this.fieldBlocks.length > 0) {
+          for (let f = 0; f < this.fieldBlocks.length; f++) {
+            const fb = this.fieldBlocks[f];
+            if (wx >= fb.x && wx < fb.x + fb.w && wy >= fb.y && wy < fb.y + fb.h) {
+              isField = true;
+              break;
+            }
+          }
+        }
+
+        if (isField) {
+          ctx.drawImage(fieldTile, sx, sy);
+        } else if ((tx * 7 + ty * 13) % 23 === 0) {
           ctx.drawImage(flowerRed, sx, sy);
         } else if ((tx * 11 + ty * 5) % 19 === 0) {
           ctx.drawImage(flowerYellow, sx, sy);
@@ -1605,7 +1756,159 @@ export class WorldMap {
         continue;
       }
 
-      // 6. School of Life Sciences (#3) & ASPIRE BioNEST (#2)
+      // 6. Overhead Water Tank (#91)
+      if (loc.isWaterTank) {
+        pixelEngine.drawWaterTank(ctx, sx, sy, loc.width, loc.height);
+        this.drawPinBadge(ctx, sx + 2, sy + 2, loc.id);
+        ctx.restore();
+        continue;
+      }
+
+      // 7. GMC Balayogi Sports Complex (#92)
+      if (loc.isBalayogi) {
+        pixelEngine.drawBalayogiSportsComplex(ctx, sx, sy, loc.width / 2);
+        this.drawPinBadge(ctx, sx + 4, sy + 4, loc.id);
+        ctx.restore();
+        continue;
+      }
+
+      // 8. Gachibowli Stadium (#93)
+      if (loc.isGachibowliStadium) {
+        pixelEngine.drawGachibowliStadium(ctx, sx, sy, loc.width, loc.height);
+        this.drawPinBadge(ctx, sx + 4, sy + 4, loc.id);
+        ctx.restore();
+        continue;
+      }
+
+      // 9. University of Hyderabad Monument (#86)
+      if (loc.isMonument) {
+        pixelEngine.drawUoHMonument(ctx, sx, sy, loc.width / 2);
+        this.drawPinBadge(ctx, sx + 2, sy + 2, loc.id);
+        ctx.restore();
+        continue;
+      }
+
+      // 10. SATG Shooting Ranges (#87)
+      if (loc.isShootingRange) {
+        pixelEngine.drawShootingRange(ctx, sx, sy, loc.width, loc.height);
+        this.drawPinBadge(ctx, sx + 2, sy + 2, loc.id);
+        ctx.restore();
+        continue;
+      }
+
+      // 11. Sai Baba Temple (#89)
+      if (loc.isSaiBabaTemple) {
+        pixelEngine.drawSaiBabaTemple(ctx, sx, sy, loc.width, loc.height);
+        this.drawPinBadge(ctx, sx + 2, sy + 2, loc.id);
+        ctx.restore();
+        continue;
+      }
+
+      // 12. Indian Immunologicals Limited (#90)
+      if (loc.isIndianImmunologicals) {
+        pixelEngine.drawIndianImmunologicals(ctx, sx, sy, loc.width, loc.height);
+        this.drawPinBadge(ctx, sx + 2, sy + 2, loc.id);
+        ctx.restore();
+        continue;
+      }
+
+      // 13. Health Center (#38)
+      if (loc.isHealthCenter) {
+        pixelEngine.drawHealthCenter(ctx, sx, sy, loc.width, loc.height);
+        this.drawPinBadge(ctx, sx + 2, sy + 2, loc.id);
+        ctx.restore();
+        continue;
+      }
+
+      // 14. Administration Building (#36)
+      if (loc.isAdminBuilding) {
+        pixelEngine.drawAdminBuilding(ctx, sx, sy, loc.width, loc.height);
+        this.drawPinBadge(ctx, sx + 2, sy + 2, loc.id);
+        ctx.restore();
+        continue;
+      }
+
+      // 15. SCIS (School of Computer Sciences) (#45)
+      if (loc.isSCIS) {
+        pixelEngine.drawSCISBuilding(ctx, sx, sy, loc.width, loc.height);
+        this.drawPinBadge(ctx, sx + 2, sy + 2, loc.id);
+        ctx.restore();
+        continue;
+      }
+
+      // 16. IGM Library, UoH (#51)
+      if (loc.isIGMLibrary) {
+        pixelEngine.drawIGMLibrary(ctx, sx, sy, loc.width, loc.height);
+        this.drawPinBadge(ctx, sx + 2, sy + 2, loc.id);
+        ctx.restore();
+        continue;
+      }
+
+      // 17. HCU Small Gate Security Office (#41)
+      if (loc.isSmallGate) {
+        pixelEngine.drawSecurityGateOffice(ctx, sx, sy, loc.width, loc.height);
+        this.drawPinBadge(ctx, sx + 2, sy + 2, loc.id);
+        ctx.restore();
+        continue;
+      }
+
+      // 18. Karthik SIM Cards & Xerox (#42)
+      if (loc.isKarthikXerox) {
+        pixelEngine.drawKarthikXerox(ctx, sx, sy, loc.width, loc.height);
+        this.drawPinBadge(ctx, sx + 2, sy + 2, loc.id);
+        ctx.restore();
+        continue;
+      }
+
+      // 19. India Post (#74)
+      if (loc.isIndiaPost) {
+        pixelEngine.drawIndiaPost(ctx, sx, sy, loc.width, loc.height);
+        this.drawPinBadge(ctx, sx + 2, sy + 2, loc.id);
+        ctx.restore();
+        continue;
+      }
+
+      // 20. Sukoon Canteen (#59)
+      if (loc.isSukoonCanteen) {
+        pixelEngine.drawSukoonCanteen(ctx, sx, sy, loc.width, loc.height);
+        this.drawPinBadge(ctx, sx + 2, sy + 2, loc.id);
+        ctx.restore();
+        continue;
+      }
+
+      // 21. RV Panchajanya Kondapur (#88)
+      if (loc.isRVPanchajanya) {
+        pixelEngine.drawRVPanchajanya(ctx, sx, sy, loc.width, loc.height);
+        this.drawPinBadge(ctx, sx + 2, sy + 2, loc.id);
+        ctx.restore();
+        continue;
+      }
+
+      // 22. Football Field (#94)
+      if (loc.isFootballField) {
+        pixelEngine.drawFootballField(ctx, sx, sy, loc.width, loc.height);
+        this.drawPinBadge(ctx, sx + 2, sy + 2, loc.id);
+        ctx.restore();
+        continue;
+      }
+
+      // 23. Parking Area (#95)
+      if (loc.isParkingArea) {
+        pixelEngine.drawParkingArea(ctx, sx, sy, loc.width, loc.height);
+        this.drawPinBadge(ctx, sx + 2, sy + 2, loc.id);
+        ctx.restore();
+        continue;
+      }
+
+      // 24. Central Rotunda Dome (#85)
+      if (loc.isCentralDome) {
+        pixelEngine.drawUoHMonument(ctx, sx, sy, loc.width / 2);
+        this.drawPinBadge(ctx, sx + 2, sy + 2, loc.id);
+        ctx.restore();
+        continue;
+      }
+
+      // 25. School of Life Sciences (#3) & ASPIRE BioNEST (#2)
       if (loc.id === 3) {
         const rad = loc.width / 2;
         const cx = sx + rad;
@@ -1658,7 +1961,7 @@ export class WorldMap {
         continue;
       }
 
-      // 7. Standard Upgraded GBA Departmental & Residential Buildings
+      // 26. Standard Upgraded GBA Departmental & Residential Buildings
       ctx.fillStyle = 'rgba(0, 0, 0, 0.35)';
       ctx.fillRect(sx + 4, sy + 4, loc.width, loc.height);
 
@@ -1737,7 +2040,7 @@ export class WorldMap {
         ctx.fillRect(wx + 2, sy + 24, 2, 2);
       }
 
-      // Red numbered pin badge (1 to 78)
+      // Red numbered pin badge (1 to 99)
       this.drawPinBadge(ctx, sx + 2, sy + 2, loc.id);
 
       // Title label
@@ -1766,7 +2069,7 @@ export class WorldMap {
   }
 
   drawPinBadge(ctx, x, y, id) {
-    if (id > 78) return;
+    if (id > 99) return;
     ctx.save();
     ctx.fillStyle = '#dc2626';
     ctx.beginPath();
@@ -1821,6 +2124,15 @@ export class WorldMap {
       const sy = s.y - camera.y;
       if (sx > -20 && sx < camera.width + 20 && sy > -20 && sy < camera.height + 20) {
         ctx.drawImage(signTile, sx, sy);
+      }
+    }
+
+    // Draw authentic 8-Bit Map Legend in East Campus
+    if (this.currentSection === 'east') {
+      const lx = 50 - camera.x;
+      const ly = 1180 - camera.y;
+      if (lx > -150 && lx < camera.width + 150 && ly > -150 && ly < camera.height + 150) {
+        pixelEngine.drawMapLegend(ctx, lx, ly);
       }
     }
   }
