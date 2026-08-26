@@ -1,4 +1,5 @@
 import { soundManager } from './AudioSynth.js';
+import { locationRegistry } from './LocationRegistry.js';
 
 /**
  * Campus Discovery & Exploration Progression System
@@ -14,7 +15,9 @@ export class DiscoverySystem {
   loadState(savedData) {
     if (!savedData) return;
     if (savedData.discoveredIds && Array.isArray(savedData.discoveredIds)) {
-      this.discoveredIds = new Set(savedData.discoveredIds);
+      this.discoveredIds = new Set(
+        savedData.discoveredIds.map(id => locationRegistry.migrateId(id)).filter(Boolean)
+      );
     }
     if (typeof savedData.score === 'number') {
       this.score = savedData.score;
@@ -29,16 +32,18 @@ export class DiscoverySystem {
   }
 
   isDiscovered(locationId) {
-    return this.discoveredIds.has(locationId);
+    const canonicalId = locationRegistry.migrateId(locationId);
+    return this.discoveredIds.has(canonicalId);
   }
 
   discoverLocation(locationId) {
-    if (this.discoveredIds.has(locationId)) return false;
+    const canonicalId = locationRegistry.migrateId(locationId);
+    if (!canonicalId || this.discoveredIds.has(canonicalId)) return false;
 
-    const loc = this.locations.find(l => l.id === locationId);
+    const loc = locationRegistry.getById(canonicalId) || this.locations.find(l => l.id === canonicalId);
     if (!loc) return false;
 
-    this.discoveredIds.add(locationId);
+    this.discoveredIds.add(canonicalId);
     const pts = loc.points || 50;
     this.score += pts;
 
