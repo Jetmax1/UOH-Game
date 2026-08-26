@@ -165,11 +165,19 @@
       <div id="mobile-dpad">
         <div class="joystick-base">
           <div class="joystick-stick"></div>
+          <span class="joystick-hint">TOUCH &amp; MOVE</span>
         </div>
       </div>
       <div id="mobile-action-buttons">
-        <button class="mobile-btn nes-btn" id="btn-mobile-sprint">⚡ RUN</button>
-        <button class="mobile-btn nes-btn is-primary" id="btn-mobile-interact">E INTERACT</button>
+        <div class="mobile-top-row">
+          <button class="mobile-btn nes-btn is-primary" id="btn-mobile-map" type="button" title="Campus Map">🗺️</button>
+          <button class="mobile-btn nes-btn is-success" id="btn-mobile-book" type="button" title="Discovery Book">📖</button>
+          <button class="mobile-btn nes-btn is-error" id="btn-mobile-quests" type="button" title="Quests">🏆</button>
+        </div>
+        <div class="mobile-bottom-row">
+          <button class="mobile-btn nes-btn is-warning" id="btn-mobile-sprint" type="button">⚡ RUN</button>
+          <button class="mobile-btn nes-btn is-error" id="btn-mobile-interact" type="button">🅰️ ACTION</button>
+        </div>
       </div>
     </div>
 

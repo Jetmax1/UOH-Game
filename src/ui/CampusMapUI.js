@@ -48,7 +48,7 @@ export class CampusMapUI {
             <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #334155; padding-bottom: 10px; margin-bottom: 12px;">
               <div>
                 <h2 style="font-size: 13px; color: #f87171; margin-bottom: 4px;">🗺️ Regional Campus Radar Map</h2>
-                <p style="font-size: 8px; color: #94a3b8;">Discover all 78 registered landmarks across 4 campus regions</p>
+                <p style="font-size: 8px; color: #94a3b8;">Discover all ${game.locations.length} registered landmarks across the campus</p>
               </div>
               <div>
                 <span class="chip" style="background: #1e293b; border: 2px solid #000; padding: 4px 8px; font-size: 8px; color: #fef08a;">
@@ -103,6 +103,7 @@ export class CampusMapUI {
                   <button class="nes-btn is-error sec-east-btn" data-travel="87" style="text-align: left; font-size: 7px;">🎯 SATG Shooting Ranges (#87)</button>
                   <button class="nes-btn is-error sec-east-btn" data-travel="86" style="text-align: left; font-size: 7px;">🏛️ UoH Monument (#86)</button>
                   <button class="nes-btn is-error sec-east-btn" data-travel="61" style="text-align: left; font-size: 7px;">🧪 Chemistry Annex (#61)</button>
+                  <button class="nes-btn is-error sec-east-btn" data-travel="98" style="text-align: left; font-size: 7px;">🪨 Mushroom Rock (#98)</button>
                 </div>
               </div>
             </div>
@@ -310,10 +311,10 @@ export class CampusMapUI {
     const boxH = (h - pad * 3 - 35) / 2;
 
     const sections = [
-      { id: 'west', name: '🟡 WEST CAMPUS', sub: 'Stadium & Gate 3 (7 POIs)', x: pad, y: pad + 15, w: boxW, h: boxH, color: 'rgba(234, 179, 8, 0.20)', border: '#eab308' },
-      { id: 'main', name: '🟢 NORTH / MAIN CAMPUS', sub: 'Admin, CS, Library & Lakes (26 POIs)', x: pad * 2 + boxW, y: pad + 15, w: boxW, h: boxH, color: 'rgba(16, 185, 129, 0.20)', border: '#10b981' },
-      { id: 'south', name: '🔵 SOUTH CAMPUS', sub: 'SLS Road & Hostels Quads (15 POIs)', x: pad, y: pad * 2 + 15 + boxH, w: boxW, h: boxH, color: 'rgba(37, 99, 235, 0.20)', border: '#2563eb' },
-      { id: 'east', name: '🟣 EAST CAMPUS', sub: 'Chemistry, Arts & Sukoon (23 POIs)', x: pad * 2 + boxW, y: pad * 2 + 15 + boxH, w: boxW, h: boxH, color: 'rgba(168, 85, 247, 0.20)', border: '#a855f7' }
+      { id: 'west', name: '🟡 WEST CAMPUS', sub: `Stadium, IDC & Gate 3 (${game.locations.filter(l => l.section === 'west').length} POIs)`, x: pad, y: pad + 15, w: boxW, h: boxH, color: 'rgba(234, 179, 8, 0.20)', border: '#eab308' },
+      { id: 'main', name: '🟢 NORTH / MAIN CAMPUS', sub: `Humanities, Social Sciences & Lakes (${game.locations.filter(l => l.section === 'main').length} POIs)`, x: pad * 2 + boxW, y: pad + 15, w: boxW, h: boxH, color: 'rgba(168, 85, 247, 0.20)', border: '#10b981' },
+      { id: 'south', name: '🔵 SOUTH CAMPUS', sub: `SLS Road & Hostels Quads (${game.locations.filter(l => l.section === 'south').length} POIs)`, x: pad, y: pad * 2 + 15 + boxH, w: boxW, h: boxH, color: 'rgba(37, 99, 235, 0.20)', border: '#2563eb' },
+      { id: 'east', name: '🟣 EAST CAMPUS', sub: `Academic Core, Sports & Sukoon (${game.locations.filter(l => l.section === 'east').length} POIs)`, x: pad * 2 + boxW, y: pad * 2 + 15 + boxH, w: boxW, h: boxH, color: 'rgba(168, 85, 247, 0.20)', border: '#a855f7' }
     ];
 
     sections.forEach(s => {
@@ -354,10 +355,11 @@ export class CampusMapUI {
     ctx.lineWidth = 2;
     ctx.strokeRect(cdX, cdY, cdW, cdH);
 
+    const cdCount = game.locations.filter(l => l.section === 'checkdam_buffer').length;
     ctx.fillStyle = '#ffffff';
     ctx.font = 'bold 10px Inter, sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('🌊 CHECK DAM BUFFER (4 POIs)', cdX + cdW / 2, cdY + 18);
+    ctx.fillText(`🌊 CHECK DAM BUFFER (${cdCount} POIs)`, cdX + cdW / 2, cdY + 18);
 
     ctx.fillStyle = '#7dd3fc';
     ctx.font = '8px Inter, sans-serif';
@@ -375,10 +377,11 @@ export class CampusMapUI {
     ctx.lineWidth = 2;
     ctx.strokeRect(amphiX, amphiY, amphiW, amphiH);
 
+    const amphiCount = game.locations.filter(l => l.section === 'amphi_valley').length;
     ctx.fillStyle = '#ffffff';
     ctx.font = 'bold 10px Inter, sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('🌲 AMPHI VALLEY BUFFER (3 POIs)', amphiX + amphiW / 2, amphiY + 18);
+    ctx.fillText(`🌲 AMPHI VALLEY BUFFER (${amphiCount} POIs)`, amphiX + amphiW / 2, amphiY + 18);
 
     ctx.fillStyle = '#a7f3d0';
     ctx.font = '8px Inter, sans-serif';

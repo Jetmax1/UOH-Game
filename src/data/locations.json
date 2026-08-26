@@ -51,8 +51,8 @@
   },
   {
     "id": 4,
-    "name": "Study India Program / Greenhouse Nursery",
-    "shortName": "Greenhouse / Nursery",
+    "name": "Greenhouse & Botanical Research Nursery",
+    "shortName": "Greenhouse Nursery",
     "section": "south",
     "zone": "south",
     "category": "nature-rocks",
@@ -561,8 +561,8 @@
   },
   {
     "id": 35,
-    "name": "Hostel D / Men's Hostel C",
-    "shortName": "Hostel D / MH-C",
+    "name": "Men's Hostel D (MH-D)",
+    "shortName": "Hostel D (MH-D)",
     "section": "main",
     "zone": "north",
     "category": "residential",
@@ -874,8 +874,8 @@
   },
   {
     "id": 54,
-    "name": "School of Arts and Communication",
-    "shortName": "Arts & Communication",
+    "name": "Department of Fine Arts & Theatre Studio",
+    "shortName": "Fine Arts & Theatre",
     "section": "east",
     "zone": "east",
     "category": "academic",
@@ -890,7 +890,7 @@
   },
   {
     "id": 55,
-    "name": "Department of Communication",
+    "name": "Department of Communication & Media Lab",
     "shortName": "Dept of Communication",
     "section": "east",
     "zone": "east",
@@ -1134,8 +1134,8 @@
   },
   {
     "id": 70,
-    "name": "Faculty Quarters",
-    "shortName": "Faculty Quarters",
+    "name": "East Campus Faculty Residences",
+    "shortName": "East Faculty Quarters",
     "section": "east",
     "zone": "east",
     "category": "residential",
@@ -1561,6 +1561,23 @@
     "description": "Spacious asphalt visitor parking ground marked by blue P signage.",
     "trivia": "Convenient transit hub for sports fans and campus shuttles.",
     "isParkingArea": true,
+    "hasInterior": false
+  },
+  {
+    "id": 98,
+    "name": "Mushroom Rock Natural Heritage Monolith",
+    "shortName": "Mushroom Rock",
+    "section": "east",
+    "zone": "east",
+    "category": "nature-rocks",
+    "x": 1860,
+    "y": 1540,
+    "width": 65,
+    "height": 55,
+    "points": 80,
+    "description": "Protected INTACH natural heritage geological monument featuring a distinctive balanced mushroom cap weathered over millions of years.",
+    "trivia": "A celebrated geological icon in Hyderabad, proudly preserved within the UoH campus grounds near the stadium ridge.",
+    "isMajorWonder": true,
     "hasInterior": false
   }
 ]

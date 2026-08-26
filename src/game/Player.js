@@ -52,7 +52,7 @@ export class Player {
     };
   }
 
-  update(delta, inputManager, collisionChecker, particleSystem) {
+  update(delta, inputManager, collisionChecker, particleSystem, surfaceModifierGetter = null) {
     if (this.exclamationTimer > 0) {
       this.exclamationTimer -= delta;
     }
@@ -60,11 +60,17 @@ export class Player {
     const moveVec = inputManager.getMovementVector();
     this.isSprinting = inputManager.isSprinting() && this.stamina > 5;
 
+    // Physical surface modifier at player foot position (Road: 1.10x, Path: 1.0x, Grass: 0.82x, Field: 0.75x)
+    const footX = this.x + this.width / 2;
+    const footY = this.y + this.height - 2;
+    const surfaceMod = surfaceModifierGetter ? surfaceModifierGetter(footX, footY) : 1.0;
+
+    const baseSpeed = this.isSprinting ? this.sprintSpeed : this.normalSpeed;
+    this.currentSpeed = baseSpeed * surfaceMod;
+
     if (this.isSprinting && (moveVec.x !== 0 || moveVec.y !== 0)) {
-      this.currentSpeed = this.sprintSpeed;
       this.stamina = Math.max(0, this.stamina - 28 * delta);
     } else {
-      this.currentSpeed = this.normalSpeed;
       this.stamina = Math.min(this.maxStamina, this.stamina + 25 * delta);
     }
 
@@ -119,7 +125,8 @@ export class Player {
 
       // Footstep dust puff
       this.footstepTimer += delta;
-      if (this.footstepTimer > (this.isSprinting ? 0.12 : 0.22) && particleSystem) {
+      const dustInterval = (this.isSprinting ? 0.10 : 0.20) / Math.max(0.5, surfaceMod);
+      if (this.footstepTimer > dustInterval && particleSystem) {
         this.footstepTimer = 0;
         particleSystem.createFootstep(this.x + this.width / 2, this.y + this.height - 2);
       }

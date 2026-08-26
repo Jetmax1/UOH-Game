@@ -52,7 +52,7 @@ export class DiscoveryBookUI {
             <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #334155; padding-bottom: 10px; margin-bottom: 12px;">
               <div>
                 <h2 style="font-size: 13px; color: #f87171; margin-bottom: 4px;">📖 Campus Discovery Book</h2>
-                <p style="font-size: 8px; color: #94a3b8;">Directory of all 78 registered university landmarks &amp; active missions</p>
+                <p style="font-size: 8px; color: #94a3b8;">Directory of all ${stats.total} registered university landmarks &amp; active missions</p>
               </div>
               <span class="chip" style="background: #1e293b; border: 2px solid #000; padding: 4px 8px; font-size: 8px; color: #fef08a;">
                 DISCOVERED: ${stats.discovered} / ${stats.total} (${stats.percent}%) · ${stats.score} PTS
@@ -61,7 +61,7 @@ export class DiscoveryBookUI {
 
             <!-- Navigation Tabs -->
             <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px;">
-              <button class="nes-btn ${this.currentTab === 'all' ? 'is-primary' : ''}" data-tab="all">ALL (#78)</button>
+              <button class="nes-btn ${this.currentTab === 'all' ? 'is-primary' : ''}" data-tab="all">ALL (#${stats.total})</button>
               <button class="nes-btn ${this.currentTab === 'nature' ? 'is-success' : ''}" data-tab="nature">LAKES &amp; ROCKS</button>
               <button class="nes-btn ${this.currentTab === 'academic' ? 'is-warning' : ''}" data-tab="academic">ACADEMIC</button>
               <button class="nes-btn ${this.currentTab === 'residential' ? 'is-primary' : ''}" data-tab="residential">HOSTELS</button>

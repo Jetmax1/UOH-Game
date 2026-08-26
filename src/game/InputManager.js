@@ -62,7 +62,7 @@ export class InputManager {
     });
   }
 
-  setupMobileTouchControls(dpadContainer, interactBtn, sprintBtn) {
+  setupMobileTouchControls(dpadContainer, interactBtn, sprintBtn, mapBtn = null, bookBtn = null, questBtn = null) {
     if (!dpadContainer) return;
 
     let touchId = null;
@@ -108,22 +108,78 @@ export class InputManager {
     window.addEventListener('touchend', handleTouchEnd, { passive: false });
     window.addEventListener('touchcancel', handleTouchEnd, { passive: false });
 
+    // Also support mouse drag on virtual joystick for desktop testing
+    let isMouseDown = false;
+    dpadContainer.addEventListener('mousedown', (e) => {
+      isMouseDown = true;
+      const rect = dpadContainer.getBoundingClientRect();
+      this.joystickCenter = { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
+      this.touchActive = true;
+      this.updateJoystickPosition(e.clientX, e.clientY);
+    });
+    window.addEventListener('mousemove', (e) => {
+      if (isMouseDown) this.updateJoystickPosition(e.clientX, e.clientY);
+    });
+    window.addEventListener('mouseup', () => {
+      if (isMouseDown) {
+        isMouseDown = false;
+        this.touchActive = false;
+        this.touchVector = { x: 0, y: 0 };
+        const stick = dpadContainer.querySelector('.joystick-stick');
+        if (stick) stick.style.transform = `translate(-50%, -50%)`;
+      }
+    });
+
     if (interactBtn) {
-      interactBtn.addEventListener('touchstart', (e) => {
+      const triggerInteract = (e) => {
         e.preventDefault();
+        e.stopPropagation();
         this.interactPressed = true;
-      });
-      interactBtn.addEventListener('click', (e) => {
-        this.interactPressed = true;
-      });
+      };
+      interactBtn.addEventListener('touchstart', triggerInteract, { passive: false });
+      interactBtn.addEventListener('click', triggerInteract);
     }
 
     if (sprintBtn) {
-      sprintBtn.addEventListener('touchstart', (e) => {
+      const toggleSprint = (e) => {
         e.preventDefault();
+        e.stopPropagation();
         this.sprint = !this.sprint;
         sprintBtn.classList.toggle('active', this.sprint);
-      });
+        sprintBtn.classList.toggle('is-warning', this.sprint);
+      };
+      sprintBtn.addEventListener('touchstart', toggleSprint, { passive: false });
+      sprintBtn.addEventListener('click', toggleSprint);
+    }
+
+    if (mapBtn) {
+      const triggerMap = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        this.mapPressed = true;
+      };
+      mapBtn.addEventListener('touchstart', triggerMap, { passive: false });
+      mapBtn.addEventListener('click', triggerMap);
+    }
+
+    if (bookBtn) {
+      const triggerBook = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        this.bookPressed = true;
+      };
+      bookBtn.addEventListener('touchstart', triggerBook, { passive: false });
+      bookBtn.addEventListener('click', triggerBook);
+    }
+
+    if (questBtn) {
+      const triggerQuest = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        this.questPressed = true;
+      };
+      questBtn.addEventListener('touchstart', triggerQuest, { passive: false });
+      questBtn.addEventListener('click', triggerQuest);
     }
   }
 

@@ -30,8 +30,8 @@
     "wakeUpMinute": 0
   },
   "world": {
-    "width": 1800,
-    "height": 1450,
+    "width": 2400,
+    "height": 1600,
     "tileSize": 32
   },
   "audio": {

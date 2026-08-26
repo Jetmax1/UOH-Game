@@ -164,8 +164,11 @@ export class UIManager {
     const dpad = document.getElementById('mobile-dpad');
     const interactBtn = document.getElementById('btn-mobile-interact');
     const sprintBtn = document.getElementById('btn-mobile-sprint');
+    const mapBtn = document.getElementById('btn-mobile-map');
+    const bookBtn = document.getElementById('btn-mobile-book');
+    const questBtn = document.getElementById('btn-mobile-quests');
     if (this.game && dpad) {
-      this.game.input.setupMobileTouchControls(dpad, interactBtn, sprintBtn);
+      this.game.input.setupMobileTouchControls(dpad, interactBtn, sprintBtn, mapBtn, bookBtn, questBtn);
     }
   }
 
@@ -464,7 +467,7 @@ export class UIManager {
                 <div class="lbl">Acres of Lush Campus</div>
               </div>
               <div class="stat-chip">
-                <div class="val">78</div>
+                <div class="val">${this.game?.locations?.length || 95}</div>
                 <div class="lbl">Indexed Landmarks</div>
               </div>
               <div class="stat-chip">

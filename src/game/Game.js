@@ -123,8 +123,9 @@ export class Game {
   }
 
   resizeCanvas() {
-    const desiredVirtualWidth = 440; // GBA Virtual Resolution (~440px wide)
-    this.zoom = Math.max(1.8, Math.min(3.2, window.innerWidth / desiredVirtualWidth));
+    const isMobile = window.innerWidth < 768;
+    const desiredVirtualWidth = isMobile ? 300 : 440;
+    this.zoom = Math.max(1.2, Math.min(3.2, window.innerWidth / desiredVirtualWidth));
 
     this.canvas.width = window.innerWidth;
     this.canvas.height = window.innerHeight;
@@ -164,7 +165,13 @@ export class Game {
 
     // 4. Player Physics & Movement (Paused during transition)
     if (!this.isTransitioning) {
-      this.player.update(delta, this.input, collisionChecker, this.particles);
+      this.player.update(
+        delta,
+        this.input,
+        collisionChecker,
+        this.particles,
+        (x, y) => this.currentInterior ? 1.0 : this.worldMap.getSurfaceModifier(x, y)
+      );
     }
 
     // 5. Update Wildlife
@@ -420,7 +427,7 @@ export class Game {
 
     if (prevInterior === 'sls_dept' || prevInterior === 'hostel_mhk' || prevInterior === 'mhk_hostel') {
       this.worldMap.setSection('south');
-    } else if (prevInterior === 'sukoon_canteen') {
+    } else if (prevInterior === 'sukoon_canteen' || prevInterior === 'library' || prevInterior === 'cs_dept') {
       this.worldMap.setSection('east');
     } else {
       this.worldMap.setSection('main');

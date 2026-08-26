@@ -1894,6 +1894,32 @@ export class PixelArtEngine {
       ctx.font = 'bold 7px monospace';
       ctx.textAlign = 'center';
       ctx.fillText('AQUARIUM ROCK', sx + 30, sy + 46);
+    } else if (type === 'mushroom') {
+      // Iconic Hyderabad INTACH Heritage Mushroom Rock
+      // Stem / Pedestal
+      ctx.fillStyle = '#3a3a48';
+      ctx.fillRect(sx + 24, sy + 18, 12, 22);
+      ctx.fillStyle = '#646474';
+      ctx.fillRect(sx + 26, sy + 18, 6, 22);
+
+      // Wide umbrella mushroom cap
+      ctx.fillStyle = '#525262';
+      ctx.beginPath();
+      ctx.ellipse(sx + 30, sy + 14, 26, 12, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = '#8e8ea0';
+      ctx.beginPath();
+      ctx.ellipse(sx + 28, sy + 11, 22, 9, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Heritage plaque
+      ctx.fillStyle = '#d97706';
+      ctx.fillRect(sx + 8, sy + 38, 44, 10);
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 7px monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText('MUSHROOM ROCK', sx + 30, sy + 46);
     } else {
       ctx.fillStyle = '#585868';
       ctx.beginPath();
