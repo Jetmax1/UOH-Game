@@ -39,11 +39,15 @@ html, body, button, a, input, select {
 html, body {
   width: 100%;
   height: 100%;
+  height: 100dvh;
   overflow: hidden;
+  position: fixed;
+  inset: 0;
   background-color: #000000;
   font-family: var(--nes-font);
   color: #ffffff;
   touch-action: none;
+  -webkit-touch-callout: none;
 }
 
 .hidden {
@@ -389,9 +393,11 @@ html, body {
    3. Top Game HUD Bar
    -------------------------------------------------------------------------- */
 #game-app {
-  position: relative;
-  width: 100vw;
-  height: 100vh;
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  height: 100dvh;
   overflow: hidden;
   background: #080c14;
 }
@@ -607,51 +613,51 @@ html, body {
    -------------------------------------------------------------------------- */
 #mobile-controls-overlay {
   display: none;
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100dvh;
   pointer-events: none;
-  z-index: 60;
+  z-index: 100;
   touch-action: none;
 }
 
 @media (pointer: coarse), (max-width: 900px) {
   #mobile-controls-overlay {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    padding: 0 max(16px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+    display: block;
   }
 }
 
 #mobile-dpad {
-  position: absolute;
-  bottom: max(20px, env(safe-area-inset-bottom));
-  left: max(16px, env(safe-area-inset-left));
-  width: 120px;
-  height: 120px;
+  position: fixed;
+  bottom: calc(max(28px, env(safe-area-inset-bottom)) + 18px);
+  left: max(18px, env(safe-area-inset-left));
+  width: 116px;
+  height: 116px;
   pointer-events: auto;
   touch-action: none;
+  z-index: 101;
 }
 
 .joystick-base {
   width: 100%;
   height: 100%;
-  background: rgba(15, 23, 42, 0.82);
+  background: rgba(15, 23, 42, 0.85);
   border: 3px solid #000;
   border-radius: 50%;
   position: relative;
-  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.2), inset 0 0 15px rgba(0,0,0,0.7);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.25), inset 0 0 15px rgba(0,0,0,0.7);
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .joystick-stick {
-  width: 50px;
-  height: 50px;
+  width: 48px;
+  height: 48px;
   background: radial-gradient(circle at 35% 35%, #60a5fa, #2563eb);
   border: 2px solid #000;
   border-radius: 50%;
@@ -665,7 +671,7 @@ html, body {
 
 .joystick-hint {
   position: absolute;
-  bottom: -18px;
+  bottom: -16px;
   width: 100%;
   text-align: center;
   font-size: 6px;
@@ -676,33 +682,44 @@ html, body {
 }
 
 #mobile-action-buttons {
-  position: absolute;
-  bottom: max(20px, env(safe-area-inset-bottom));
-  right: max(16px, env(safe-area-inset-right));
+  position: fixed;
+  bottom: calc(max(28px, env(safe-area-inset-bottom)) + 18px);
+  right: max(18px, env(safe-area-inset-right));
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
+  align-items: flex-end;
   pointer-events: auto;
   touch-action: none;
+  z-index: 101;
 }
 
 .mobile-top-row {
   display: flex;
-  gap: 8px;
+  gap: 6px;
   justify-content: flex-end;
 }
 
 .mobile-bottom-row {
   display: flex;
-  gap: 8px;
+  gap: 6px;
   justify-content: flex-end;
 }
 
-.mobile-btn {
-  padding: 10px 14px !important;
+.mobile-top-row .mobile-btn {
+  padding: 6px 8px !important;
+  font-size: 13px !important;
+  min-height: 38px;
+  min-width: 38px;
+}
+
+.mobile-bottom-row .mobile-btn {
+  padding: 8px 12px !important;
   font-size: 9px !important;
-  min-height: 44px;
-  min-width: 44px;
+  min-height: 42px;
+}
+
+.mobile-btn {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -717,8 +734,8 @@ html, body {
 }
 
 #btn-mobile-interact {
-  min-width: 100px;
-  font-size: 10px !important;
+  min-width: 90px;
+  font-size: 9px !important;
   font-weight: bold;
 }
 

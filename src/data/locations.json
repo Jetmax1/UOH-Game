@@ -279,7 +279,7 @@
   },
   {
     "id": 18,
-    "name": "Temple",
+    "name": "Chinna Gudi Heritage Temple",
     "shortName": "Chinna Gudi Temple",
     "section": "checkdam_buffer",
     "zone": "buffer",
@@ -497,8 +497,8 @@
   },
   {
     "id": 31,
-    "name": "SBI RACPC Kokapet",
-    "shortName": "SBI Branch & ATM",
+    "name": "State Bank of India (SBI) Campus Branch & ATM",
+    "shortName": "SBI Campus Branch",
     "section": "main",
     "zone": "north",
     "category": "amenities",
@@ -744,8 +744,8 @@
   },
   {
     "id": 46,
-    "name": "Silver Jubilee / Savapeedi Radhakrishnan Lecture Hall Complex",
-    "shortName": "Silver Jubilee / SRK LHC",
+    "name": "Dr. S. Radhakrishnan Lecture Hall Complex (SRK LHC)",
+    "shortName": "SRK Lecture Halls",
     "section": "main",
     "zone": "central",
     "category": "academic",
@@ -808,8 +808,8 @@
   },
   {
     "id": 50,
-    "name": "CIS/CSST Lab",
-    "shortName": "CIS / CSST Lab",
+    "name": "Centre for Neural & Cognitive Sciences (CNCS)",
+    "shortName": "Cognitive Sciences (CNCS)",
     "section": "main",
     "zone": "central",
     "category": "academic",
@@ -818,8 +818,8 @@
     "width": 75,
     "height": 55,
     "points": 35,
-    "description": "Specialized laboratory complex for Centre for Study of Social Theory and advanced integrated computing experiments.",
-    "trivia": "Combines computational social sciences with interdisciplinary analytical research.",
+    "description": "Specialized interdisciplinary laboratory for cognitive science, computational neuroscience, and neural theory research.",
+    "trivia": "Pioneering brain-computer interaction and cognitive linguistics in India.",
     "hasInterior": false
   },
   {
@@ -1561,23 +1561,6 @@
     "description": "Spacious asphalt visitor parking ground marked by blue P signage.",
     "trivia": "Convenient transit hub for sports fans and campus shuttles.",
     "isParkingArea": true,
-    "hasInterior": false
-  },
-  {
-    "id": 98,
-    "name": "Mushroom Rock Natural Heritage Monolith",
-    "shortName": "Mushroom Rock",
-    "section": "east",
-    "zone": "east",
-    "category": "nature-rocks",
-    "x": 1860,
-    "y": 1540,
-    "width": 65,
-    "height": 55,
-    "points": 80,
-    "description": "Protected INTACH natural heritage geological monument featuring a distinctive balanced mushroom cap weathered over millions of years.",
-    "trivia": "A celebrated geological icon in Hyderabad, proudly preserved within the UoH campus grounds near the stadium ridge.",
-    "isMajorWonder": true,
     "hasInterior": false
   }
 ]

@@ -86,6 +86,10 @@ export class Game {
   init() {
     this.resizeCanvas();
     window.addEventListener('resize', () => this.resizeCanvas());
+    window.addEventListener('orientationchange', () => setTimeout(() => this.resizeCanvas(), 100));
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', () => this.resizeCanvas());
+    }
 
     // Try loading saved game
     const saved = this.saveSystem.loadGame();
@@ -127,11 +131,13 @@ export class Game {
     const desiredVirtualWidth = isMobile ? 300 : 440;
     this.zoom = Math.max(1.2, Math.min(3.2, window.innerWidth / desiredVirtualWidth));
 
-    this.canvas.width = window.innerWidth;
-    this.canvas.height = window.innerHeight;
+    const w = window.visualViewport ? window.visualViewport.width : (window.innerWidth || document.documentElement.clientWidth);
+    const h = window.visualViewport ? window.visualViewport.height : (window.innerHeight || document.documentElement.clientHeight);
+    this.canvas.width = Math.round(w);
+    this.canvas.height = Math.round(h);
 
-    this.camera.width = Math.round(window.innerWidth / this.zoom);
-    this.camera.height = Math.round(window.innerHeight / this.zoom);
+    this.camera.width = Math.round(w / this.zoom);
+    this.camera.height = Math.round(h / this.zoom);
   }
 
   gameLoop(currentTime) {
