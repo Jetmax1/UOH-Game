@@ -1,792 +1,22 @@
 import { pixelEngine } from './PixelArtEngine.js';
+import { sectionConfigs, masterWorldConfig } from '../data/map/worldData.js';
+import { navigationEngine } from './NavigationEngine.js';
 
 /**
  * Pokémon FireRed GBA 4-Section Campus World Map System
- * Features 4 spacious regional campus areas:
- * 1. North / Main Campus (Green)
- * 2. South Campus (Blue)
- * 3. West Campus (Yellow)
- * 4. East Campus (Purple)
- * Connected via authentic Pokémon-style road checkpoint gates with smooth transitions.
+ * Coordinates multi-section world simulation, collision boundaries, and visual rendering
+ * driven by structured map data from worldData.js.
  */
 export class WorldMap {
   constructor(locationsData, npcsData) {
     this.allLocations = locationsData;
     this.allNPCs = npcsData;
-    this.currentSection = 'main'; // 'main', 'south', 'west', 'east'
+    this.currentSection = masterWorldConfig.defaultSection || 'main';
 
-    // Define all 4 Campus Regional Sections
-    this.sectionConfigs = {
-      // =======================================================================
-      // 1. NORTH / MAIN CAMPUS (Academic Core, Admin, Library, Lakes)
-      // =======================================================================
-      main: {
-        id: 'main',
-        name: 'NORTH / MAIN CAMPUS',
-        sub: 'Academic Core, IGM Library, SCIS, Social Sciences & Central Lakes',
-        themeColor: '#10b981',
-        width: 1700,
-        height: 1350,
-        waterBodies: [
-          { id: 26, name: 'Buffalo Lake', x: 1080, y: 760, radiusX: 60, radiusY: 45, color: '#3070b0' },
-          { id: 28, name: 'Peacock Lake', x: 1120, y: 1100, radiusX: 80, radiusY: 55, color: '#2868a8' },
-          { id: 29, name: 'Auroya Dam', x: 980, y: 1180, radiusX: 40, radiusY: 26, color: '#306898', isDam: true }
-        ],
-        checkpoints: [
-          {
-            id: 'cp_main_to_west',
-            name: '⛩️ West Gate (to West Campus)',
-            shortLabel: '⛩️ West Gate',
-            targetSection: 'west',
-            targetX: 1300,
-            targetY: 260,
-            targetDirection: 'left',
-            x: 80,
-            y: 200,
-            width: 40,
-            height: 100,
-            isVertical: true
-          },
-          {
-            id: 'cp_main_to_south',
-            name: '⛩️ Amphi Valley Gate (to Amphi Valley)',
-            shortLabel: '⛩️ Amphi Gate',
-            targetSection: 'amphi_valley',
-            targetX: 1400,
-            targetY: 220,
-            targetDirection: 'left',
-            x: 160,
-            y: 760,
-            width: 40,
-            height: 100,
-            isVertical: true
-          },
-          {
-            id: 'cp_main_to_east',
-            name: '⛩️ East Gate (to East Campus)',
-            shortLabel: '⛩️ East Gate',
-            targetSection: 'east',
-            targetX: 160,
-            targetY: 480,
-            targetDirection: 'right',
-            x: 1560,
-            y: 480,
-            width: 40,
-            height: 100,
-            isVertical: true
-          }
-        ],
-        roads: [
-          // Main West-East North Highway
-          [80, 250, 700, 250, 26, false],
-          [700, 250, 880, 250, 26, false],
-          [880, 250, 1140, 250, 24, false],
-          [880, 250, 880, 360, 22, false],
-          [880, 360, 900, 360, 20, false],
-          // North Hostels Ring
-          [480, 250, 480, 430, 20, false],
-          [380, 305, 480, 305, 18, false],
-          [380, 430, 500, 430, 18, false],
-          [580, 320, 700, 250, 20, false],
-          // Central Academic Boulevard Spine
-          [700, 250, 700, 525, 24, false],
-          [700, 525, 940, 550, 24, false],
-          [940, 550, 1560, 530, 24, false], // East Avenue
-          [700, 525, 680, 650, 22, false],
-          [680, 650, 640, 780, 22, false],
-          [640, 780, 160, 810, 24, false],  // South connector road
-          [680, 650, 860, 715, 22, false],
-          [860, 715, 1080, 690, 22, false],
-          [860, 715, 800, 920, 26, false],  // Library Boulevard
-          [800, 920, 980, 940, 24, false],
-          [980, 940, 1140, 940, 22, false],
-          [800, 920, 740, 1075, 20, false],
-          [740, 1075, 880, 1110, 20, false],
-          // Nature & Lake Trails
-          [940, 550, 1240, 540, 14, true],
-          [1080, 690, 1080, 760, 14, true],
-          [1080, 760, 1260, 820, 14, true],  // Trail to Masoom's Rock
-          [880, 1110, 980, 1180, 14, true],
-          [980, 1180, 1120, 1100, 14, true]
-        ],
-        plazas: [
-          { x: 670, y: 220, w: 120, h: 60 },  // Admin Quad
-          { x: 760, y: 860, w: 140, h: 70 },  // Library Square
-          { x: 910, y: 500, w: 110, h: 60 },  // SCIS Plaza
-          { x: 550, y: 270, w: 90, h: 50 }    // North Shopping Quad
-        ],
-        zebraCrossings: [
-          { x: 685, y: 240, w: 18, h: 26, isVertical: false },
-          { x: 800, y: 910, w: 26, h: 18, isVertical: true },
-          { x: 930, y: 540, w: 24, h: 18, isVertical: false },
-          { x: 500, y: 240, w: 18, h: 22, isVertical: false }
-        ],
-        benches: [
-          { x: 710, y: 290 }, { x: 770, y: 290 },
-          { x: 820, y: 940 }, { x: 880, y: 940 },
-          { x: 960, y: 590 }, { x: 1010, y: 590 },
-          { x: 880, y: 730 }, { x: 1000, y: 970 }
-        ],
-        fountains: [
-          { x: 745, y: 200 },
-          { x: 850, y: 860 }
-        ],
-        hedges: [
-          { x: 650, y: 190, tilesX: 5, tilesY: 1 },
-          { x: 750, y: 840, tilesX: 1, tilesY: 5 },
-          { x: 910, y: 840, tilesX: 1, tilesY: 5 }
-        ],
-        fences: [
-          { x: 60, y: 190, length: 6 },
-          { x: 60, y: 310, length: 6 },
-          { x: 140, y: 750, length: 6 },
-          { x: 140, y: 870, length: 6 },
-          { x: 1540, y: 470, length: 6 },
-          { x: 1540, y: 590, length: 6 }
-        ],
-        signposts: [
-          { x: 130, y: 220, text: 'CHECKPOINT — Westbound to Indoor Stadium & Gate 3' },
-          { x: 210, y: 780, text: 'CHECKPOINT — Southbound to School of Life Sciences & Hostels' },
-          { x: 1510, y: 500, text: 'CHECKPOINT — Eastbound to Science Valley & Sukoon Canteen' },
-          { x: 720, y: 220, text: 'NORTH PLAZA — Administration Building & Admission Office' },
-          { x: 960, y: 510, text: 'CENTRAL GROVE — School of Computer & Information Sciences (SCIS)' },
-          { x: 820, y: 860, text: 'CENTRAL GROVE — Indira Gandhi Memorial Library' },
-          { x: 1240, y: 800, text: 'NATURAL MONUMENT — Protected The Masoom’s Rock' }
-        ],
-        streetLamps: [
-          { x: 200, y: 235 }, { x: 480, y: 235 }, { x: 700, y: 235 }, { x: 880, y: 235 },
-          { x: 700, y: 510 }, { x: 940, y: 535 }, { x: 1200, y: 535 }, { x: 1450, y: 535 },
-          { x: 680, y: 635 }, { x: 640, y: 765 }, { x: 350, y: 795 },
-          { x: 860, y: 700 }, { x: 800, y: 900 }, { x: 980, y: 925 }, { x: 1140, y: 925 }
-        ],
-        wildlife: [
-          { type: 'peacock', x: 1140, y: 1080, startX: 1140, startY: 1080, vx: 12, timer: 0 },
-          { type: 'peacock', x: 1220, y: 560, startX: 1220, startY: 560, vx: -10, timer: 0 },
-          { type: 'deer', x: 1060, y: 740, startX: 1060, startY: 740, vx: 8, timer: 0 }
-        ],
-        forestBlocks: [
-          { x: 100, y: 60, w: 1500, h: 90 },
-          { x: 60, y: 400, w: 120, h: 300 },
-          { x: 60, y: 950, w: 150, h: 320 },
-          { x: 1480, y: 150, w: 160, h: 300 },
-          { x: 1450, y: 700, w: 180, h: 550 },
-          { x: 400, y: 1200, w: 500, h: 100 }
-        ],
-        tallGrassPatches: [
-          { x: 1200, y: 560, w: 5, h: 3 },
-          { x: 1040, y: 780, w: 6, h: 3 },
-          { x: 1220, y: 840, w: 5, h: 4 },
-          { x: 1080, y: 1120, w: 6, h: 4 }
-        ]
-      },
+    this.masterConfig = masterWorldConfig;
+    this.sectionConfigs = sectionConfigs;
 
-      // =======================================================================
-      // 2. SOUTH CAMPUS (Vertical Spine + Horizontal SLS Road Axis)
-      // =======================================================================
-      south: {
-        id: 'south',
-        name: 'SOUTH CAMPUS',
-        sub: 'SLS Road & Central Spine: Life Sciences, CIS, Amphitheatre, Check Dam & Hostels',
-        themeColor: '#2563eb',
-        width: 2000,
-        height: 2000,
-        waterBodies: [
-          { id: 1, name: 'Check Dam UoH', x: 350, y: 460, radiusX: 65, radiusY: 42, color: '#3880b8', isDam: true },
-          { id: 20, name: 'Amphi Lake', x: 1560, y: 280, radiusX: 70, radiusY: 48, color: '#3878b8' }
-        ],
-        checkpoints: [
-          {
-            id: 'cp_south_to_main',
-            name: '⛩️ Main Gate (to Main Campus)',
-            shortLabel: '⛩️ Main Gate',
-            targetSection: 'main',
-            targetX: 240,
-            targetY: 810,
-            targetDirection: 'right',
-            x: 930,
-            y: 80,
-            width: 80,
-            height: 40,
-            isVertical: false
-          },
-          {
-            id: 'cp_south_to_west',
-            name: '⛩️ West Trail (to West Campus)',
-            shortLabel: '⛩️ West Trail',
-            targetSection: 'west',
-            targetX: 700,
-            targetY: 960,
-            targetDirection: 'up',
-            x: 120,
-            y: 1180,
-            width: 40,
-            height: 80,
-            isVertical: true
-          }
-        ],
-        roads: [
-          // 1. Central Vertical Spine (From North Checkpoint to South Gate)
-          [950, 80, 950, 1850, 28, false],
-          // Vertical Spine Lateral Branches (as in user blueprint):
-          [950, 300, 1400, 300, 24, false], // Branch East -> Amphitheatre (#21) & Amphi Lake (#20)
-          [350, 480, 950, 480, 24, false],  // Branch West -> Check Dam UoH (#1)
-          [950, 750, 1300, 750, 22, false], // Branch East -> Faculty A Quarters (#82)
-          [550, 920, 950, 920, 22, false],  // Branch West -> International Students Hostel (#8)
-
-          // 2. Main Horizontal SLS Road Axis (Connecting Academic Wing to Hostels Cluster)
-          [120, 1200, 1880, 1200, 28, false],
-
-          // North Branches from SLS Road (Top Row - Standalone Buildings):
-          [160, 1020, 160, 1200, 22, false], // To ASPIRE BioNEST (#2)
-          [320, 1020, 320, 1200, 22, false], // To School of Life Sciences (#3)
-          [560, 1020, 560, 1200, 22, false], // To Nanotechnology (#7)
-          [1100, 1020, 1100, 1200, 22, false], // To Tagore International House (#10)
-          [1240, 1020, 1240, 1200, 22, false], // To Men's Hostel J (#11)
-          [1380, 1020, 1380, 1200, 20, false], // To Volleyball Court (#16)
-          [1520, 1020, 1520, 1200, 22, false], // To MHK Hostel (#13)
-          [1660, 1020, 1660, 1200, 22, false], // To Ladies Hostel 10 (#15)
-          [1800, 1020, 1800, 1200, 22, false], // To Ladies Hostel 9 (#79)
-
-          // South Branches from SLS Road (Bottom Row - Standalone Buildings):
-          [160, 1200, 160, 1340, 22, false], // To Greenhouse Nursery (#4)
-          [320, 1200, 320, 1340, 22, false], // To Study India Program (SIP) Building (#84)
-          [560, 1200, 560, 1340, 22, false], // To CIS Main Building (#5)
-          [560, 1340, 560, 1480, 20, false], // To CIS Reading Room (#6)
-          [800, 1200, 800, 1340, 22, false], // To South Shopping Complex (#9)
-          [1100, 1200, 1100, 1340, 22, false], // To Ladies Hostel 8 (#14)
-          [1240, 1200, 1240, 1340, 22, false], // To Ladies Hostel 7 (#80)
-          [1380, 1200, 1380, 1340, 22, false], // To Men's Hostel I (#12)
-          [1520, 1200, 1520, 1340, 22, false]  // To Men's Hostel L (#81)
-        ],
-        plazas: [
-          { x: 910, y: 1160, w: 80, h: 80 },  // Grand Central Spine × SLS Road Crossroad Plaza
-          { x: 230, y: 990, w: 140, h: 70 },  // SLS Concentric Quad
-          { x: 1360, y: 240, w: 180, h: 100 }, // Amphitheatre Stone Plaza
-          { x: 310, y: 440, w: 110, h: 60 },  // Check Dam Overlook
-          { x: 760, y: 1300, w: 100, h: 60 }, // South Shopping Plaza
-          { x: 1500, y: 1010, w: 110, h: 60 } // MHK Hostel Quad
-        ],
-        zebraCrossings: [
-          { x: 935, y: 1150, w: 30, h: 20, isVertical: false },
-          { x: 935, y: 1230, w: 30, h: 20, isVertical: false },
-          { x: 270, y: 1190, w: 20, h: 28, isVertical: true },
-          { x: 550, y: 1190, w: 20, h: 28, isVertical: true },
-          { x: 790, y: 1190, w: 20, h: 28, isVertical: true },
-          { x: 1090, y: 1190, w: 20, h: 28, isVertical: true },
-          { x: 1250, y: 1190, w: 20, h: 28, isVertical: true },
-          { x: 1530, y: 1190, w: 20, h: 28, isVertical: true }
-        ],
-        benches: [
-          { x: 930, y: 340 }, { x: 970, y: 340 },
-          { x: 930, y: 780 }, { x: 970, y: 780 },
-          { x: 250, y: 1060 }, { x: 370, y: 1060 },
-          { x: 530, y: 1380 }, { x: 600, y: 1380 },
-          { x: 770, y: 1380 }, { x: 840, y: 1380 },
-          { x: 1070, y: 1070 }, { x: 1230, y: 1070 },
-          { x: 1510, y: 1070 }, { x: 930, y: 1780 }
-        ],
-        fountains: [
-          { x: 950, y: 1200 },
-          { x: 280, y: 1000 },
-          { x: 1540, y: 1010 }
-        ],
-        hedges: [
-          { x: 900, y: 1150, tilesX: 1, tilesY: 6 },
-          { x: 990, y: 1150, tilesX: 1, tilesY: 6 },
-          { x: 230, y: 980, tilesX: 6, tilesY: 1 },
-          { x: 1500, y: 1000, tilesX: 6, tilesY: 1 }
-        ],
-        fences: [
-          { x: 880, y: 60, length: 5 },
-          { x: 980, y: 60, length: 5 },
-          { x: 880, y: 1870, length: 5 },
-          { x: 980, y: 1870, length: 5 }
-        ],
-        signposts: [
-          { x: 980, y: 100, text: 'CENTRAL SPINE — Northbound to Main Campus & Library' },
-          { x: 980, y: 320, text: 'AMPHI ROAD — Eastbound to Amphitheatre & Amphi Lake' },
-          { x: 910, y: 500, text: 'CHECK DAM ROAD — Westbound to Check Dam UoH' },
-          { x: 980, y: 770, text: 'RESIDENTIAL WAY — Faculty A Quarters' },
-          { x: 910, y: 970, text: 'INTERNATIONAL HOSTEL ROAD — ISH Central' },
-          { x: 980, y: 1160, text: 'MAIN CROSSROAD — SLS Road Axis (Sciences ↔ Hostels)' },
-          { x: 980, y: 1820, text: 'SOUTH GATE — University of Hyderabad Boundary Gate' },
-          { x: 250, y: 1160, text: 'SLS ROAD WEST — School of Life Sciences & Greenhouse' },
-          { x: 530, y: 1160, text: 'CENTRE FOR INTEGRATED STUDIES & Nanotechnology' },
-          { x: 770, y: 1160, text: 'COMMERCIAL HUB — South Shopping Complex' },
-          { x: 1220, y: 1160, text: 'HOSTELS AVENUE EAST — MHK, MH-J, MH-I & Ladies Hostels' }
-        ],
-        streetLamps: [
-          { x: 950, y: 180 }, { x: 950, y: 400 }, { x: 950, y: 620 }, { x: 950, y: 860 },
-          { x: 950, y: 1080 }, { x: 950, y: 1320 }, { x: 950, y: 1540 }, { x: 950, y: 1760 },
-          { x: 280, y: 1180 }, { x: 560, y: 1180 }, { x: 800, y: 1180 }, { x: 1100, y: 1180 },
-          { x: 1260, y: 1180 }, { x: 1400, y: 1180 }, { x: 1540, y: 1180 }, { x: 1700, y: 1180 }
-        ],
-        wildlife: [
-          { type: 'peacock', x: 260, y: 980, startX: 260, startY: 980, vx: 10, timer: 0 },
-          { type: 'deer', x: 1540, y: 260, startX: 1540, startY: 260, vx: 8, timer: 0 },
-          { type: 'butterfly', x: 950, y: 1200, startX: 950, startY: 1200, vx: 12, timer: 0 }
-        ],
-        forestBlocks: [
-          { x: 80, y: 80, w: 220, h: 800 },
-          { x: 80, y: 1450, w: 220, h: 500 },
-          { x: 1650, y: 80, w: 280, h: 800 },
-          { x: 1650, y: 1450, w: 280, h: 500 },
-          { x: 450, y: 80, w: 420, h: 320 },
-          { x: 1050, y: 80, w: 420, h: 180 },
-          { x: 1050, y: 400, w: 420, h: 300 },
-          { x: 1050, y: 820, w: 420, h: 300 },
-          { x: 350, y: 600, w: 520, h: 300 }
-        ],
-        tallGrassPatches: [
-          { x: 260, y: 920, w: 6, h: 4 },
-          { x: 1480, y: 220, w: 6, h: 4 },
-          { x: 740, y: 1420, w: 6, h: 3 },
-          { x: 1360, y: 1420, w: 6, h: 3 }
-        ]
-      },
-
-      // =======================================================================
-      // 3. WEST CAMPUS (Athletics Stadium, IDC, Central Workshop, Kirana)
-      // =======================================================================
-      west: {
-        id: 'west',
-        name: 'WEST CAMPUS',
-        sub: 'Athletics Stadium, Gymnasium, IDC & Northern Gate 3',
-        themeColor: '#eab308',
-        width: 1500,
-        height: 1150,
-        waterBodies: [],
-        checkpoints: [
-          {
-            id: 'cp_west_to_main',
-            name: '⛩️ Main Gate (to Main Campus)',
-            shortLabel: '⛩️ Main Gate',
-            targetSection: 'main',
-            targetX: 140,
-            targetY: 250,
-            targetDirection: 'right',
-            x: 1380,
-            y: 200,
-            width: 40,
-            height: 100,
-            isVertical: true
-          },
-          {
-            id: 'cp_west_to_checkdam',
-            name: '⛩️ Check Dam Trail (to Check Dam)',
-            shortLabel: '⛩️ Check Dam Trail',
-            targetSection: 'checkdam_buffer',
-            targetX: 600,
-            targetY: 120,
-            targetDirection: 'down',
-            x: 650,
-            y: 1020,
-            width: 100,
-            height: 40,
-            isVertical: false
-          }
-        ],
-        roads: [
-          // Main West Avenue
-          [360, 325, 550, 260, 24, false],
-          [550, 260, 850, 260, 26, false],
-          [850, 260, 1380, 250, 26, false], // To Main Campus Checkpoint
-          // Stadium Loop & IDC Avenue
-          [550, 260, 550, 450, 22, false],
-          [550, 450, 680, 450, 22, false],
-          [680, 450, 850, 455, 22, false],
-          [850, 260, 850, 635, 24, false],
-          [850, 635, 1020, 630, 20, false],
-          // South Connector Spine
-          [550, 450, 700, 1020, 24, false]
-        ],
-        plazas: [
-          { x: 510, y: 180, w: 130, h: 70 },  // Stadium Plaza
-          { x: 800, y: 380, w: 120, h: 60 }   // IDC Tech Plaza
-        ],
-        zebraCrossings: [
-          { x: 530, y: 250, w: 26, h: 18, isVertical: true },
-          { x: 830, y: 250, w: 26, h: 18, isVertical: true }
-        ],
-        benches: [
-          { x: 530, y: 310 }, { x: 580, y: 310 },
-          { x: 820, y: 490 }, { x: 880, y: 490 }
-        ],
-        fountains: [
-          { x: 870, y: 360 }
-        ],
-        hedges: [
-          { x: 490, y: 170, tilesX: 5, tilesY: 1 },
-          { x: 780, y: 370, tilesX: 4, tilesY: 1 }
-        ],
-        fences: [
-          { x: 630, y: 1040, length: 6 },
-          { x: 750, y: 1040, length: 6 },
-          { x: 1360, y: 180, length: 6 },
-          { x: 1360, y: 310, length: 6 }
-        ],
-        signposts: [
-          { x: 1330, y: 220, text: 'CHECKPOINT — Eastbound to Administration & Central Campus' },
-          { x: 680, y: 980, text: 'CHECKPOINT — Southbound to School of Life Sciences' },
-          { x: 520, y: 220, text: 'SPORTS COMPLEX — Indoor Stadium, Track & Gymnasium' },
-          { x: 650, y: 420, text: 'RESEARCH ENCLAVE — Gate 3, IDC & Central Workshop' }
-        ],
-        streetLamps: [
-          { x: 400, y: 300 }, { x: 550, y: 240 }, { x: 850, y: 240 }, { x: 1100, y: 240 },
-          { x: 680, y: 430 }, { x: 850, y: 430 }, { x: 850, y: 610 }, { x: 620, y: 720 }
-        ],
-        wildlife: [
-          { type: 'butterfly', x: 870, y: 360, startX: 870, startY: 360, vx: 15, timer: 0 }
-        ],
-        forestBlocks: [
-          { x: 80, y: 80, w: 1350, h: 80 },
-          { x: 80, y: 200, w: 180, h: 800 },
-          { x: 1250, y: 400, w: 180, h: 650 },
-          { x: 800, y: 800, w: 450, h: 250 }
-        ],
-        tallGrassPatches: [
-          { x: 400, y: 360, w: 5, h: 3 },
-          { x: 950, y: 480, w: 5, h: 4 }
-        ]
-      },
-
-      // =======================================================================
-      // 4. EAST CAMPUS (Chemistry, CR Rao, Arts & Comm, Hostels, Sukoon)
-      // =======================================================================
-      east: {
-        id: 'east',
-        name: 'EAST CAMPUS',
-        sub: 'Science Valley, School of Arts & Comm, Eastern Hostels & Sukoon',
-        themeColor: '#a855f7',
-        width: 1650,
-        height: 1350,
-        waterBodies: [],
-        checkpoints: [
-          {
-            id: 'cp_east_to_main',
-            name: '⛩️ Main Gate (to Main Campus)',
-            shortLabel: '⛩️ Main Gate',
-            targetSection: 'main',
-            targetX: 1500,
-            targetY: 530,
-            targetDirection: 'left',
-            x: 80,
-            y: 440,
-            width: 40,
-            height: 100,
-            isVertical: true
-          }
-        ],
-        roads: [
-          // West-to-East Main Science Avenue
-          [80, 490, 280, 490, 26, false],
-          [280, 490, 580, 510, 26, false],
-          [580, 510, 760, 515, 24, false],
-          [760, 515, 1020, 595, 24, false],
-          [1020, 595, 1420, 310, 22, false], // To Small Gate & Xerox
-          [1420, 310, 1420, 450, 20, false],
-          // Faculty & Sports Loop
-          [280, 490, 260, 245, 20, false],
-          [260, 245, 520, 230, 20, false],
-          [520, 230, 750, 255, 22, false],
-          [750, 255, 940, 290, 20, false],
-          [940, 290, 960, 450, 20, false],
-          [960, 450, 760, 515, 20, false],
-          // Arts & Eastern Hostels Avenue
-          [580, 510, 440, 710, 22, false],
-          [440, 710, 620, 730, 22, false],
-          [620, 730, 820, 750, 22, false],
-          [820, 750, 1040, 790, 22, false],
-          [820, 750, 820, 910, 20, false],
-          [440, 710, 440, 870, 20, false],
-          [1040, 790, 1040, 995, 22, false],
-          [1040, 995, 1240, 1020, 22, false],
-          [1040, 790, 1260, 850, 20, false],
-          // Nature & Rock Trails
-          [940, 290, 1160, 270, 14, true],
-          [1160, 270, 1160, 410, 14, true],
-          [1020, 595, 1320, 630, 14, true]
-        ],
-        plazas: [
-          { x: 240, y: 430, w: 100, h: 60 },  // Sukoon Canteen Plaza
-          { x: 720, y: 450, w: 110, h: 60 },  // Chemistry Quad
-          { x: 990, y: 930, w: 120, h: 60 }   // Arts & Comm Plaza
-        ],
-        zebraCrossings: [
-          { x: 260, y: 480, w: 26, h: 18, isVertical: true },
-          { x: 740, y: 505, w: 26, h: 18, isVertical: true },
-          { x: 1000, y: 585, w: 26, h: 18, isVertical: true }
-        ],
-        benches: [
-          { x: 260, y: 520 }, { x: 310, y: 520 },
-          { x: 740, y: 550 }, { x: 800, y: 550 },
-          { x: 1020, y: 830 }, { x: 1080, y: 830 }
-        ],
-        fountains: [
-          { x: 260, y: 400 },
-          { x: 780, y: 420 }
-        ],
-        hedges: [
-          { x: 220, y: 410, tilesX: 4, tilesY: 1 },
-          { x: 700, y: 430, tilesX: 5, tilesY: 1 }
-        ],
-        fences: [
-          { x: 60, y: 420, length: 6 },
-          { x: 60, y: 550, length: 6 },
-          { x: 1400, y: 250, length: 5 },
-          { x: 1400, y: 370, length: 5 }
-        ],
-        signposts: [
-          { x: 130, y: 460, text: 'CHECKPOINT — Westbound to Administration & Central Campus' },
-          { x: 250, y: 430, text: 'SUKOON PLAZA — Sukoon Canteen & Student Gathering' },
-          { x: 730, y: 450, text: 'SCIENCE VALLEY — School of Chemistry & CR Rao AIMSCS' },
-          { x: 1010, y: 930, text: 'CREATIVE ARTS — Sarojini Naidu School of Arts & Communication' },
-          { x: 1390, y: 250, text: 'EAST GATE — HCU Small Gate to Gachibowli Road' }
-        ],
-        streetLamps: [
-          { x: 180, y: 475 }, { x: 400, y: 495 }, { x: 650, y: 505 }, { x: 880, y: 550 },
-          { x: 1100, y: 575 }, { x: 1350, y: 350 }, { x: 440, y: 690 }, { x: 820, y: 730 },
-          { x: 1040, y: 770 }, { x: 1040, y: 975 }
-        ],
-        wildlife: [
-          { type: 'butterfly', x: 260, y: 400, startX: 260, startY: 400, vx: 15, timer: 0 },
-          { type: 'deer', x: 1200, y: 350, startX: 1200, startY: 350, vx: 8, timer: 0 }
-        ],
-        forestBlocks: [
-          { x: 80, y: 80, w: 1450, h: 80 },
-          { x: 1450, y: 500, w: 150, h: 700 },
-          { x: 80, y: 600, w: 140, h: 650 },
-          { x: 300, y: 1100, w: 900, h: 180 }
-        ],
-        tallGrassPatches: [
-          { x: 1120, y: 290, w: 5, h: 3 },
-          { x: 1280, y: 650, w: 6, h: 4 }
-        ]
-      },
-
-      // =======================================================================
-      // 5. AMPHI VALLEY & NATURE CORRIDOR (Buffer Route connecting North & South)
-      // =======================================================================
-      amphi_valley: {
-        id: 'amphi_valley',
-        name: 'AMPHI VALLEY & NATURE CORRIDOR',
-        sub: 'Amphitheatre UoH, Amphi Lake, Secret Lake & Chief Warden\'s Pavilion',
-        themeColor: '#059669',
-        width: 1600,
-        height: 1200,
-        waterBodies: [
-          { id: 20, name: 'Amphi Lake', x: 1220, y: 320, radiusX: 70, radiusY: 50, color: '#3878b8' },
-          { id: 22, name: 'Secret Lake', x: 1260, y: 860, radiusX: 65, radiusY: 45, color: '#285890' }
-        ],
-        checkpoints: [
-          {
-            id: 'cp_amphi_to_main',
-            name: '⛩️ Main Gate (to Main Campus)',
-            shortLabel: '⛩️ Main Gate',
-            targetSection: 'main',
-            targetX: 240,
-            targetY: 810,
-            targetDirection: 'right',
-            x: 1460,
-            y: 180,
-            width: 40,
-            height: 90,
-            isVertical: true
-          },
-          {
-            id: 'cp_amphi_to_south',
-            name: '⛩️ South Gate (to South Campus)',
-            shortLabel: '⛩️ South Gate',
-            targetSection: 'south',
-            targetX: 1400,
-            targetY: 480,
-            targetDirection: 'left',
-            x: 80,
-            y: 880,
-            width: 40,
-            height: 90,
-            isVertical: true
-          }
-        ],
-        roads: [
-          // Main Diagonal Highway from South-West to North-East (as seen in satellite imagery)
-          [80, 920, 1460, 220, 26, false],
-          // Amphitheatre & Pavilion Branches
-          [740, 590, 820, 680, 22, false],
-          [820, 680, 960, 680, 22, false],
-          // Nature Trails to Lakes & Rocks
-          [1040, 430, 1220, 320, 14, true],   // To Amphi Lake
-          [820, 680, 1260, 860, 14, true],    // To Secret Lake
-          [480, 300, 720, 280, 14, true],     // Globbo Rock to Temple
-          [720, 280, 940, 320, 14, true],     // Temple to Tamarind Tree
-          [940, 320, 1040, 430, 14, true]     // Tamarind to Main Highway
-        ],
-        plazas: [
-          { x: 740, y: 610, w: 260, h: 140 }  // Amphitheatre & Pavilion Stone Plaza
-        ],
-        zebraCrossings: [
-          { x: 750, y: 580, w: 26, h: 18, isVertical: true },
-          { x: 1050, y: 420, w: 24, h: 18, isVertical: false }
-        ],
-        benches: [
-          { x: 760, y: 640 }, { x: 920, y: 640 },
-          { x: 800, y: 760 }, { x: 880, y: 760 }
-        ],
-        fountains: [
-          { x: 890, y: 630 }
-        ],
-        hedges: [
-          { x: 740, y: 600, tilesX: 6, tilesY: 1 },
-          { x: 740, y: 750, tilesX: 6, tilesY: 1 }
-        ],
-        fences: [
-          { x: 60, y: 860, length: 6 },
-          { x: 60, y: 980, length: 6 },
-          { x: 1440, y: 160, length: 6 },
-          { x: 1440, y: 280, length: 6 }
-        ],
-        signposts: [
-          { x: 130, y: 900, text: 'CHECKPOINT — Southbound to School of Life Sciences & Hostels' },
-          { x: 1420, y: 200, text: 'CHECKPOINT — Northbound to Administration & IGM Library' },
-          { x: 780, y: 600, text: 'AMPHI VALLEY — Amphitheatre UoH & Chief Warden’s Office' },
-          { x: 1180, y: 340, text: 'NATURE TRAIL — Amphi Lake' },
-          { x: 1220, y: 840, text: 'ECOLOGICAL GEM — Secret Lake Sanctuary' }
-        ],
-        streetLamps: [
-          { x: 200, y: 860 }, { x: 450, y: 730 }, { x: 700, y: 610 }, { x: 950, y: 480 },
-          { x: 1200, y: 350 }, { x: 1400, y: 250 }, { x: 820, y: 660 }, { x: 960, y: 660 }
-        ],
-        wildlife: [
-          { type: 'peacock', x: 1180, y: 340, startX: 1180, startY: 340, vx: 10, timer: 0 },
-          { type: 'deer', x: 1220, y: 820, startX: 1220, startY: 820, vx: 8, timer: 0 },
-          { type: 'butterfly', x: 780, y: 620, startX: 780, startY: 620, vx: 12, timer: 0 }
-        ],
-        forestBlocks: [
-          { x: 80, y: 60, w: 1450, h: 80 },
-          { x: 80, y: 160, w: 200, h: 650 },
-          { x: 1350, y: 400, w: 200, h: 700 },
-          { x: 300, y: 950, w: 900, h: 200 }
-        ],
-        tallGrassPatches: [
-          { x: 440, y: 320, w: 6, h: 3 },
-          { x: 1150, y: 360, w: 6, h: 4 },
-          { x: 1200, y: 820, w: 6, h: 4 }
-        ]
-      },
-
-      // =======================================================================
-      // 6. CHECK DAM BASIN & ROCKY WOODS (Buffer Route connecting West & South)
-      // =======================================================================
-      checkdam_buffer: {
-        id: 'checkdam_buffer',
-        name: 'CHECK DAM BASIN & ROCKY WOODS',
-        sub: 'Check Dam UoH, Globe Rock, Temple & Deccan Water Basin',
-        themeColor: '#0284c7',
-        width: 1600,
-        height: 1200,
-        waterBodies: [
-          { id: 1, name: 'Check Dam UoH', x: 520, y: 340, radiusX: 65, radiusY: 42, color: '#3880b8', isDam: true }
-        ],
-        checkpoints: [
-          {
-            id: 'cp_checkdam_to_west',
-            name: '⛩️ West Campus Gate (to West Campus)',
-            shortLabel: '⛩️ West Gate',
-            targetSection: 'west',
-            targetX: 700,
-            targetY: 960,
-            targetDirection: 'up',
-            x: 550,
-            y: 60,
-            width: 100,
-            height: 40,
-            isVertical: false
-          },
-          {
-            id: 'cp_checkdam_to_south',
-            name: '⛩️ South Campus Gate (to South Campus)',
-            shortLabel: '⛩️ South Gate',
-            targetSection: 'south',
-            targetX: 280,
-            targetY: 200,
-            targetDirection: 'down',
-            x: 550,
-            y: 1080,
-            width: 100,
-            height: 40,
-            isVertical: false
-          }
-        ],
-        roads: [
-          // Main North-to-South Connector Road
-          [600, 60, 600, 360, 24, false],
-          [600, 360, 600, 800, 24, false],
-          [600, 800, 600, 1080, 24, false],
-          // Check Dam Weir Loop
-          [600, 360, 580, 340, 16, true],
-          [580, 340, 420, 340, 14, true],
-          // Globe Rock, Temple & Tamarind Trails
-          [600, 360, 920, 340, 14, true],   // To Globe Rock
-          [920, 340, 940, 520, 14, true],   // To Temple
-          [940, 520, 780, 680, 14, true],   // To Tamarind Tree
-          [780, 680, 600, 800, 14, true]    // To Main Road
-        ],
-        plazas: [
-          { x: 540, y: 310, w: 120, h: 70 },  // Check Dam Overlook Plaza
-          { x: 900, y: 490, w: 90, h: 60 }    // Temple Courtyard
-        ],
-        zebraCrossings: [
-          { x: 590, y: 350, w: 22, h: 24, isVertical: false },
-          { x: 590, y: 790, w: 22, h: 24, isVertical: false }
-        ],
-        benches: [
-          { x: 540, y: 380 }, { x: 660, y: 380 },
-          { x: 900, y: 560 }, { x: 780, y: 730 }
-        ],
-        fountains: [
-          { x: 580, y: 310 }
-        ],
-        hedges: [
-          { x: 530, y: 300, tilesX: 4, tilesY: 1 },
-          { x: 890, y: 480, tilesX: 3, tilesY: 1 }
-        ],
-        fences: [
-          { x: 530, y: 40, length: 6 },
-          { x: 670, y: 40, length: 6 },
-          { x: 530, y: 1100, length: 6 },
-          { x: 670, y: 1100, length: 6 }
-        ],
-        signposts: [
-          { x: 630, y: 90, text: 'CHECKPOINT — Northbound to Stadium & Northern Gate 3' },
-          { x: 630, y: 1050, text: 'CHECKPOINT — Southbound to School of Life Sciences & SLS Road' },
-          { x: 520, y: 320, text: 'NATURE BASIN — Check Dam UoH & Wetland Aquifer' },
-          { x: 900, y: 320, text: 'GEOLOGICAL MONUMENT — Globe Rock' },
-          { x: 920, y: 500, text: 'HERITAGE HILLOCK — Chinna Gudi Temple' }
-        ],
-        streetLamps: [
-          { x: 600, y: 180 }, { x: 600, y: 360 }, { x: 600, y: 580 },
-          { x: 600, y: 800 }, { x: 600, y: 1000 }, { x: 920, y: 340 }
-        ],
-        wildlife: [
-          { type: 'deer', x: 880, y: 360, startX: 880, startY: 360, vx: 8, timer: 0 },
-          { type: 'peacock', x: 520, y: 380, startX: 520, startY: 380, vx: 10, timer: 0 },
-          { type: 'butterfly', x: 760, y: 660, startX: 760, startY: 660, vx: 12, timer: 0 }
-        ],
-        forestBlocks: [
-          { x: 80, y: 60, w: 420, h: 1050 },
-          { x: 1100, y: 60, w: 420, h: 1050 },
-          { x: 500, y: 60, w: 600, h: 60 },
-          { x: 500, y: 1120, w: 600, h: 60 }
-        ],
-        tallGrassPatches: [
-          { x: 510, y: 440, w: 5, h: 4 },
-          { x: 880, y: 420, w: 5, h: 4 },
-          { x: 740, y: 720, w: 5, h: 3 }
-        ]
-      }
-    };
-
-    this.setSection('main');
+    this.setSection(this.currentSection);
   }
 
   setSection(sectionId) {
@@ -813,41 +43,283 @@ export class WorldMap {
     this.streetLamps = cfg.streetLamps || [];
     this.wildlife = cfg.wildlife || [];
     this.forestBlocks = cfg.forestBlocks || [];
+    this.fieldBlocks = cfg.fieldBlocks || [];
     this.tallGrassPatches = cfg.tallGrassPatches || [];
 
     // Filter locations & NPCs belonging to this section
     this.locations = this.allLocations.filter(loc => loc.section === sectionId);
     this.npcs = this.allNPCs.filter(npc => npc.section === sectionId);
 
+    this.initVehiclesForSection();
     this.generateDenseWorld();
     this.buildColliders();
   }
 
+  initVehiclesForSection() {
+    this.vehicles = [];
+
+    if (this.currentSection === 'main') {
+      this.vehicles.push({
+        id: 'shuttle_main_1',
+        name: 'Campus E-Shuttle 1',
+        x: 100,
+        y: 240,
+        color: 'emerald',
+        speed: 38,
+        direction: 'right',
+        waypoints: [
+          { x: 100, y: 240 },
+          { x: 700, y: 240 },
+          { x: 700, y: 520 },
+          { x: 940, y: 540 },
+          { x: 1540, y: 520 },
+          { x: 940, y: 540 },
+          { x: 700, y: 520 },
+          { x: 700, y: 240 }
+        ],
+        currentWpIdx: 0,
+        isBlinking: false,
+        blinkSide: 'right',
+        blinkerTimer: 0
+      });
+      this.vehicles.push({
+        id: 'shuttle_main_2',
+        name: 'Library Express Cart',
+        x: 700,
+        y: 520,
+        color: 'yellow',
+        speed: 32,
+        direction: 'down',
+        waypoints: [
+          { x: 700, y: 240 },
+          { x: 700, y: 520 },
+          { x: 680, y: 640 },
+          { x: 860, y: 705 },
+          { x: 800, y: 910 },
+          { x: 860, y: 705 },
+          { x: 680, y: 640 },
+          { x: 700, y: 520 }
+        ],
+        currentWpIdx: 1,
+        isBlinking: false,
+        blinkSide: 'left',
+        blinkerTimer: 0
+      });
+    } else if (this.currentSection === 'south') {
+      this.vehicles.push({
+        id: 'shuttle_south_1',
+        name: 'South Campus Buggy',
+        x: 220,
+        y: 470,
+        color: 'blue',
+        speed: 36,
+        direction: 'right',
+        waypoints: [
+          { x: 220, y: 470 },
+          { x: 700, y: 470 },
+          { x: 1100, y: 470 },
+          { x: 1100, y: 800 },
+          { x: 1100, y: 1180 },
+          { x: 1100, y: 800 },
+          { x: 1100, y: 470 },
+          { x: 700, y: 470 }
+        ],
+        currentWpIdx: 0,
+        isBlinking: false,
+        blinkSide: 'right',
+        blinkerTimer: 0
+      });
+    } else if (this.currentSection === 'west') {
+      this.vehicles.push({
+        id: 'shuttle_west_1',
+        name: 'Stadium Shuttle',
+        x: 140,
+        y: 250,
+        color: 'emerald',
+        speed: 38,
+        direction: 'right',
+        waypoints: [
+          { x: 140, y: 250 },
+          { x: 550, y: 250 },
+          { x: 1280, y: 250 },
+          { x: 1280, y: 590 },
+          { x: 1280, y: 250 },
+          { x: 550, y: 250 }
+        ],
+        currentWpIdx: 0,
+        isBlinking: false,
+        blinkSide: 'right',
+        blinkerTimer: 0
+      });
+    } else if (this.currentSection === 'east') {
+      this.vehicles.push({
+        id: 'shuttle_east_1',
+        name: 'Science & Sukoon Shuttle',
+        x: 80,
+        y: 520,
+        color: 'purple',
+        speed: 40,
+        direction: 'right',
+        waypoints: [
+          { x: 80, y: 520 },
+          { x: 440, y: 520 },
+          { x: 740, y: 660 },
+          { x: 1020, y: 760 },
+          { x: 1360, y: 860 },
+          { x: 1620, y: 960 },
+          { x: 1980, y: 960 },
+          { x: 1720, y: 680 },
+          { x: 1440, y: 420 },
+          { x: 1180, y: 180 },
+          { x: 1000, y: 360 },
+          { x: 740, y: 660 },
+          { x: 440, y: 520 },
+          { x: 80, y: 520 }
+        ],
+        currentWpIdx: 0,
+        isBlinking: false,
+        blinkSide: 'right',
+        blinkerTimer: 0
+      });
+      this.vehicles.push({
+        id: 'shuttle_east_2',
+        name: 'Gachibowli Express Buggy',
+        x: 1440,
+        y: 420,
+        color: 'emerald',
+        speed: 42,
+        direction: 'down',
+        waypoints: [
+          { x: 1440, y: 420 },
+          { x: 1720, y: 680 },
+          { x: 1980, y: 960 },
+          { x: 2220, y: 1260 },
+          { x: 2060, y: 1320 },
+          { x: 1850, y: 1380 },
+          { x: 1600, y: 1260 },
+          { x: 1620, y: 960 },
+          { x: 1980, y: 960 },
+          { x: 1720, y: 680 },
+          { x: 1440, y: 420 }
+        ],
+        currentWpIdx: 0,
+        isBlinking: false,
+        blinkSide: 'left',
+        blinkerTimer: 0
+      });
+    }
+  }
+
   generateDenseWorld() {
     this.denseForestTrees = [];
-    this.forestBlocks.forEach(b => {
-      for (let tx = b.x; tx < b.x + b.w; tx += 30) {
-        for (let ty = b.y; ty < b.y + b.h; ty += 30) {
-          this.denseForestTrees.push({
-            x: tx,
-            y: ty,
-            type: ((tx + ty) % 3 === 0) ? 'pine' : (((tx * 3 + ty) % 5 === 0) ? 'gulmohar' : 'oak')
-          });
+    const treeMargin = 14;
+
+    const step = 24; // 24px retro RPG tree grid step (interlocking canopy like Pokemon/Zelda)
+    for (let ty = 20; ty < this.height - 20; ty += step) {
+      // Staggered rows for interlocking hexagonal tree canopy
+      const rowOffset = (Math.floor(ty / step) % 2) * 12;
+      for (let tx = 20 + rowOffset; tx < this.width - 20; tx += step) {
+        const tLeft = tx - 14;
+        const tRight = tx + 14;
+        const tTop = ty - 22;
+        const tBottom = ty + 6;
+
+        // 1. Prevent trees from spawning inside or overlapping any building footprint
+        let collidesBuilding = false;
+        for (const loc of this.locations) {
+          const locLeft = loc.x - treeMargin;
+          const locRight = loc.x + loc.width + treeMargin;
+          const locTop = loc.y - treeMargin;
+          const locBottom = loc.y + loc.height + treeMargin;
+
+          if (tLeft < locRight && tRight > locLeft && tTop < locBottom && tBottom > locTop) {
+            collidesBuilding = true;
+            break;
+          }
         }
+        if (collidesBuilding) continue;
+
+        // 2. Prevent trees from spawning on plazas or courtyards
+        let collidesPlaza = false;
+        for (const p of this.plazas) {
+          if (tLeft < p.x + p.w + 8 && tRight > p.x - 8 && tTop < p.y + p.h + 8 && tBottom > p.y - 8) {
+            collidesPlaza = true;
+            break;
+          }
+        }
+        if (collidesPlaza) continue;
+
+        // 3. Prevent trees from spawning inside water bodies & shorelines
+        let collidesWater = false;
+        for (const w of this.waterBodies) {
+          const dx = (tx - w.x) / (w.radiusX + 16);
+          const dy = (ty - w.y) / (w.radiusY + 16);
+          if (dx * dx + dy * dy < 1) {
+            collidesWater = true;
+            break;
+          }
+        }
+        if (collidesWater) continue;
+
+        // 4. Prevent trees from spawning on paved roads, avenues, paths, and nature trails
+        let collidesRoad = false;
+        for (const [x1, y1, x2, y2, rw] of this.roads) {
+          const dx = x2 - x1;
+          const dy = y2 - y1;
+          const lenSq = dx * dx + dy * dy;
+          let dist;
+          if (lenSq === 0) {
+            dist = Math.hypot(tx - x1, ty - y1);
+          } else {
+            const t = Math.max(0, Math.min(1, ((tx - x1) * dx + (ty - y1) * dy) / lenSq));
+            dist = Math.hypot(tx - (x1 + t * dx), ty - (y1 + t * dy));
+          }
+          if (dist < rw / 2 + 12) {
+            collidesRoad = true;
+            break;
+          }
+        }
+        if (collidesRoad) continue;
+
+        // 5. Prevent trees on checkpoint gates
+        let collidesCheckpoint = false;
+        for (const cp of this.checkpoints) {
+          if (tLeft < cp.x + cp.width + 12 && tRight > cp.x - 12 && tTop < cp.y + cp.height + 12 && tBottom > cp.y - 12) {
+            collidesCheckpoint = true;
+            break;
+          }
+        }
+        if (collidesCheckpoint) continue;
+
+        // 6. In agricultural fields, keep trees sparse (orchard spacing) instead of dense wall
+        let isField = false;
+        for (const f of this.sectionConfigs[this.currentSection]?.fieldBlocks || []) {
+          if (tx >= f.x && tx <= f.x + f.w && ty >= f.y && ty <= f.y + f.h) {
+            isField = true;
+            break;
+          }
+        }
+        if (isField && ((tx + ty) % 96 !== 0)) continue;
+
+        this.denseForestTrees.push({
+          x: tx,
+          y: ty,
+          type: ((tx + ty) % 4 === 0) ? 'pine' : (((tx * 3 + ty) % 5 === 0) ? 'gulmohar' : 'oak')
+        });
       }
-    });
+    }
   }
 
   buildColliders() {
     this.colliders = [];
 
-    // Outer Bounds
+    // 1. Outer Bounds
     this.colliders.push({ x: -100, y: -100, width: this.width + 200, height: 100 });
     this.colliders.push({ x: -100, y: this.height, width: this.width + 200, height: 100 });
     this.colliders.push({ x: -100, y: -100, width: 100, height: this.height + 200 });
     this.colliders.push({ x: this.width, y: -100, width: 100, height: this.height + 200 });
 
-    // Locations (Buildings)
+    // 2. Locations (Buildings & Landmarks)
     this.locations.forEach(loc => {
       if (loc.isLake || loc.isMajorWonder || loc.isGate || loc.isAmphitheatre || loc.isVolleyball || loc.isCheckDam) return;
       this.colliders.push({
@@ -856,45 +328,78 @@ export class WorldMap {
         x: loc.x,
         y: loc.y,
         width: loc.width,
-        height: loc.height
+        height: Math.max(16, loc.height - 8) // Clearance for entrance doorway threshold
       });
     });
 
-    // Water Bodies
+    // 3. Water Bodies (Smooth Elliptical Shoreline Colliders)
     this.waterBodies.forEach(w => {
+      const rx = w.radiusX * 0.90;
+      const ry = w.radiusY * 0.90;
       this.colliders.push({
         id: w.id,
         isWater: true,
-        x: w.x - w.radiusX * 0.85,
-        y: w.y - w.radiusY * 0.85,
-        width: w.radiusX * 1.7,
-        height: w.radiusY * 1.7
+        isEllipse: true,
+        centerX: w.x,
+        centerY: w.y,
+        radiusX: rx,
+        radiusY: ry,
+        x: w.x - rx,
+        y: w.y - ry,
+        width: rx * 2,
+        height: ry * 2
       });
     });
 
-    // Fountains
-    this.fountains.forEach(f => {
+    // 4. Perimeter Fences & Security Barriers
+    this.fences.forEach(f => {
       this.colliders.push({
-        x: f.x - 14,
-        y: f.y - 14,
-        width: 28,
-        height: 28
+        isFence: true,
+        x: f.x,
+        y: f.y + 2,
+        width: f.length * 16,
+        height: 10
       });
     });
+
+    // 5. Dense Forest Tree Trunks (Physical obstacle cores)
+    this.denseForestTrees.forEach(t => {
+      this.colliders.push({
+        isTreeTrunk: true,
+        x: t.x - 4,
+        y: t.y - 2,
+        width: 8,
+        height: 6
+      });
+    });
+
+    // 6. Fountains
+    this.fountains.forEach(f => {
+      this.colliders.push({
+        x: f.x - 12,
+        y: f.y - 12,
+        width: 24,
+        height: 24
+      });
+    });
+
+    // Build spatial hash grid for instant collision queries
+    navigationEngine.buildSpatialGrid(this.colliders, this.width, this.height);
+    navigationEngine.buildRoadGraph(this.roads);
   }
 
   checkCollision(bounds) {
-    for (const box of this.colliders) {
-      if (
-        bounds.x < box.x + box.width &&
-        bounds.x + bounds.width > box.x &&
-        bounds.y < box.y + box.height &&
-        bounds.y + bounds.height > box.y
-      ) {
-        return true;
-      }
-    }
-    return false;
+    return navigationEngine.checkCollision(bounds);
+  }
+
+  getSurfaceAt(x, y) {
+    const cfg = this.sectionConfigs[this.currentSection];
+    return navigationEngine.getSurfaceAt(x, y, cfg);
+  }
+
+  getSurfaceModifier(x, y) {
+    const cfg = this.sectionConfigs[this.currentSection];
+    return navigationEngine.getSpeedModifierAt(x, y, cfg);
   }
 
   checkCheckpointCollision(playerBounds) {
@@ -960,12 +465,62 @@ export class WorldMap {
     return null;
   }
 
-  updateWildlife(delta) {
+  updateWildlife(delta, player = null) {
     for (const w of this.wildlife) {
       w.timer += delta;
       w.x += w.vx * delta;
       if (Math.abs(w.x - w.startX) > 40) {
         w.vx = -w.vx;
+      }
+    }
+
+    this.updateVehicles(delta, player);
+  }
+
+  updateVehicles(delta, player) {
+    if (!this.vehicles) return;
+
+    for (const v of this.vehicles) {
+      if (!v.waypoints || v.waypoints.length === 0) continue;
+
+      const targetWp = v.waypoints[v.currentWpIdx];
+      const dx = targetWp.x - v.x;
+      const dy = targetWp.y - v.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+
+      // Blinker animation timer
+      v.blinkerTimer = (v.blinkerTimer || 0) + delta;
+      v.isBlinking = (Math.floor(v.blinkerTimer * 4) % 2 === 0);
+
+      // Check pedestrian safety: if player is right in front within 30px, slow down/yield
+      let speed = v.speed;
+      if (player) {
+        const pdist = Math.hypot(player.x - v.x, player.y - v.y);
+        if (pdist < 32) speed = 0;
+      }
+
+      if (dist < 4) {
+        // Arrived at current waypoint, select next
+        v.currentWpIdx = (v.currentWpIdx + 1) % v.waypoints.length;
+        const nextWp = v.waypoints[v.currentWpIdx];
+        const nextDx = nextWp.x - v.x;
+        const nextDy = nextWp.y - v.y;
+
+        if (Math.abs(nextDx) > Math.abs(nextDy)) {
+          v.direction = nextDx > 0 ? 'right' : 'left';
+        } else {
+          v.direction = nextDy > 0 ? 'down' : 'up';
+        }
+      } else {
+        const moveDist = Math.min(speed * delta, dist);
+        v.x += (dx / dist) * moveDist;
+        v.y += (dy / dist) * moveDist;
+
+        if (Math.abs(dx) > Math.abs(dy)) {
+          v.direction = dx > 0 ? 'right' : 'left';
+        } else {
+          v.direction = dy > 0 ? 'down' : 'up';
+        }
       }
     }
   }
@@ -1000,27 +555,85 @@ export class WorldMap {
     // 9. Geological Rocks & Monuments
     this.drawRockFormations(ctx, camera);
 
-    // 10. Custom Architectural Buildings (All 78 Pins with Badges)
-    this.drawBuildings(ctx, camera);
-
-    // 11. Fences, Benches, Fountains, Signs
-    this.drawProps(ctx, camera);
-
-    // 12. Dense Trees & Forest Borders
+    // 10. Dense Trees & Forest Borders (Rendered behind buildings to prevent covering)
     this.drawDenseForest(ctx, camera);
 
-    // 13. Street Lamps
+    // 11. Custom Architectural Buildings (All Pins with Badges)
+    this.drawBuildings(ctx, camera);
+
+    // 12. Campus Autonomous E-Shuttles & Traffic
+    this.drawVehicles(ctx, camera, timeSystem);
+
+    // 13. Fences, Benches, Fountains, Signs
+    this.drawProps(ctx, camera);
+
+    // 14. Street Lamps
     this.drawStreetLamps(ctx, camera, timeSystem);
 
-    // 14. Wildlife & NPCs
+    // 15. Wildlife & NPCs
     this.drawWildlife(ctx, camera);
     this.drawNPCs(ctx, camera);
+  }
+
+  drawVehicles(ctx, camera, timeSystem) {
+    if (!this.vehicles) return;
+    const isNight = timeSystem.ambientMode === 'night' || timeSystem.ambientMode === 'evening';
+
+    for (const v of this.vehicles) {
+      const sx = v.x - camera.x;
+      const sy = v.y - camera.y;
+
+      if (sx < -60 || sx > camera.width + 60 || sy < -60 || sy > camera.height + 60) continue;
+
+      // Draw vehicle headlight beam at evening/night
+      if (isNight) {
+        ctx.save();
+        let hx = sx + 18;
+        let hy = sy + 11;
+        let angle = 0;
+        if (v.direction === 'right') { hx = sx + 34; hy = sy + 11; angle = 0; }
+        else if (v.direction === 'left') { hx = sx + 2; hy = sy + 11; angle = Math.PI; }
+        else if (v.direction === 'down') { hx = sx + 11; hy = sy + 34; angle = Math.PI / 2; }
+        else if (v.direction === 'up') { hx = sx + 11; hy = sy + 2; angle = -Math.PI / 2; }
+
+        ctx.translate(hx, hy);
+        ctx.rotate(angle);
+
+        const beam = ctx.createRadialGradient(0, 0, 5, 45, 0, 50);
+        beam.addColorStop(0, 'rgba(254, 240, 138, 0.6)');
+        beam.addColorStop(0.5, 'rgba(254, 240, 138, 0.2)');
+        beam.addColorStop(1, 'rgba(254, 240, 138, 0)');
+
+        ctx.fillStyle = beam;
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.lineTo(55, -22);
+        ctx.lineTo(55, 22);
+        ctx.closePath();
+        ctx.fill();
+        ctx.restore();
+      }
+
+      const sprite = pixelEngine.getVehicleSprite(v.direction, v.color, v.isBlinking, v.blinkSide);
+      ctx.drawImage(sprite, sx, sy);
+
+      // Vehicle Name Tag
+      ctx.save();
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 7px monospace';
+      ctx.textAlign = 'center';
+      ctx.shadowColor = '#000000';
+      ctx.shadowBlur = 3;
+      ctx.fillText(v.name, sx + (v.direction === 'left' || v.direction === 'right' ? 18 : 11), sy - 4);
+      ctx.restore();
+    }
   }
 
   drawTerrain(ctx, camera) {
     const grassTile = pixelEngine.getGrassTile();
     const flowerRed = pixelEngine.getFlowerTile('red');
     const flowerYellow = pixelEngine.getFlowerTile('yellow');
+    const fieldTile = pixelEngine.getFieldTile();
 
     const tileSize = 16;
     const startTileX = Math.floor(camera.x / tileSize);
@@ -1030,10 +643,26 @@ export class WorldMap {
 
     for (let ty = startTileY; ty <= endTileY; ty++) {
       for (let tx = startTileX; tx <= endTileX; tx++) {
-        const sx = tx * tileSize - camera.x;
-        const sy = ty * tileSize - camera.y;
+        const wx = tx * tileSize;
+        const wy = ty * tileSize;
+        const sx = wx - camera.x;
+        const sy = wy - camera.y;
 
-        if ((tx * 7 + ty * 13) % 23 === 0) {
+        // Check if tile falls within field / agricultural dirt patches
+        let isField = false;
+        if (this.fieldBlocks && this.fieldBlocks.length > 0) {
+          for (let f = 0; f < this.fieldBlocks.length; f++) {
+            const fb = this.fieldBlocks[f];
+            if (wx >= fb.x && wx < fb.x + fb.w && wy >= fb.y && wy < fb.y + fb.h) {
+              isField = true;
+              break;
+            }
+          }
+        }
+
+        if (isField) {
+          ctx.drawImage(fieldTile, sx, sy);
+        } else if ((tx * 7 + ty * 13) % 23 === 0) {
           ctx.drawImage(flowerRed, sx, sy);
         } else if ((tx * 11 + ty * 5) % 19 === 0) {
           ctx.drawImage(flowerYellow, sx, sy);
@@ -1316,6 +945,12 @@ export class WorldMap {
     if (aquaLoc) {
       pixelEngine.drawRockMonolith(ctx, aquaLoc.x - camera.x, aquaLoc.y - camera.y, aquaLoc.shortName, 'aquarium');
     }
+
+    // 5. Mushroom Rock (#98)
+    const mushLoc = this.locations.find(l => l.id === 98);
+    if (mushLoc) {
+      pixelEngine.drawRockMonolith(ctx, mushLoc.x - camera.x, mushLoc.y - camera.y, mushLoc.shortName, 'mushroom');
+    }
   }
 
   drawBuildings(ctx, camera) {
@@ -1376,7 +1011,159 @@ export class WorldMap {
         continue;
       }
 
-      // 6. School of Life Sciences (#3) & ASPIRE BioNEST (#2)
+      // 6. Overhead Water Tank (#91)
+      if (loc.isWaterTank) {
+        pixelEngine.drawWaterTank(ctx, sx, sy, loc.width, loc.height);
+        this.drawPinBadge(ctx, sx + 2, sy + 2, loc.id);
+        ctx.restore();
+        continue;
+      }
+
+      // 7. GMC Balayogi Sports Complex (#92)
+      if (loc.isBalayogi) {
+        pixelEngine.drawBalayogiSportsComplex(ctx, sx, sy, loc.width / 2);
+        this.drawPinBadge(ctx, sx + 4, sy + 4, loc.id);
+        ctx.restore();
+        continue;
+      }
+
+      // 8. Gachibowli Stadium (#93)
+      if (loc.isGachibowliStadium) {
+        pixelEngine.drawGachibowliStadium(ctx, sx, sy, loc.width, loc.height);
+        this.drawPinBadge(ctx, sx + 4, sy + 4, loc.id);
+        ctx.restore();
+        continue;
+      }
+
+      // 9. University of Hyderabad Monument (#86)
+      if (loc.isMonument) {
+        pixelEngine.drawUoHMonument(ctx, sx, sy, loc.width / 2);
+        this.drawPinBadge(ctx, sx + 2, sy + 2, loc.id);
+        ctx.restore();
+        continue;
+      }
+
+      // 10. SATG Shooting Ranges (#87)
+      if (loc.isShootingRange) {
+        pixelEngine.drawShootingRange(ctx, sx, sy, loc.width, loc.height);
+        this.drawPinBadge(ctx, sx + 2, sy + 2, loc.id);
+        ctx.restore();
+        continue;
+      }
+
+      // 11. Sai Baba Temple (#89)
+      if (loc.isSaiBabaTemple) {
+        pixelEngine.drawSaiBabaTemple(ctx, sx, sy, loc.width, loc.height);
+        this.drawPinBadge(ctx, sx + 2, sy + 2, loc.id);
+        ctx.restore();
+        continue;
+      }
+
+      // 12. Indian Immunologicals Limited (#90)
+      if (loc.isIndianImmunologicals) {
+        pixelEngine.drawIndianImmunologicals(ctx, sx, sy, loc.width, loc.height);
+        this.drawPinBadge(ctx, sx + 2, sy + 2, loc.id);
+        ctx.restore();
+        continue;
+      }
+
+      // 13. Health Center (#38)
+      if (loc.isHealthCenter) {
+        pixelEngine.drawHealthCenter(ctx, sx, sy, loc.width, loc.height);
+        this.drawPinBadge(ctx, sx + 2, sy + 2, loc.id);
+        ctx.restore();
+        continue;
+      }
+
+      // 14. Administration Building (#36)
+      if (loc.isAdminBuilding) {
+        pixelEngine.drawAdminBuilding(ctx, sx, sy, loc.width, loc.height);
+        this.drawPinBadge(ctx, sx + 2, sy + 2, loc.id);
+        ctx.restore();
+        continue;
+      }
+
+      // 15. SCIS (School of Computer Sciences) (#45)
+      if (loc.isSCIS) {
+        pixelEngine.drawSCISBuilding(ctx, sx, sy, loc.width, loc.height);
+        this.drawPinBadge(ctx, sx + 2, sy + 2, loc.id);
+        ctx.restore();
+        continue;
+      }
+
+      // 16. IGM Library, UoH (#51)
+      if (loc.isIGMLibrary) {
+        pixelEngine.drawIGMLibrary(ctx, sx, sy, loc.width, loc.height);
+        this.drawPinBadge(ctx, sx + 2, sy + 2, loc.id);
+        ctx.restore();
+        continue;
+      }
+
+      // 17. HCU Small Gate Security Office (#41)
+      if (loc.isSmallGate) {
+        pixelEngine.drawSecurityGateOffice(ctx, sx, sy, loc.width, loc.height);
+        this.drawPinBadge(ctx, sx + 2, sy + 2, loc.id);
+        ctx.restore();
+        continue;
+      }
+
+      // 18. Karthik SIM Cards & Xerox (#42)
+      if (loc.isKarthikXerox) {
+        pixelEngine.drawKarthikXerox(ctx, sx, sy, loc.width, loc.height);
+        this.drawPinBadge(ctx, sx + 2, sy + 2, loc.id);
+        ctx.restore();
+        continue;
+      }
+
+      // 19. India Post (#74)
+      if (loc.isIndiaPost) {
+        pixelEngine.drawIndiaPost(ctx, sx, sy, loc.width, loc.height);
+        this.drawPinBadge(ctx, sx + 2, sy + 2, loc.id);
+        ctx.restore();
+        continue;
+      }
+
+      // 20. Sukoon Canteen (#59)
+      if (loc.isSukoonCanteen) {
+        pixelEngine.drawSukoonCanteen(ctx, sx, sy, loc.width, loc.height);
+        this.drawPinBadge(ctx, sx + 2, sy + 2, loc.id);
+        ctx.restore();
+        continue;
+      }
+
+      // 21. RV Panchajanya Kondapur (#88)
+      if (loc.isRVPanchajanya) {
+        pixelEngine.drawRVPanchajanya(ctx, sx, sy, loc.width, loc.height);
+        this.drawPinBadge(ctx, sx + 2, sy + 2, loc.id);
+        ctx.restore();
+        continue;
+      }
+
+      // 22. Football Field (#94)
+      if (loc.isFootballField) {
+        pixelEngine.drawFootballField(ctx, sx, sy, loc.width, loc.height);
+        this.drawPinBadge(ctx, sx + 2, sy + 2, loc.id);
+        ctx.restore();
+        continue;
+      }
+
+      // 23. Parking Area (#95)
+      if (loc.isParkingArea) {
+        pixelEngine.drawParkingArea(ctx, sx, sy, loc.width, loc.height);
+        this.drawPinBadge(ctx, sx + 2, sy + 2, loc.id);
+        ctx.restore();
+        continue;
+      }
+
+      // 24. Central Rotunda Dome (#85)
+      if (loc.isCentralDome) {
+        pixelEngine.drawUoHMonument(ctx, sx, sy, loc.width / 2);
+        this.drawPinBadge(ctx, sx + 2, sy + 2, loc.id);
+        ctx.restore();
+        continue;
+      }
+
+      // 25. School of Life Sciences (#3) & ASPIRE BioNEST (#2)
       if (loc.id === 3) {
         const rad = loc.width / 2;
         const cx = sx + rad;
@@ -1429,7 +1216,7 @@ export class WorldMap {
         continue;
       }
 
-      // 7. Standard Upgraded GBA Departmental & Residential Buildings
+      // 26. Standard Upgraded GBA Departmental & Residential Buildings
       ctx.fillStyle = 'rgba(0, 0, 0, 0.35)';
       ctx.fillRect(sx + 4, sy + 4, loc.width, loc.height);
 
@@ -1508,7 +1295,7 @@ export class WorldMap {
         ctx.fillRect(wx + 2, sy + 24, 2, 2);
       }
 
-      // Red numbered pin badge (1 to 78)
+      // Red numbered pin badge (1 to 99)
       this.drawPinBadge(ctx, sx + 2, sy + 2, loc.id);
 
       // Title label
@@ -1537,7 +1324,7 @@ export class WorldMap {
   }
 
   drawPinBadge(ctx, x, y, id) {
-    if (id > 78) return;
+    if (id > 99) return;
     ctx.save();
     ctx.fillStyle = '#dc2626';
     ctx.beginPath();
@@ -1592,6 +1379,15 @@ export class WorldMap {
       const sy = s.y - camera.y;
       if (sx > -20 && sx < camera.width + 20 && sy > -20 && sy < camera.height + 20) {
         ctx.drawImage(signTile, sx, sy);
+      }
+    }
+
+    // Draw authentic 8-Bit Map Legend in East Campus
+    if (this.currentSection === 'east') {
+      const lx = 50 - camera.x;
+      const ly = 1180 - camera.y;
+      if (lx > -150 && lx < camera.width + 150 && ly > -150 && ly < camera.height + 150) {
+        pixelEngine.drawMapLegend(ctx, lx, ly);
       }
     }
   }

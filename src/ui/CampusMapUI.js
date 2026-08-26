@@ -39,83 +39,72 @@ export class CampusMapUI {
     const curSec = game.worldMap.currentSection;
 
     modal.innerHTML = `
-      <div class="modal-backdrop">
-        <div class="map-modal-container glass-panel">
-          <!-- Header -->
-          <div class="map-modal-header">
-            <div class="map-title-group">
-              <span class="map-icon">🗺️</span>
+      <div class="modal-backdrop"></div>
+      <div class="frame-wrp" style="max-width: 1080px;">
+        <div class="frame-wrp-inner">
+          <button aria-label="Close" class="nes-btn is-error close-btn-position" id="btn-close-full-map">×</button>
+          <div class="frame pixel-corners">
+            <!-- Header -->
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #334155; padding-bottom: 10px; margin-bottom: 12px;">
               <div>
-                <h2>University of Hyderabad — 4-Section Regional Campus Map</h2>
-                <p class="map-subtitle">Pokémon-Style Regional World: North/Main (🟢), South (🔵), West (🟡), and East (🟣) Campuses</p>
+                <h2 style="font-size: 13px; color: #f87171; margin-bottom: 4px;">🗺️ Regional Campus Radar Map</h2>
+                <p style="font-size: 8px; color: #94a3b8;">Discover all ${game.locations.length} registered landmarks across the campus</p>
+              </div>
+              <div>
+                <span class="chip" style="background: #1e293b; border: 2px solid #000; padding: 4px 8px; font-size: 8px; color: #fef08a;">
+                  Progress: ${stats.discovered}/${stats.total} (${stats.percent}%)
+                </span>
               </div>
             </div>
-            <div class="map-header-right">
-              <span class="map-stats-badge">Discovery Progress: <strong>${stats.discovered}/${stats.total} (${stats.percent}%)</strong></span>
-              <button class="modal-close-btn" id="btn-close-full-map">✕</button>
-            </div>
-          </div>
 
-          <!-- Section Switcher Bar -->
-          <div class="map-section-nav-tabs">
-            <button class="map-sec-tab ${this.selectedSectionTab === 'main' ? 'active' : ''}" data-sectab="main">🟢 NORTH / MAIN (26)</button>
-            <button class="map-sec-tab ${this.selectedSectionTab === 'south' ? 'active' : ''}" data-sectab="south">🔵 SOUTH CAMPUS (24)</button>
-            <button class="map-sec-tab ${this.selectedSectionTab === 'west' ? 'active' : ''}" data-sectab="west">🟡 WEST CAMPUS (7)</button>
-            <button class="map-sec-tab ${this.selectedSectionTab === 'east' ? 'active' : ''}" data-sectab="east">🟣 EAST CAMPUS (23)</button>
-            <button class="map-sec-tab ${this.selectedSectionTab === 'amphi_valley' ? 'active' : ''}" data-sectab="amphi_valley">🌲 DECCAN WILDERNESS (4)</button>
-            <button class="map-sec-tab ${this.selectedSectionTab === 'overview' ? 'active' : ''}" data-sectab="overview">🗺️ OVERVIEW</button>
-          </div>
-
-          <!-- Main Map Canvas & Legend Split -->
-          <div class="map-body-layout">
-            <div class="map-canvas-wrapper">
-              <canvas id="full-map-canvas" width="820" height="660"></canvas>
+            <!-- Section Switcher Bar -->
+            <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px;">
+              <button class="nes-btn ${this.selectedSectionTab === 'main' ? 'is-success' : ''}" data-sectab="main">🟢 NORTH / MAIN</button>
+              <button class="nes-btn ${this.selectedSectionTab === 'south' ? 'is-primary' : ''}" data-sectab="south">🔵 SOUTH CAMPUS</button>
+              <button class="nes-btn ${this.selectedSectionTab === 'west' ? 'is-warning' : ''}" data-sectab="west">🟡 WEST CAMPUS</button>
+              <button class="nes-btn ${this.selectedSectionTab === 'east' ? 'is-error' : ''}" data-sectab="east">🟣 EAST CAMPUS</button>
+              <button class="nes-btn ${this.selectedSectionTab === 'amphi_valley' ? 'is-success' : ''}" data-sectab="amphi_valley">🌲 WILDERNESS</button>
+              <button class="nes-btn ${this.selectedSectionTab === 'overview' ? 'is-primary' : ''}" data-sectab="overview">🗺️ OVERVIEW</button>
             </div>
 
-            <!-- Sidebar Fast Travel & Legend -->
-            <div class="map-sidebar">
-              <h3>🚀 Fast Travel Portals</h3>
-              <p class="sidebar-tip">Jump to any location across campus sections:</p>
-              <div class="fast-travel-grid">
-                <!-- Main Campus -->
-                <button class="btn btn-travel sec-main-btn" data-travel="36">🏛️ Admin Building (#36)</button>
-                <button class="btn btn-travel sec-main-btn" data-travel="51">📚 IGM Library (#51)</button>
-                <button class="btn btn-travel sec-main-btn" data-travel="45">💻 Computer Science (#45)</button>
-                <button class="btn btn-travel sec-main-btn" data-travel="27">🪨 The Masoom's Rock (#27)</button>
-                <!-- South Campus (SLS Road & Central Spine) -->
-                <button class="btn btn-travel sec-south-btn" data-travel="3">🔬 Life Sciences (SLS) (#3)</button>
-                <button class="btn btn-travel sec-south-btn" data-travel="2">🧬 ASPIRE BioNEST (#2)</button>
-                <button class="btn btn-travel sec-south-btn" data-travel="7">🔬 Nanotechnology (#7)</button>
-                <button class="btn btn-travel sec-south-btn" data-travel="21">🎭 Amphitheatre UoH (#21)</button>
-                <button class="btn btn-travel sec-south-btn" data-travel="1">🌊 Check Dam UoH (#1)</button>
-                <button class="btn btn-travel sec-south-btn" data-travel="5">🎓 Integrated Studies (#5)</button>
-                <button class="btn btn-travel sec-south-btn" data-travel="13">🏠 MHK Hostel (Dorm) (#13)</button>
-                <button class="btn btn-travel sec-south-btn" data-travel="9">🛍️ South Shopping (#9)</button>
-                <button class="btn btn-travel sec-south-btn" data-travel="8">🌐 International Hostel (#8)</button>
-                <button class="btn btn-travel sec-south-btn" data-travel="11">🏠 MH-J Hostel (#11)</button>
-                <button class="btn btn-travel sec-south-btn" data-travel="15">🏠 LH-10 Hostel (#15)</button>
-                <button class="btn btn-travel sec-south-btn" data-travel="79">🏠 LH-9 Hostel (#79)</button>
-                <button class="btn btn-travel sec-south-btn" data-travel="83">⛩️ South Gate (#83)</button>
-                <!-- West Campus -->
-                <button class="btn btn-travel sec-west-btn" data-travel="30">🏟️ Indoor Stadium (#30)</button>
-                <button class="btn btn-travel sec-west-btn" data-travel="75">⛩️ Gate 3 IDC (#75)</button>
-                <button class="btn btn-travel sec-west-btn" data-travel="78">🏪 Kirana Store (#78)</button>
-                <!-- East Campus -->
-                <button class="btn btn-travel sec-east-btn" data-travel="59">☕ Sukoon Canteen (#59)</button>
-                <button class="btn btn-travel sec-east-btn" data-travel="61">🧪 Chemistry Annex (#61)</button>
-                <button class="btn btn-travel sec-east-btn" data-travel="56">🎨 SN School Arts (#56)</button>
-                <button class="btn btn-travel sec-east-btn" data-travel="41">⛩️ HCU Small Gate (#41)</button>
+            <!-- Main Map Canvas & Sidebar Split -->
+            <div style="display: flex; flex-wrap: wrap; gap: 16px;">
+              <div style="flex: 1; min-width: 320px; background: #000; border: 3px solid #000; box-shadow: inset 0 0 10px rgba(0,0,0,0.8); display: flex; justify-content: center; align-items: center;">
+                <canvas id="full-map-canvas" width="600" height="480" style="max-width: 100%; height: auto; display: block; image-rendering: pixelated;"></canvas>
               </div>
 
-              <div class="map-legend">
-                <h4>🎨 Section Color Guide</h4>
-                <div class="legend-item"><span class="legend-swatch" style="background:#10b981;"></span> 🟢 North/Main: Admin & CS</div>
-                <div class="legend-item"><span class="legend-swatch" style="background:#059669;"></span> 🌲 Amphi Valley: Amphitheatre (Main↔South)</div>
-                <div class="legend-item"><span class="legend-swatch" style="background:#0284c7;"></span> 🌊 Check Dam: Wetland (West↔South)</div>
-                <div class="legend-item"><span class="legend-swatch" style="background:#2563eb;"></span> 🔵 South: SLS Road & Hostels</div>
-                <div class="legend-item"><span class="legend-swatch" style="background:#eab308;"></span> 🟡 West: Stadium & Gate 3</div>
-                <div class="legend-item"><span class="legend-swatch" style="background:#a855f7;"></span> 🟣 East: Chemistry & Arts</div>
-                <div class="legend-item"><span class="legend-swatch" style="background:#f59e0b; border: 1px solid #ffffff;"></span> ⛩️ Road Checkpoint Gates</div>
+              <!-- Sidebar Fast Travel Portals -->
+              <div style="width: 320px; max-width: 100%; display: flex; flex-direction: column; gap: 8px;">
+                <h3 style="font-size: 9px; color: #facc15;">🚀 Fast Travel Portals</h3>
+                <div style="max-height: 420px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; padding-right: 4px;">
+                  <!-- Main Campus -->
+                  <button class="nes-btn is-success sec-main-btn" data-travel="36" style="text-align: left; font-size: 7px;">🏛️ Admin Building (#36)</button>
+                  <button class="nes-btn is-success sec-main-btn" data-travel="51" style="text-align: left; font-size: 7px;">📚 IGM Library (#51)</button>
+                  <button class="nes-btn is-success sec-main-btn" data-travel="45" style="text-align: left; font-size: 7px;">💻 Computer Science (#45)</button>
+                  <button class="nes-btn is-success sec-main-btn" data-travel="27" style="text-align: left; font-size: 7px;">🪨 The Masoom's Rock (#27)</button>
+                  <!-- South Campus -->
+                  <button class="nes-btn is-primary sec-south-btn" data-travel="3" style="text-align: left; font-size: 7px;">🔬 Life Sciences (SLS) (#3)</button>
+                  <button class="nes-btn is-primary sec-south-btn" data-travel="2" style="text-align: left; font-size: 7px;">🧬 ASPIRE BioNEST (#2)</button>
+                  <button class="nes-btn is-primary sec-south-btn" data-travel="21" style="text-align: left; font-size: 7px;">🎭 Amphitheatre UoH (#21)</button>
+                  <button class="nes-btn is-primary sec-south-btn" data-travel="1" style="text-align: left; font-size: 7px;">🌊 Check Dam UoH (#1)</button>
+                  <button class="nes-btn is-primary sec-south-btn" data-travel="13" style="text-align: left; font-size: 7px;">🏠 MHK Hostel (Dorm) (#13)</button>
+                  <button class="nes-btn is-primary sec-south-btn" data-travel="9" style="text-align: left; font-size: 7px;">🛍️ South Shopping (#9)</button>
+                  <!-- West Campus -->
+                  <button class="nes-btn is-warning sec-west-btn" data-travel="30" style="text-align: left; font-size: 7px;">🏟️ Indoor Stadium (#30)</button>
+                  <button class="nes-btn is-warning sec-west-btn" data-travel="75" style="text-align: left; font-size: 7px;">⛩️ Gate 3 IDC (#75)</button>
+                  <!-- East Campus -->
+                  <button class="nes-btn is-error sec-east-btn" data-travel="59" style="text-align: left; font-size: 7px;">☕ Sukoon Canteen (#59)</button>
+                  <button class="nes-btn is-error sec-east-btn" data-travel="62" style="text-align: left; font-size: 7px;">📐 CR Rao AIMSCS (#62)</button>
+                  <button class="nes-btn is-error sec-east-btn" data-travel="91" style="text-align: left; font-size: 7px;">🚰 Overhead Water Tank (#91)</button>
+                  <button class="nes-btn is-error sec-east-btn" data-travel="92" style="text-align: left; font-size: 7px;">🏟️ Balayogi Complex (#92)</button>
+                  <button class="nes-btn is-error sec-east-btn" data-travel="93" style="text-align: left; font-size: 7px;">🏃 Gachibowli Stadium (#93)</button>
+                  <button class="nes-btn is-error sec-east-btn" data-travel="89" style="text-align: left; font-size: 7px;">🛕 Sai Baba Temple (#89)</button>
+                  <button class="nes-btn is-error sec-east-btn" data-travel="90" style="text-align: left; font-size: 7px;">🧬 Indian Immunologicals (#90)</button>
+                  <button class="nes-btn is-error sec-east-btn" data-travel="87" style="text-align: left; font-size: 7px;">🎯 SATG Shooting Ranges (#87)</button>
+                  <button class="nes-btn is-error sec-east-btn" data-travel="86" style="text-align: left; font-size: 7px;">🏛️ UoH Monument (#86)</button>
+                  <button class="nes-btn is-error sec-east-btn" data-travel="61" style="text-align: left; font-size: 7px;">🧪 Chemistry Annex (#61)</button>
+                  <button class="nes-btn is-error sec-east-btn" data-travel="98" style="text-align: left; font-size: 7px;">🪨 Mushroom Rock (#98)</button>
+                </div>
               </div>
             </div>
           </div>
@@ -154,6 +143,15 @@ export class CampusMapUI {
     // 1. Lush Section Terrain Ground
     ctx.fillStyle = '#4a7c36';
     ctx.fillRect(0, 0, w, h);
+
+    // 1B. Earthen Agricultural Field Blocks
+    for (const fb of secCfg.fieldBlocks || []) {
+      ctx.fillStyle = '#8c6230';
+      ctx.fillRect(fb.x * sx, fb.y * sy, fb.w * sx, fb.h * sy);
+      ctx.strokeStyle = '#6a461e';
+      ctx.lineWidth = 1;
+      ctx.strokeRect(fb.x * sx, fb.y * sy, fb.w * sx, fb.h * sy);
+    }
 
     // Subtle grid lines
     ctx.fillStyle = 'rgba(255, 255, 255, 0.03)';
@@ -313,10 +311,10 @@ export class CampusMapUI {
     const boxH = (h - pad * 3 - 35) / 2;
 
     const sections = [
-      { id: 'west', name: '🟡 WEST CAMPUS', sub: 'Stadium & Gate 3 (7 POIs)', x: pad, y: pad + 15, w: boxW, h: boxH, color: 'rgba(234, 179, 8, 0.20)', border: '#eab308' },
-      { id: 'main', name: '🟢 NORTH / MAIN CAMPUS', sub: 'Admin, CS, Library & Lakes (26 POIs)', x: pad * 2 + boxW, y: pad + 15, w: boxW, h: boxH, color: 'rgba(16, 185, 129, 0.20)', border: '#10b981' },
-      { id: 'south', name: '🔵 SOUTH CAMPUS', sub: 'SLS Road & Hostels Quads (15 POIs)', x: pad, y: pad * 2 + 15 + boxH, w: boxW, h: boxH, color: 'rgba(37, 99, 235, 0.20)', border: '#2563eb' },
-      { id: 'east', name: '🟣 EAST CAMPUS', sub: 'Chemistry, Arts & Sukoon (23 POIs)', x: pad * 2 + boxW, y: pad * 2 + 15 + boxH, w: boxW, h: boxH, color: 'rgba(168, 85, 247, 0.20)', border: '#a855f7' }
+      { id: 'west', name: '🟡 WEST CAMPUS', sub: `Stadium, IDC & Gate 3 (${game.locations.filter(l => l.section === 'west').length} POIs)`, x: pad, y: pad + 15, w: boxW, h: boxH, color: 'rgba(234, 179, 8, 0.20)', border: '#eab308' },
+      { id: 'main', name: '🟢 NORTH / MAIN CAMPUS', sub: `Humanities, Social Sciences & Lakes (${game.locations.filter(l => l.section === 'main').length} POIs)`, x: pad * 2 + boxW, y: pad + 15, w: boxW, h: boxH, color: 'rgba(168, 85, 247, 0.20)', border: '#10b981' },
+      { id: 'south', name: '🔵 SOUTH CAMPUS', sub: `SLS Road & Hostels Quads (${game.locations.filter(l => l.section === 'south').length} POIs)`, x: pad, y: pad * 2 + 15 + boxH, w: boxW, h: boxH, color: 'rgba(37, 99, 235, 0.20)', border: '#2563eb' },
+      { id: 'east', name: '🟣 EAST CAMPUS', sub: `Academic Core, Sports & Sukoon (${game.locations.filter(l => l.section === 'east').length} POIs)`, x: pad * 2 + boxW, y: pad * 2 + 15 + boxH, w: boxW, h: boxH, color: 'rgba(168, 85, 247, 0.20)', border: '#a855f7' }
     ];
 
     sections.forEach(s => {
@@ -357,10 +355,11 @@ export class CampusMapUI {
     ctx.lineWidth = 2;
     ctx.strokeRect(cdX, cdY, cdW, cdH);
 
+    const cdCount = game.locations.filter(l => l.section === 'checkdam_buffer').length;
     ctx.fillStyle = '#ffffff';
     ctx.font = 'bold 10px Inter, sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('🌊 CHECK DAM BUFFER (4 POIs)', cdX + cdW / 2, cdY + 18);
+    ctx.fillText(`🌊 CHECK DAM BUFFER (${cdCount} POIs)`, cdX + cdW / 2, cdY + 18);
 
     ctx.fillStyle = '#7dd3fc';
     ctx.font = '8px Inter, sans-serif';
@@ -378,10 +377,11 @@ export class CampusMapUI {
     ctx.lineWidth = 2;
     ctx.strokeRect(amphiX, amphiY, amphiW, amphiH);
 
+    const amphiCount = game.locations.filter(l => l.section === 'amphi_valley').length;
     ctx.fillStyle = '#ffffff';
     ctx.font = 'bold 10px Inter, sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('🌲 AMPHI VALLEY BUFFER (3 POIs)', amphiX + amphiW / 2, amphiY + 18);
+    ctx.fillText(`🌲 AMPHI VALLEY BUFFER (${amphiCount} POIs)`, amphiX + amphiW / 2, amphiY + 18);
 
     ctx.fillStyle = '#a7f3d0';
     ctx.font = '8px Inter, sans-serif';
@@ -415,20 +415,24 @@ export class CampusMapUI {
   }
 
   bindEvents(modal) {
-    document.getElementById('btn-close-full-map')?.addEventListener('click', () => this.toggle());
+    document.getElementById('btn-close-full-map')?.addEventListener('click', () => {
+      soundManager.playMenuClose();
+      this.toggle();
+    });
 
-    modal.querySelectorAll('.map-sec-tab').forEach(tab => {
+    modal.querySelectorAll('[data-sectab]').forEach(tab => {
       tab.addEventListener('click', (e) => {
-        this.selectedSectionTab = e.currentTarget.dataset.sectab;
-        modal.querySelectorAll('.map-sec-tab').forEach(t => t.classList.remove('active'));
-        e.currentTarget.classList.add('active');
+        soundManager.playBtnClick();
+        this.selectedSectionTab = e.currentTarget.getAttribute('data-sectab');
+        this.render();
         this.drawFullMap();
       });
     });
 
-    modal.querySelectorAll('.btn-travel').forEach(btn => {
+    modal.querySelectorAll('[data-travel]').forEach(btn => {
       btn.addEventListener('click', (e) => {
-        const locId = parseInt(e.currentTarget.dataset.travel, 10);
+        const locId = parseInt(e.currentTarget.getAttribute('data-travel'), 10);
+        soundManager.playDoorTransition();
         this.uiManager.game.fastTravelTo(locId);
         this.toggle();
       });

@@ -3,33 +3,95 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>University of Hyderabad Campus Adventure — Playable Web Game</title>
-  <meta name="description" content="Explore the University of Hyderabad campus in this top-down adventure! Discover 78 indexed locations, 6 natural lakes & dams, The Masoom's Rock, attend classes, take quizzes, and live the hostel life.">
+  <title>University of Hyderabad Campus Adventure — Playable Retro Pixel Game</title>
+  <meta name="description" content="Explore the University of Hyderabad campus in this top-down retro pixel art adventure inspired by classic 8-bit games! Discover 78 indexed locations, natural lakes, Masoom's Rock, attend classes, take quizzes, and explore student life.">
+  
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Space+Grotesk:wght@500;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./src/style.css">
 </head>
 <body>
+  <!-- Initial Load Fallback -->
+  <div id="init-load">Loading UoH Adventure...</div>
+
+  <!-- CRT Scanlines Filter Overlay (Toggleable in Settings) -->
+  <div id="crt-overlay" class="hidden"></div>
+
   <div id="game-app">
-    <!-- Main Game Canvas -->
+    <!-- 1. Preloader Overlay (peteroravec.com style) -->
+    <div class="progress-percentage-cover hidden"></div>
+    <div class="progress-percentage">
+      <div class="preloader-text">
+        <canvas id="preloader-mascot" width="64" height="64" class="preloader-image"></canvas>
+      </div>
+      <div class="preloader">
+        <div class="bar" id="preloader-bar" style="width: 0%"></div>
+      </div>
+      <div class="preloader-text" id="preloader-text">0%</div>
+      <div class="preloader-subtext">LOADING CAMPUS ASSETS...</div>
+    </div>
+
+    <!-- 2. Retro Play Start Box (peteroravec.com style) -->
+    <div class="play-box" id="play-screen">
+      <div class="mini-text top-text">
+        <div class="box">🏛️ UNIVERSITY OF HYDERABAD · RETRO PIXEL EXPLORATION</div>
+      </div>
+      <div class="wrp">
+        <div class="img-wrp">
+          <div class="hero-brand-card pixel-corners">
+            <div class="hero-crest">🏛️ 🎓 🌲</div>
+            <h1 class="hero-title">UOH ADVENTURE</h1>
+            <p class="hero-tagline">2,300-ACRE RETRO 2D CAMPUS SIMULATION &amp; QUESTS</p>
+            <div class="hero-features-chips">
+              <span class="chip">78 LANDMARKS</span>
+              <span class="chip">6 LAKES</span>
+              <span class="chip">ACADEMIC QUIZZES</span>
+              <span class="chip">NIGHT CANTEEN</span>
+            </div>
+            <div class="btn-wrp">
+              <button type="button" class="nes-btn is-error btn-play" id="btn-start-play">
+                ▶ START ADVENTURE
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mini-text bottom-text">
+        <div class="limiter">
+          <div class="quick-nav-box">
+            <div class="box text">
+              <span class="highlight-text">No time for full campus tour? Quick Jump:</span>
+            </div>
+            <div class="box box-btn">
+              <button type="button" class="nes-btn is-primary" id="quick-btn-map">🗺️ Map</button>
+              <button type="button" class="nes-btn is-success" id="quick-btn-tech">💻 Schools &amp; Tech</button>
+              <button type="button" class="nes-btn is-warning" id="quick-btn-about">🏛️ Heritage</button>
+              <button type="button" class="nes-btn is-error" id="quick-btn-quests">🏆 Quests</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Main Game Canvas -->
     <canvas id="game-canvas"></canvas>
 
-    <!-- Top HUD Overlay -->
-    <header id="game-hud" class="glass-bar">
+    <!-- 4. Top HUD Overlay (NES Retro Bar) -->
+    <header id="game-hud" class="nes-hud-bar">
       <div class="hud-left">
         <div class="hud-brand">
           <span class="hud-logo">🏛️</span>
           <div class="hud-title-wrap">
             <h1 class="hud-game-title">UoH Adventure</h1>
-            <span class="hud-edition">Central University of Hyderabad</span>
+            <span class="hud-edition">Central University</span>
           </div>
         </div>
 
         <div class="hud-pill hud-score-pill">
           <span class="hud-pill-icon">🌟</span>
           <div class="hud-pill-text">
-            <span class="hud-label">EXPLORATION SCORE</span>
+            <span class="hud-label">SCORE</span>
             <span class="hud-val" id="hud-score">0</span>
           </div>
         </div>
@@ -48,8 +110,8 @@
         <div class="hud-quest-ticker" id="hud-quest-ticker">
           <span class="ticker-badge">OBJECTIVE</span>
           <div class="ticker-content">
-            <strong id="hud-quest-title">Freshman Induction Trail</strong>:
-            <span id="hud-quest-text">Visit the Administration Building (Building 36)</span>
+            <strong id="hud-quest-title">Freshman Trail</strong>:
+            <span id="hud-quest-text">Visit Administration (#36)</span>
           </div>
           <span class="ticker-prog" id="hud-quest-prog">[0/3]</span>
         </div>
@@ -57,81 +119,90 @@
 
       <!-- Right Action Controls -->
       <div class="hud-right">
-        <div class="stamina-wrapper" title="Sprint Stamina (Hold Shift / Sprint button)">
-          <div class="stamina-label">⚡ STAMINA</div>
+        <div class="stamina-wrapper" title="Sprint Stamina (Hold Shift / RUN button)">
+          <div class="stamina-label">⚡ RUN</div>
           <div class="stamina-track">
             <div class="stamina-bar" id="stamina-fill" style="width: 100%;"></div>
           </div>
         </div>
 
         <div class="hud-actions-group">
-          <button class="hud-btn" id="btn-map" title="Campus Map (M)">
-            <span class="hud-btn-icon">🗺️</span>
-            <span class="hud-btn-label">Map (M)</span>
+          <button class="nes-btn is-primary hud-action-btn" id="btn-map" title="Campus Map (M)">
+            🗺️ MAP
           </button>
-          <button class="hud-btn" id="btn-book" title="Discovery Book (J)">
-            <span class="hud-btn-icon">📖</span>
-            <span class="hud-btn-label">Book (J)</span>
+          <button class="nes-btn is-success hud-action-btn" id="btn-book" title="Discovery Book (J)">
+            📖 BOOK
           </button>
-          <button class="hud-btn" id="btn-quests" title="Quests (Q)">
-            <span class="hud-btn-icon">🏆</span>
-            <span class="hud-btn-label">Quests</span>
+          <button class="nes-btn is-warning hud-action-btn" id="btn-tech-hud" title="Schools & Tech">
+            💻 TECH
           </button>
-          <button class="hud-btn" id="btn-hud-unstuck" title="Unstuck / Respawn on Road (U)" style="border-color:#f59e0b; color:#fef08a;">
-            <span class="hud-btn-icon">🧭</span>
-            <span class="hud-btn-label">Unstuck</span>
+          <button class="nes-btn hud-action-btn" id="btn-about-hud" title="Campus Heritage">
+            🏛️ INFO
           </button>
-          <button class="hud-btn hud-btn-icon-only" id="btn-sound" title="Toggle Sound">
+          <button class="nes-btn is-error hud-action-btn" id="btn-hud-unstuck" title="Unstuck / Safe Road (U)">
+            🧭 RESCUE
+          </button>
+          <button class="nes-btn hud-action-btn btn-icon-only" id="btn-sound" title="Toggle Sound">
             <span id="sound-icon">🔊</span>
           </button>
-          <button class="hud-btn hud-btn-icon-only" id="btn-settings" title="Settings & Guide">
-            <span>⚙️</span>
+          <button class="nes-btn hud-action-btn btn-icon-only" id="btn-settings" title="Settings & Guide">
+            ⚙️
           </button>
         </div>
       </div>
     </header>
 
-    <!-- Bottom Right Minimap HUD -->
-    <div id="minimap-container" class="glass-panel">
+    <!-- 5. Bottom Right Minimap HUD -->
+    <div id="minimap-container" class="pixel-corners">
       <div class="minimap-header">
         <span>📍 UoH Radar</span>
       </div>
       <canvas id="minimap-canvas" width="160" height="140"></canvas>
     </div>
 
-    <!-- Onscreen Controls for Mobile & Touch Devices -->
+    <!-- 6. Mobile & Touch Virtual Controls -->
     <div id="mobile-controls-overlay">
       <div id="mobile-dpad">
         <div class="joystick-base">
           <div class="joystick-stick"></div>
+          <span class="joystick-hint">TOUCH &amp; MOVE</span>
         </div>
       </div>
       <div id="mobile-action-buttons">
-        <button class="mobile-btn" id="btn-mobile-sprint">⚡ RUN</button>
-        <button class="mobile-btn mobile-btn-primary" id="btn-mobile-interact">E INTERACT</button>
+        <div class="mobile-top-row">
+          <button class="mobile-btn nes-btn is-primary" id="btn-mobile-map" type="button" title="Campus Map">🗺️</button>
+          <button class="mobile-btn nes-btn is-success" id="btn-mobile-book" type="button" title="Discovery Book">📖</button>
+          <button class="mobile-btn nes-btn is-error" id="btn-mobile-quests" type="button" title="Quests">🏆</button>
+        </div>
+        <div class="mobile-bottom-row">
+          <button class="mobile-btn nes-btn is-warning" id="btn-mobile-sprint" type="button">⚡ RUN</button>
+          <button class="mobile-btn nes-btn is-error" id="btn-mobile-interact" type="button">🅰️ ACTION</button>
+        </div>
       </div>
     </div>
 
-    <!-- Toasts Notifications Container -->
+    <!-- 7. Toast Notifications Container -->
     <div id="toast-container"></div>
 
-    <!-- Modals Container Root -->
+    <!-- 8. Modal Roots (NES Styled Frames) -->
     <div id="book-modal" class="modal-root hidden"></div>
     <div id="map-modal" class="modal-root hidden"></div>
     <div id="quiz-modal" class="modal-root hidden"></div>
     <div id="dialog-modal" class="modal-root hidden"></div>
+    <div id="tech-modal" class="modal-root hidden"></div>
+    <div id="about-modal" class="modal-root hidden"></div>
     <div id="generic-modal" class="modal-root hidden">
       <div class="modal-backdrop">
         <div id="generic-modal-content"></div>
       </div>
     </div>
 
-    <!-- Fullscreen Sleep Fade Overlay -->
+    <!-- 9. Fullscreen Sleep Fade Overlay -->
     <div id="sleep-overlay" class="hidden">
-      <div class="sleep-content">
+      <div class="sleep-content pixel-corners">
         <div class="sleep-moon">🌙 💤</div>
         <h2>Resting in MHK Hostel...</h2>
-        <p>Restoring stamina and advancing to the morning.</p>
+        <p>Restoring stamina and advancing to morning 07:00 AM.</p>
       </div>
     </div>
   </div>

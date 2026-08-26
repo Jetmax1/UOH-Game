@@ -2,6 +2,7 @@ import { soundManager } from '../game/AudioSynth.js';
 
 /**
  * 5-Question Interactive Classroom Quiz Modal
+ * Retro NES Arcade style matching peteroravec.com
  */
 export class QuizUI {
   constructor(uiManager) {
@@ -25,6 +26,7 @@ export class QuizUI {
     const modal = document.getElementById('quiz-modal');
     if (!modal) return;
 
+    soundManager.playMenuOpen();
     this.renderQuestion();
     modal.classList.remove('hidden');
   }
@@ -38,57 +40,58 @@ export class QuizUI {
     const progressPct = ((this.currentIndex + 1) / totalQuestions) * 100;
 
     modal.innerHTML = `
-      <div class="modal-backdrop">
-        <div class="quiz-container glass-panel">
-          <!-- Quiz Header -->
-          <div class="quiz-header">
-            <div>
-              <span class="quiz-dept-tag">${this.quizSet.department}</span>
-              <h2>${this.quizSet.title}</h2>
+      <div class="modal-backdrop"></div>
+      <div class="frame-wrp" style="max-width: 680px;">
+        <div class="frame-wrp-inner">
+          <button aria-label="Close" class="nes-btn is-error close-btn-position" id="btn-close-quiz">×</button>
+          <div class="frame pixel-corners">
+            <!-- Quiz Header -->
+            <div class="quiz-header-bar">
+              <div>
+                <span class="chip" style="background: #1e293b; border: 2px solid #000; padding: 2px 6px; font-size: 7px; color: #facc15;">
+                  ${this.quizSet.department}
+                </span>
+                <h2 style="font-size: 12px; color: #f87171; margin-top: 4px;">${this.quizSet.title}</h2>
+              </div>
+              <div style="font-size: 8px; color: #94a3b8;">
+                Q ${this.currentIndex + 1} / ${totalQuestions}
+              </div>
             </div>
-            <button class="modal-close-btn" id="btn-close-quiz">✕</button>
-          </div>
 
-          <!-- Progress Bar -->
-          <div class="quiz-progress-section">
-            <div class="quiz-progress-bar">
-              <div class="quiz-progress-fill" style="width: ${progressPct}%"></div>
+            <!-- Progress Bar -->
+            <div style="width: 100%; height: 12px; background: #1e293b; border: 2px solid #000; margin-bottom: 16px;">
+              <div style="height: 100%; width: ${progressPct}%; background: #3b82f6; transition: width 0.2s ease;"></div>
             </div>
-            <div class="quiz-progress-labels">
-              <span>Question ${this.currentIndex + 1} of ${totalQuestions}</span>
-              <span>Current Score: ${this.score} pts</span>
+
+            <!-- Question Body -->
+            <div class="quiz-question-box">
+              <h3>${q.question}</h3>
             </div>
-          </div>
 
-          <!-- Question Body -->
-          <div class="quiz-question-box">
-            <h3 class="quiz-question-text">${q.question}</h3>
-          </div>
+            <!-- Multiple Choice Options -->
+            <div class="quiz-options-list">
+              ${q.options.map((opt, idx) => `
+                <button type="button" class="nes-btn quiz-option-btn" data-opt-idx="${idx}">
+                  <span style="color: #38bdf8; margin-right: 8px;">${String.fromCharCode(65 + idx)}:</span>
+                  <span>${opt}</span>
+                </button>
+              `).join('')}
+            </div>
 
-          <!-- Multiple Choice Options -->
-          <div class="quiz-options-list">
-            ${q.options.map((opt, idx) => `
-              <button class="quiz-option-btn" data-opt-idx="${idx}">
-                <span class="opt-letter">${String.fromCharCode(65 + idx)}</span>
-                <span class="opt-text">${opt}</span>
+            <!-- Feedback Box -->
+            <div id="quiz-feedback" class="hidden" style="margin-top: 14px; background: #1e293b; border: 2px solid #000; padding: 12px;">
+              <div id="feedback-verdict" style="font-size: 9px; margin-bottom: 6px;"></div>
+              <div id="feedback-exp" style="font-size: 8px; font-family: var(--body-font); color: #cbd5e1; line-height: 1.4;">
+                ${q.explanation}
+              </div>
+            </div>
+
+            <!-- Action Footer -->
+            <div style="margin-top: 16px; text-align: right;">
+              <button type="button" class="nes-btn is-primary hidden" id="btn-next-question">
+                ${this.currentIndex + 1 === totalQuestions ? 'View Results 🎓' : 'Next Question ➔'}
               </button>
-            `).join('')}
-          </div>
-
-          <!-- Explanation Box (Initially hidden) -->
-          <div class="quiz-feedback-box hidden" id="quiz-feedback">
-            <div class="feedback-icon" id="feedback-icon"></div>
-            <div class="feedback-body">
-              <strong id="feedback-verdict"></strong>
-              <p id="feedback-exp">${q.explanation}</p>
             </div>
-          </div>
-
-          <!-- Action Footer -->
-          <div class="quiz-footer">
-            <button class="btn btn-primary hidden" id="btn-next-question">
-              ${this.currentIndex + 1 === totalQuestions ? 'View Results 🎓' : 'Next Question ➔'}
-            </button>
           </div>
         </div>
       </div>
@@ -99,6 +102,7 @@ export class QuizUI {
 
   bindQuestionEvents(modal, q) {
     document.getElementById('btn-close-quiz')?.addEventListener('click', () => {
+      soundManager.playMenuClose();
       modal.classList.add('hidden');
     });
 
@@ -111,30 +115,27 @@ export class QuizUI {
         if (this.isAnswered) return;
         this.isAnswered = true;
 
-        const chosenIdx = parseInt(e.currentTarget.dataset.optIdx, 10);
+        const chosenIdx = parseInt(e.currentTarget.getAttribute('data-opt-idx'), 10);
         const isCorrect = chosenIdx === q.correctIndex;
 
-        // Visual highlights
         if (isCorrect) {
-          e.currentTarget.classList.add('opt-correct');
-          this.score += 20; // 20 pts per question = 100 pts max
           soundManager.playQuizCorrect();
+          e.currentTarget.classList.add('is-success');
+          this.score += 20;
         } else {
-          e.currentTarget.classList.add('opt-wrong');
-          // Highlight the right one
-          optButtons[q.correctIndex].classList.add('opt-correct');
           soundManager.playQuizWrong();
+          e.currentTarget.classList.add('is-error');
+          // Highlight correct one
+          optButtons[q.correctIndex]?.classList.add('is-success');
         }
 
-        // Show Explanation
         if (feedbackBox) {
           feedbackBox.classList.remove('hidden');
-          feedbackBox.classList.toggle('feedback-success', isCorrect);
-          feedbackBox.classList.toggle('feedback-fail', !isCorrect);
           const verdict = document.getElementById('feedback-verdict');
-          const icon = document.getElementById('feedback-icon');
-          if (verdict) verdict.textContent = isCorrect ? '🎉 Correct Answer!' : '❌ Incorrect';
-          if (icon) icon.textContent = isCorrect ? '✅' : '❌';
+          if (verdict) {
+            verdict.textContent = isCorrect ? '🎉 Correct Answer! (+20 pts)' : '❌ Incorrect!';
+            verdict.style.color = isCorrect ? '#86efac' : '#f87171';
+          }
         }
 
         if (nextBtn) {
@@ -144,6 +145,7 @@ export class QuizUI {
     });
 
     nextBtn?.addEventListener('click', () => {
+      soundManager.playBtnClick();
       this.isAnswered = false;
       this.currentIndex += 1;
       if (this.currentIndex < this.quizSet.questions.length) {
@@ -162,45 +164,50 @@ export class QuizUI {
     const correctCount = this.score / 20;
     const isPassed = correctCount >= (this.quizSet.passScore || 3);
 
+    if (isPassed) soundManager.playQuestComplete();
+    else soundManager.playQuizWrong();
+
     modal.innerHTML = `
-      <div class="modal-backdrop">
-        <div class="quiz-results-container glass-panel">
-          <div class="results-badge-icon">${isPassed ? '🎓' : '📚'}</div>
-          <h2>${isPassed ? 'Quiz Passed with Honors!' : 'Keep Learning!'}</h2>
-          <p class="results-subtitle">${this.quizSet.title} · ${this.quizSet.department}</p>
+      <div class="modal-backdrop"></div>
+      <div class="frame-wrp" style="max-width: 550px;">
+        <div class="frame-wrp-inner">
+          <div class="frame pixel-corners" style="text-align: center;">
+            <div style="font-size: 36px; margin-bottom: 8px;">${isPassed ? '🎓' : '📚'}</div>
+            <h2 class="big-title">${isPassed ? 'Classroom Quiz Passed!' : 'Keep Studying!'}</h2>
+            <p style="font-size: 8px; color: #94a3b8; margin-bottom: 16px;">
+              ${this.quizSet.title} · ${this.quizSet.department}
+            </p>
 
-          <div class="results-score-card">
-            <div class="score-item">
-              <span class="score-label">Score</span>
-              <span class="score-value">${correctCount} / ${totalQuestions}</span>
+            <div style="background: #1e293b; border: 2px solid #000; padding: 16px; margin-bottom: 16px; display: flex; justify-content: space-around;">
+              <div>
+                <span style="font-size: 7px; color: #94a3b8; display: block;">CORRECT</span>
+                <span style="font-size: 14px; color: #facc15;">${correctCount} / ${totalQuestions}</span>
+              </div>
+              <div>
+                <span style="font-size: 7px; color: #94a3b8; display: block;">POINTS AWARDED</span>
+                <span style="font-size: 14px; color: #86efac;">+${isPassed ? (correctCount === 5 ? 100 : 60) : 10} pts</span>
+              </div>
+              <div>
+                <span style="font-size: 7px; color: #94a3b8; display: block;">RESULT</span>
+                <span style="font-size: 11px; color: ${isPassed ? '#86efac' : '#f87171'};">
+                  ${isPassed ? 'PASSED ✅' : 'RETRY 🔄'}
+                </span>
+              </div>
             </div>
-            <div class="score-item">
-              <span class="score-label">Exploration Points</span>
-              <span class="score-value highlight">+${isPassed ? (correctCount === 5 ? 100 : 50) : 10} pts</span>
-            </div>
-            <div class="score-item">
-              <span class="score-label">Status</span>
-              <span class="score-value ${isPassed ? 'text-pass' : 'text-retry'}">${isPassed ? 'PASSED ✅' : 'TRY AGAIN 🔄'}</span>
-            </div>
-          </div>
 
-          <p class="results-message">
-            ${isPassed
-              ? 'Excellent mastery! Your score has been credited to your campus record.'
-              : 'You need at least 3 correct answers to pass. Feel free to retry the lecture quiz!'}
-          </p>
-
-          <div class="results-actions">
-            ${!isPassed ? `
-              <button class="btn btn-secondary" id="btn-retry-quiz">🔄 Try Again</button>
-            ` : ''}
-            <button class="btn btn-primary" id="btn-finish-quiz">Leave Classroom ➔</button>
+            <div style="display: flex; justify-content: center; gap: 8px; margin-top: 16px;">
+              ${!isPassed ? `
+                <button type="button" class="nes-btn is-warning" id="btn-retry-quiz">🔄 Try Again</button>
+              ` : ''}
+              <button type="button" class="nes-btn is-primary" id="btn-finish-quiz">Leave Classroom ➔</button>
+            </div>
           </div>
         </div>
       </div>
     `;
 
     document.getElementById('btn-retry-quiz')?.addEventListener('click', () => {
+      soundManager.playBtnClick();
       this.currentIndex = 0;
       this.score = 0;
       this.isAnswered = false;
@@ -208,6 +215,7 @@ export class QuizUI {
     });
 
     document.getElementById('btn-finish-quiz')?.addEventListener('click', () => {
+      soundManager.playMenuClose();
       modal.classList.add('hidden');
       if (this.onCompleteCallback) {
         this.onCompleteCallback(this.score, isPassed);

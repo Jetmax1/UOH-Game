@@ -52,7 +52,7 @@ export class Player {
     };
   }
 
-  update(delta, inputManager, collisionChecker, particleSystem) {
+  update(delta, inputManager, collisionChecker, particleSystem, surfaceModifierGetter = null) {
     if (this.exclamationTimer > 0) {
       this.exclamationTimer -= delta;
     }
@@ -60,11 +60,17 @@ export class Player {
     const moveVec = inputManager.getMovementVector();
     this.isSprinting = inputManager.isSprinting() && this.stamina > 5;
 
+    // Physical surface modifier at player foot position (Road: 1.10x, Path: 1.0x, Grass: 0.82x, Field: 0.75x)
+    const footX = this.x + this.width / 2;
+    const footY = this.y + this.height - 2;
+    const surfaceMod = surfaceModifierGetter ? surfaceModifierGetter(footX, footY) : 1.0;
+
+    const baseSpeed = this.isSprinting ? this.sprintSpeed : this.normalSpeed;
+    this.currentSpeed = baseSpeed * surfaceMod;
+
     if (this.isSprinting && (moveVec.x !== 0 || moveVec.y !== 0)) {
-      this.currentSpeed = this.sprintSpeed;
       this.stamina = Math.max(0, this.stamina - 28 * delta);
     } else {
-      this.currentSpeed = this.normalSpeed;
       this.stamina = Math.min(this.maxStamina, this.stamina + 25 * delta);
     }
 
@@ -119,7 +125,8 @@ export class Player {
 
       // Footstep dust puff
       this.footstepTimer += delta;
-      if (this.footstepTimer > (this.isSprinting ? 0.12 : 0.22) && particleSystem) {
+      const dustInterval = (this.isSprinting ? 0.10 : 0.20) / Math.max(0.5, surfaceMod);
+      if (this.footstepTimer > dustInterval && particleSystem) {
         this.footstepTimer = 0;
         particleSystem.createFootstep(this.x + this.width / 2, this.y + this.height - 2);
       }
@@ -164,21 +171,54 @@ export class Player {
   drawInteractBubble(ctx, sx, sy) {
     const bob = Math.sin(Date.now() / 160) * 2;
     const bubbleX = sx + 12;
-    const bubbleY = sy - 12 + bob;
+    const bubbleY = sy - 14 + bob;
 
-    ctx.fillStyle = '#2858b8';
-    ctx.beginPath();
-    ctx.arc(bubbleX, bubbleY, 9, 0, Math.PI * 2);
-    ctx.fill();
+    let label = 'E';
+    let action = '';
+    if (this.nearbyInteractable) {
+      if (this.nearbyInteractable.type === 'npc' || this.nearbyInteractable.type === 'interior_npc') {
+        action = 'TALK';
+      } else if (this.nearbyInteractable.type === 'bed') {
+        action = 'REST';
+      } else if (this.nearbyInteractable.type === 'quiz') {
+        action = 'QUIZ';
+      } else if (this.nearbyInteractable.type === 'exit_door') {
+        action = 'EXIT';
+      } else if (this.nearbyInteractable.data?.hasInterior) {
+        action = 'ENTER';
+      } else if (this.nearbyInteractable.data?.isNightCanteen) {
+        action = 'EAT';
+      } else {
+        action = 'INFO';
+      }
+    }
 
-    ctx.strokeStyle = '#ffffff';
-    ctx.lineWidth = 1.5;
-    ctx.stroke();
+    const text = action ? `[E] ${action}` : '[E]';
+    ctx.save();
+    ctx.font = 'bold 7px "Press Start 2P", monospace';
+    const textWidth = ctx.measureText(text).width;
+    const pad = 4;
+    const boxW = Math.max(20, textWidth + pad * 2);
+    const boxH = 14;
+    const boxX = bubbleX - boxW / 2;
+    const boxY = bubbleY - boxH / 2;
 
+    // NES pixel-corner badge background
+    ctx.fillStyle = '#0f172a';
+    ctx.fillRect(boxX, boxY, boxW, boxH);
+    ctx.fillStyle = '#2563eb';
+    ctx.fillRect(boxX + 1, boxY + 1, boxW - 2, boxH - 2);
+
+    // Border highlights
+    ctx.fillStyle = '#60a5fa';
+    ctx.fillRect(boxX + 1, boxY + 1, boxW - 2, 1);
+    ctx.fillRect(boxX + 1, boxY + 1, 1, boxH - 2);
+
+    // Text
     ctx.fillStyle = '#ffffff';
-    ctx.font = 'bold 9px monospace';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText('A', bubbleX, bubbleY);
+    ctx.fillText(text, bubbleX, bubbleY + 1);
+    ctx.restore();
   }
 }
