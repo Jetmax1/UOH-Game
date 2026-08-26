@@ -77,32 +77,36 @@ export class CampusMapUI {
               <div style="width: 320px; max-width: 100%; display: flex; flex-direction: column; gap: 8px;">
                 <h3 style="font-size: 9px; color: #facc15;">🚀 Fast Travel Portals</h3>
                 <div style="max-height: 420px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; padding-right: 4px;">
-                  <!-- Main Campus -->
-                  <button class="nes-btn is-success sec-main-btn" data-travel="36" style="text-align: left; font-size: 7px;">🏛️ Admin Building (#36)</button>
-                  <button class="nes-btn is-success sec-main-btn" data-travel="51" style="text-align: left; font-size: 7px;">📚 IGM Library (#51)</button>
-                  <button class="nes-btn is-success sec-main-btn" data-travel="45" style="text-align: left; font-size: 7px;">💻 Computer Science (#45)</button>
+                  <!-- Main / North Campus -->
+                  <button class="nes-btn is-success sec-main-btn" data-travel="37" style="text-align: left; font-size: 7px;">🏛️ Admission Office (#37)</button>
+                  <button class="nes-btn is-success sec-main-btn" data-travel="48" style="text-align: left; font-size: 7px;">📚 Social Sciences (#48)</button>
+                  <button class="nes-btn is-success sec-main-btn" data-travel="52" style="text-align: left; font-size: 7px;">📖 School of Humanities (#52)</button>
                   <button class="nes-btn is-success sec-main-btn" data-travel="27" style="text-align: left; font-size: 7px;">🪨 The Masoom's Rock (#27)</button>
+                  <button class="nes-btn is-success sec-main-btn" data-travel="26" style="text-align: left; font-size: 7px;">🌊 Buffalo Lake (#26)</button>
                   <!-- South Campus -->
                   <button class="nes-btn is-primary sec-south-btn" data-travel="3" style="text-align: left; font-size: 7px;">🔬 Life Sciences (SLS) (#3)</button>
                   <button class="nes-btn is-primary sec-south-btn" data-travel="2" style="text-align: left; font-size: 7px;">🧬 ASPIRE BioNEST (#2)</button>
+                  <button class="nes-btn is-primary sec-south-btn" data-travel="5" style="text-align: left; font-size: 7px;">🏫 Integrated Studies (CIS) (#5)</button>
                   <button class="nes-btn is-primary sec-south-btn" data-travel="21" style="text-align: left; font-size: 7px;">🎭 Amphitheatre UoH (#21)</button>
                   <button class="nes-btn is-primary sec-south-btn" data-travel="1" style="text-align: left; font-size: 7px;">🌊 Check Dam UoH (#1)</button>
                   <button class="nes-btn is-primary sec-south-btn" data-travel="13" style="text-align: left; font-size: 7px;">🏠 MHK Hostel (Dorm) (#13)</button>
                   <button class="nes-btn is-primary sec-south-btn" data-travel="9" style="text-align: left; font-size: 7px;">🛍️ South Shopping (#9)</button>
                   <!-- West Campus -->
-                  <button class="nes-btn is-warning sec-west-btn" data-travel="30" style="text-align: left; font-size: 7px;">🏟️ Indoor Stadium (#30)</button>
+                  <button class="nes-btn is-warning sec-west-btn" data-travel="30" style="text-align: left; font-size: 7px;">🏟️ Indoor Stadium & Gym (#30)</button>
+                  <button class="nes-btn is-warning sec-west-btn" data-travel="73" style="text-align: left; font-size: 7px;">⚙️ Central Workshop (#73)</button>
                   <button class="nes-btn is-warning sec-west-btn" data-travel="75" style="text-align: left; font-size: 7px;">⛩️ Gate 3 IDC (#75)</button>
                   <!-- East Campus -->
+                  <button class="nes-btn is-error sec-east-btn" data-travel="36" style="text-align: left; font-size: 7px;">🏛️ Admin Building (#36)</button>
+                  <button class="nes-btn is-error sec-east-btn" data-travel="51" style="text-align: left; font-size: 7px;">📚 IGM Library (#51)</button>
+                  <button class="nes-btn is-error sec-east-btn" data-travel="45" style="text-align: left; font-size: 7px;">💻 Computer Science (#45)</button>
                   <button class="nes-btn is-error sec-east-btn" data-travel="59" style="text-align: left; font-size: 7px;">☕ Sukoon Canteen (#59)</button>
+                  <button class="nes-btn is-error sec-east-btn" data-travel="56" style="text-align: left; font-size: 7px;">🎭 SN School Main (#56)</button>
                   <button class="nes-btn is-error sec-east-btn" data-travel="62" style="text-align: left; font-size: 7px;">📐 CR Rao AIMSCS (#62)</button>
-                  <button class="nes-btn is-error sec-east-btn" data-travel="91" style="text-align: left; font-size: 7px;">🚰 Overhead Water Tank (#91)</button>
-                  <button class="nes-btn is-error sec-east-btn" data-travel="92" style="text-align: left; font-size: 7px;">🏟️ Balayogi Complex (#92)</button>
-                  <button class="nes-btn is-error sec-east-btn" data-travel="93" style="text-align: left; font-size: 7px;">🏃 Gachibowli Stadium (#93)</button>
+                  <button class="nes-btn is-error sec-east-btn" data-travel="92" style="text-align: left; font-size: 7px;">🏟️ Balayogi Athletics (#92)</button>
+                  <button class="nes-btn is-error sec-east-btn" data-travel="93" style="text-align: left; font-size: 7px;">🏊 Gachibowli Aquatics (#93)</button>
                   <button class="nes-btn is-error sec-east-btn" data-travel="89" style="text-align: left; font-size: 7px;">🛕 Sai Baba Temple (#89)</button>
-                  <button class="nes-btn is-error sec-east-btn" data-travel="90" style="text-align: left; font-size: 7px;">🧬 Indian Immunologicals (#90)</button>
-                  <button class="nes-btn is-error sec-east-btn" data-travel="87" style="text-align: left; font-size: 7px;">🎯 SATG Shooting Ranges (#87)</button>
                   <button class="nes-btn is-error sec-east-btn" data-travel="86" style="text-align: left; font-size: 7px;">🏛️ UoH Monument (#86)</button>
-                  <button class="nes-btn is-error sec-east-btn" data-travel="61" style="text-align: left; font-size: 7px;">🧪 Chemistry Annex (#61)</button>
+                  <button class="nes-btn is-error sec-east-btn" data-travel="28" style="text-align: left; font-size: 7px;">🌊 Peacock Lake (#28)</button>
                 </div>
               </div>
             </div>

@@ -1,1566 +1,2693 @@
 [
   {
     "id": 1,
+    "canonicalId": "check_dam",
     "name": "Check Dam UoH",
     "shortName": "Check Dam",
+    "aliases": [
+      "Checkdam",
+      "UoH Check Dam",
+      "South Lake Dam"
+    ],
     "section": "south",
     "zone": "south",
     "category": "nature-rocks",
     "x": 350,
     "y": 460,
+    "worldPosition": {
+      "x": 350,
+      "y": 1810
+    },
     "width": 90,
     "height": 65,
     "points": 50,
     "description": "Scenic stone check dam in the south-western campus basin channeling seasonal rainwater into lush natural aquifers.",
     "trivia": "A tranquil sanctuary frequented by migrating herons and kingfishers after monsoon showers.",
-    "isCheckDam": true,
+    "interactive": false,
+    "discoverable": true,
     "hasInterior": false
   },
   {
     "id": 2,
+    "canonicalId": "aspire_bionest",
     "name": "ASPIRE BioNEST",
     "shortName": "ASPIRE BioNEST",
+    "aliases": [
+      "BioNEST",
+      "ASPIRE Incubation Center",
+      "Life Sciences Incubator"
+    ],
     "section": "south",
     "zone": "south",
     "category": "research",
     "x": 160,
     "y": 1040,
+    "worldPosition": {
+      "x": 160,
+      "y": 2390
+    },
     "width": 75,
     "height": 60,
     "points": 40,
     "description": "Premier biotechnology incubator and life science enterprise accelerator supporting cutting-edge bio-ventures.",
     "trivia": "Houses high-end biosafety incubators, fermentation suites, and genomics startups founded by UoH alumni.",
+    "interactive": false,
+    "discoverable": true,
     "hasInterior": false
   },
   {
     "id": 3,
+    "canonicalId": "school_of_life_sciences",
     "name": "Prof. Manjula Sridharan Lab / School of Life Sciences",
     "shortName": "School of Life Sciences",
+    "aliases": [
+      "SLS",
+      "School of Life Sciences",
+      "Manjula Lab",
+      "Biology Complex"
+    ],
     "section": "south",
     "zone": "south",
     "category": "academic",
     "x": 280,
     "y": 1020,
+    "worldPosition": {
+      "x": 280,
+      "y": 2370
+    },
     "width": 105,
     "height": 95,
     "points": 60,
     "description": "Iconic concentric multi-wing complex housing Biochemistry, Plant Sciences, Animal Biology, and Biotechnology departments.",
     "trivia": "Renowned for pioneering research in molecular biology, plant genetics, and neurobiology.",
+    "interactive": true,
+    "discoverable": true,
     "hasInterior": true,
     "interiorType": "sls_dept"
   },
   {
     "id": 4,
+    "canonicalId": "greenhouse_nursery",
     "name": "Greenhouse & Botanical Research Nursery",
     "shortName": "Greenhouse Nursery",
+    "aliases": [
+      "Botanical Nursery",
+      "SLS Greenhouse",
+      "Flora Research Nursery"
+    ],
     "section": "south",
     "zone": "south",
     "category": "nature-rocks",
     "x": 240,
     "y": 1340,
+    "worldPosition": {
+      "x": 240,
+      "y": 2690
+    },
     "width": 85,
     "height": 65,
     "points": 40,
     "description": "Lush botanical greenhouse and nursery cultivating medicinal flora, rare orchids, and research seedlings.",
     "trivia": "Maintained by the School of Life Sciences for botanical genetics and biodiversity propagation.",
+    "interactive": false,
+    "discoverable": true,
     "hasInterior": false
   },
   {
     "id": 5,
+    "canonicalId": "cis_building",
     "name": "Centre for Integrated Studies",
     "shortName": "CIS Building",
+    "aliases": [
+      "CIS",
+      "Centre for Integrated Studies",
+      "Integrated Masters Building"
+    ],
     "section": "south",
     "zone": "south",
     "category": "academic",
     "x": 560,
     "y": 1340,
+    "worldPosition": {
+      "x": 560,
+      "y": 2690
+    },
     "width": 95,
     "height": 70,
     "points": 50,
     "description": "Flagship academic building for integrated 5-year Master's programs across Sciences, Humanities, and Social Sciences.",
     "trivia": "The vibrant home of UoH's energetic integrated batch students with buzzing common corridors.",
+    "interactive": false,
+    "discoverable": true,
     "hasInterior": false
   },
   {
     "id": 6,
-    "name": "CIS Reading Room",
-    "shortName": "CIS Reading Room",
+    "canonicalId": "student_study_lounge",
+    "name": "South Campus Student Study Lounge",
+    "shortName": "Student Study Lounge",
+    "aliases": [
+      "CIS Study Lounge",
+      "South Reading Room",
+      "Student Study Hall"
+    ],
     "section": "south",
     "zone": "south",
     "category": "academic",
     "x": 560,
     "y": 1470,
+    "worldPosition": {
+      "x": 560,
+      "y": 2820
+    },
     "width": 70,
     "height": 50,
     "points": 30,
-    "description": "Dedicated round-the-clock air-conditioned reading room and quiet reference study hall for CIS scholars.",
-    "trivia": "Always packed with enthusiastic students discussing problem sheets during end-semester exams.",
+    "description": "Quiet air-conditioned study hall with high-speed Wi-Fi, individual cubicles, and academic reference materials.",
+    "trivia": "A favorite haven for late-evening exam preparation and thesis writing.",
+    "interactive": false,
+    "discoverable": true,
     "hasInterior": false
   },
   {
     "id": 7,
+    "canonicalId": "nanotechnology",
     "name": "Centre for Nanotechnology",
     "shortName": "Nanotechnology",
+    "aliases": [
+      "Nano Center",
+      "Nanotech Lab",
+      "Centre for Nanotechnology"
+    ],
     "section": "south",
     "zone": "south",
     "category": "research",
     "x": 560,
     "y": 1040,
+    "worldPosition": {
+      "x": 560,
+      "y": 2390
+    },
     "width": 85,
     "height": 60,
     "points": 40,
     "description": "Advanced research facility with clean rooms, electron beam lithography, and nanomaterial synthesis laboratories.",
     "trivia": "Pioneering novel nanomaterials for clean energy storage, biosensors, and quantum devices.",
+    "interactive": false,
+    "discoverable": true,
     "hasInterior": false
   },
   {
     "id": 8,
+    "canonicalId": "international_hostel",
     "name": "International Students Hostel Central",
     "shortName": "International Hostel",
+    "aliases": [
+      "ISH Central",
+      "International Hostel",
+      "Foreign Students Dorm"
+    ],
     "section": "south",
     "zone": "south",
     "category": "residential",
     "x": 550,
     "y": 920,
+    "worldPosition": {
+      "x": 550,
+      "y": 2270
+    },
     "width": 85,
     "height": 60,
     "points": 35,
     "description": "Modern residential complex hosting international research scholars, exchange students, and visiting fellows.",
     "trivia": "Celebrates global international food nights and cultural celebrations representing dozens of countries.",
+    "interactive": false,
+    "discoverable": true,
     "hasInterior": false
   },
   {
     "id": 9,
+    "canonicalId": "south_shop_complex",
     "name": "South Shopping Complex",
     "shortName": "South Shop Complex",
+    "aliases": [
+      "South Canteen",
+      "South Complex",
+      "Shopping Complex South"
+    ],
     "section": "south",
     "zone": "south",
     "category": "amenities",
     "x": 800,
     "y": 1340,
+    "worldPosition": {
+      "x": 800,
+      "y": 2690
+    },
     "width": 90,
     "height": 65,
     "points": 35,
     "description": "Lively commercial and culinary hub on South Campus with grocery stores, bakeries, juice stalls, and late-night food joints.",
     "trivia": "Famous for late-night chai debates and post-dinner egg rolls amongst hostelers.",
-    "isNightCanteen": true,
-    "hasInterior": false
+    "interactive": true,
+    "discoverable": true,
+    "hasInterior": false,
+    "isNightCanteen": true
   },
   {
     "id": 10,
+    "canonicalId": "tagore_house",
     "name": "Tagore International House",
     "shortName": "Tagore House",
+    "aliases": [
+      "TIH",
+      "Tagore House",
+      "International Scholars House"
+    ],
     "section": "south",
     "zone": "south",
     "category": "residential",
     "x": 1100,
     "y": 1040,
+    "worldPosition": {
+      "x": 1100,
+      "y": 2390
+    },
     "width": 85,
     "height": 60,
     "points": 35,
     "description": "Historic residential building named after Nobel Laureate Rabindranath Tagore, fostering cross-cultural residential community.",
     "trivia": "Features peaceful courtyards surrounded by neem trees and garden pathways.",
+    "interactive": false,
+    "discoverable": true,
     "hasInterior": false
   },
   {
     "id": 11,
+    "canonicalId": "hostel_j_mh_j",
     "name": "Men's Hostel J, University of Hyderabad",
     "shortName": "Hostel J (MH-J)",
+    "aliases": [
+      "MH-J",
+      "Hostel J",
+      "Men's Hostel J"
+    ],
     "section": "south",
     "zone": "south",
     "category": "residential",
     "x": 1260,
     "y": 1040,
+    "worldPosition": {
+      "x": 1260,
+      "y": 2390
+    },
     "width": 85,
     "height": 65,
     "points": 30,
     "description": "Multi-floor residential hostel housing post-graduate and research scholars on South Campus.",
     "trivia": "Known for spirited inter-hostel cricket match watch parties in the common hall.",
+    "interactive": false,
+    "discoverable": true,
     "hasInterior": false
   },
   {
     "id": 12,
+    "canonicalId": "hostel_i_mh_i",
     "name": "Men's Hostel I",
     "shortName": "Hostel I (MH-I)",
+    "aliases": [
+      "MH-I",
+      "Hostel I",
+      "Men's Hostel I"
+    ],
     "section": "south",
     "zone": "south",
     "category": "residential",
     "x": 1420,
     "y": 1340,
+    "worldPosition": {
+      "x": 1420,
+      "y": 2690
+    },
     "width": 85,
     "height": 65,
     "points": 30,
     "description": "Spacious hostel quadrangle located adjacent to the southern residential greenery.",
     "trivia": "Enjoys panoramic views of the Deccan rocky ridges at sunset.",
+    "interactive": false,
+    "discoverable": true,
     "hasInterior": false
   },
   {
     "id": 13,
+    "canonicalId": "mhk_hostel",
     "name": "MHK Hostel",
     "shortName": "MHK Hostel",
+    "aliases": [
+      "MHK",
+      "MHK Dorm",
+      "Moulana Abul Kalam Azad Hostel"
+    ],
     "section": "south",
     "zone": "south",
     "category": "residential",
     "x": 1540,
     "y": 1040,
+    "worldPosition": {
+      "x": 1540,
+      "y": 2390
+    },
     "width": 95,
     "height": 75,
     "points": 40,
     "description": "Maulana Hasrat Mohani Hostel (MHK), one of the most prominent residential dormitories on South Campus.",
     "trivia": "Features an active recreation room with table tennis, study cubicles, and a cozy dining mess.",
+    "interactive": true,
+    "discoverable": true,
     "hasInterior": true,
     "interiorType": "hostel_mhk"
   },
   {
     "id": 14,
+    "canonicalId": "ladies_hostel_8",
     "name": "Ladies Hostel 8",
     "shortName": "Ladies Hostel 8",
+    "aliases": [
+      "LH-8",
+      "Hostel 8",
+      "Ladies Hostel 8"
+    ],
     "section": "south",
     "zone": "south",
     "category": "residential",
     "x": 1100,
     "y": 1340,
+    "worldPosition": {
+      "x": 1100,
+      "y": 2690
+    },
     "width": 85,
     "height": 65,
     "points": 30,
     "description": "Secure residential complex for women postgraduate scholars and researchers.",
     "trivia": "Surrounded by lush bougainvillea hedges and peaceful outdoor seating benches.",
+    "interactive": false,
+    "discoverable": true,
     "hasInterior": false
   },
   {
     "id": 15,
+    "canonicalId": "ladies_hostel_10_lh_10",
     "name": "Ladies Hostel 10",
     "shortName": "Ladies Hostel 10 (LH-10)",
+    "aliases": [
+      "LH-10",
+      "Hostel 10",
+      "Ladies Hostel 10"
+    ],
     "section": "south",
     "zone": "south",
     "category": "residential",
     "x": 1680,
     "y": 1040,
+    "worldPosition": {
+      "x": 1680,
+      "y": 2390
+    },
     "width": 85,
     "height": 65,
     "points": 30,
     "description": "Modern multi-storey women's residential hostel with study halls and solar-heated water facilities.",
     "trivia": "Surrounded by neat brick-paved walking paths and quiet outdoor study gazebos.",
+    "interactive": false,
+    "discoverable": true,
     "hasInterior": false
   },
   {
     "id": 16,
+    "canonicalId": "volleyball_court",
     "name": "Volleyball Court",
     "shortName": "Volleyball Court",
+    "aliases": [
+      "Volleyball Ground",
+      "South Sports Court"
+    ],
     "section": "south",
     "zone": "south",
     "category": "sports",
     "x": 1400,
     "y": 1040,
+    "worldPosition": {
+      "x": 1400,
+      "y": 2390
+    },
     "width": 80,
     "height": 50,
     "points": 30,
     "description": "Floodlit clay/sand volleyball court bustling with energetic matches every evening.",
     "trivia": "Host to high-voltage inter-hostel championship tournaments under stadium floodlights.",
-    "isVolleyball": true,
+    "interactive": false,
+    "discoverable": true,
     "hasInterior": false
   },
   {
     "id": 17,
+    "canonicalId": "globbo_rock",
     "name": "Globbo Rock",
     "shortName": "Globbo Rock",
+    "aliases": [
+      "Globbo Boulder",
+      "Granite Wonder",
+      "Spherical Rock"
+    ],
     "section": "checkdam_buffer",
     "zone": "buffer",
     "category": "nature-rocks",
     "x": 920,
     "y": 340,
+    "worldPosition": {
+      "x": 1320,
+      "y": 1340
+    },
     "width": 70,
     "height": 60,
     "points": 80,
     "description": "A magnificent 2.5-billion-year-old spherical granite boulder perched naturally on the central granite plateau.",
     "trivia": "One of Hyderabad's finest natural geological marvels, protected under campus heritage heritage.",
-    "isMajorWonder": true,
-    "hasInterior": false
+    "interactive": false,
+    "discoverable": true,
+    "hasInterior": false,
+    "isMajorWonder": true
   },
   {
     "id": 18,
+    "canonicalId": "chinna_gudi_temple",
     "name": "Chinna Gudi Heritage Temple",
     "shortName": "Chinna Gudi Temple",
+    "aliases": [
+      "Chinna Gudi",
+      "Checkdam Temple",
+      "Hillock Temple"
+    ],
     "section": "checkdam_buffer",
     "zone": "buffer",
     "category": "heritage",
     "x": 940,
     "y": 520,
+    "worldPosition": {
+      "x": 1340,
+      "y": 1520
+    },
     "width": 70,
     "height": 60,
     "points": 50,
     "description": "Historic hillock temple (Chinna Gudi) tucked into the rocky woods, offering peace and panoramic sunrise views.",
     "trivia": "Students often visit before crucial examinations to ring the brass bell for good luck.",
-    "isTemple": true,
-    "hasInterior": false
+    "interactive": true,
+    "discoverable": true,
+    "hasInterior": false,
+    "isTemple": true
   },
   {
     "id": 19,
+    "canonicalId": "tamarind_tree",
     "name": "Tamarind Tree",
     "shortName": "Tamarind Tree",
+    "aliases": [
+      "Old Tamarind Tree",
+      "Heritage Tree",
+      "Checkdam Tamarind"
+    ],
     "section": "checkdam_buffer",
     "zone": "buffer",
     "category": "nature-rocks",
     "x": 780,
     "y": 680,
+    "worldPosition": {
+      "x": 1180,
+      "y": 1680
+    },
     "width": 60,
     "height": 60,
     "points": 40,
     "description": "Century-old majestic tamarind tree marking the historic crossroad between central campus and the Amphitheatre trail.",
     "trivia": "A beloved natural canopy providing cool shade for reading and birdwatching.",
+    "interactive": false,
+    "discoverable": true,
     "hasInterior": false
   },
   {
     "id": 20,
+    "canonicalId": "amphi_lake",
     "name": "Amphi Lake",
     "shortName": "Amphi Lake",
+    "aliases": [
+      "Amphitheatre Lake",
+      "Amphi Pond",
+      "South Lake 2"
+    ],
     "section": "south",
     "zone": "south",
     "category": "nature-rocks",
     "x": 1560,
     "y": 280,
+    "worldPosition": {
+      "x": 1560,
+      "y": 1630
+    },
     "width": 90,
     "height": 70,
     "points": 70,
     "description": "Serene natural water body cradled alongside the open-air Amphitheatre.",
     "trivia": "Home to resident freshwater turtles, white egrets, and blooming water lilies.",
-    "isLake": true,
+    "interactive": false,
+    "discoverable": true,
     "hasInterior": false
   },
   {
     "id": 21,
+    "canonicalId": "amphitheatre_uoh",
     "name": "Amphitheatre UoH",
     "shortName": "Amphitheatre UoH",
+    "aliases": [
+      "Open Air Theatre",
+      "Amphi",
+      "UoH Amphitheatre"
+    ],
     "section": "south",
     "zone": "south",
     "category": "student-life",
     "x": 1400,
     "y": 280,
+    "worldPosition": {
+      "x": 1400,
+      "y": 1630
+    },
     "width": 110,
     "height": 90,
     "points": 60,
     "description": "Magnificent stepped open-air stone amphitheater hosting university drama plays, music fests, and cultural gatherings.",
     "trivia": "Under moonlit skies, students gather here for acoustic guitar jam sessions and poetry recitals.",
-    "isAmphitheatre": true,
+    "interactive": false,
+    "discoverable": true,
     "hasInterior": false
   },
   {
     "id": 22,
+    "canonicalId": "secret_lake",
     "name": "Secret Lake",
     "shortName": "Secret Lake",
+    "aliases": [
+      "Hidden Lake",
+      "Sanctuary Lake",
+      "Valley Lake"
+    ],
     "section": "amphi_valley",
     "zone": "buffer",
     "category": "nature-rocks",
     "x": 1260,
     "y": 860,
+    "worldPosition": {
+      "x": 2860,
+      "y": 2210
+    },
     "width": 90,
     "height": 70,
     "points": 80,
     "description": "Secluded ecological gem surrounded by dense wild shrubbery and rocky hillocks.",
     "trivia": "A treasured quiet hideaway for nature photographers and wildlife enthusiasts.",
-    "isLake": true,
+    "interactive": false,
+    "discoverable": true,
     "hasInterior": false
   },
   {
     "id": 23,
+    "canonicalId": "horticulture_nursery",
     "name": "Horticulture Department Nursery",
     "shortName": "Horticulture Nursery",
+    "aliases": [
+      "Horticulture Farm",
+      "East Nursery",
+      "Plant Nursery"
+    ],
     "section": "east",
     "zone": "east",
     "category": "nature-rocks",
     "x": 1200,
     "y": 440,
+    "worldPosition": {
+      "x": 2900,
+      "y": 440
+    },
     "width": 90,
     "height": 65,
     "points": 35,
     "description": "Extensive university botanical nursery propagating native flowering plants, medicinal herbs, and avenue trees.",
     "trivia": "Supplies beautiful saplings and blooming flora for all campus afforestation and landscaping drives.",
+    "interactive": false,
+    "discoverable": true,
     "hasInterior": false
   },
   {
     "id": 24,
+    "canonicalId": "cherry_rock",
     "name": "Cherry Rock",
     "shortName": "Cherry Rock",
+    "aliases": [
+      "Cherry Boulder",
+      "East Rock 1",
+      "Cherry Hill Monolith"
+    ],
     "section": "east",
     "zone": "east",
     "category": "nature-rocks",
     "x": 1380,
     "y": 760,
+    "worldPosition": {
+      "x": 3080,
+      "y": 760
+    },
     "width": 60,
     "height": 50,
     "points": 70,
     "description": "Distinctive pinkish-granite natural rock formation standing sentinel along the eastern nature trail.",
     "trivia": "Glows with a warm cherry-amber hue when illuminated by the setting Hyderabad sun.",
-    "isMajorWonder": true,
-    "hasInterior": false
+    "interactive": false,
+    "discoverable": true,
+    "hasInterior": false,
+    "isMajorWonder": true
   },
   {
     "id": 25,
+    "canonicalId": "aquarium_rock",
     "name": "Aquarium Rock",
     "shortName": "Aquarium Rock",
+    "aliases": [
+      "Aquarium Monolith",
+      "East Rock 2",
+      "Cave Rock"
+    ],
     "section": "east",
     "zone": "east",
     "category": "nature-rocks",
     "x": 1480,
     "y": 760,
+    "worldPosition": {
+      "x": 3180,
+      "y": 760
+    },
     "width": 60,
     "height": 50,
     "points": 70,
     "description": "Fascinating natural cavernous monolith formation with natural hollow rock basins that hold rainwater.",
     "trivia": "Ancient weathering carved natural glass-clear pools into the stone where tiny freshwater biomes thrive.",
-    "isMajorWonder": true,
-    "hasInterior": false
+    "interactive": false,
+    "discoverable": true,
+    "hasInterior": false,
+    "isMajorWonder": true
   },
   {
     "id": 26,
+    "canonicalId": "buffalo_lake",
     "name": "Buffalo Lake",
     "shortName": "Buffalo Lake",
+    "aliases": [
+      "Buffalo Pond",
+      "Main Campus Lake",
+      "North Lake"
+    ],
     "section": "main",
     "zone": "central",
     "category": "nature-rocks",
     "x": 1080,
     "y": 760,
+    "worldPosition": {
+      "x": 1080,
+      "y": 760
+    },
     "width": 85,
     "height": 65,
     "points": 70,
     "description": "Placid campus lake where gentle herds of spotted deer and indigenous buffalo drink during twilight.",
     "trivia": "A premier birdwatching haven where migratory pintails and teals visit during winter.",
-    "isLake": true,
+    "interactive": false,
+    "discoverable": true,
     "hasInterior": false
   },
   {
     "id": 27,
+    "canonicalId": "the_masoom_s_rock",
     "name": "The Masoom's Rock",
     "shortName": "The Masoom's Rock",
+    "aliases": [
+      "Masoom's Rock",
+      "Balancing Rock",
+      "Protected Monolith",
+      "Mushroom Cap Rock"
+    ],
     "section": "main",
     "zone": "central",
     "category": "nature-rocks",
     "x": 1260,
     "y": 820,
+    "worldPosition": {
+      "x": 1260,
+      "y": 820
+    },
     "width": 70,
     "height": 60,
     "points": 100,
     "description": "Breathtaking natural balancing monolith rock, affectionately celebrated in campus folklore as Masoom's Rock.",
     "trivia": "Perched precariously for millions of years defying gravity, it is one of UoH's most iconic natural landmarks.",
-    "isMajorWonder": true,
-    "hasInterior": false
+    "interactive": false,
+    "discoverable": true,
+    "hasInterior": false,
+    "isMajorWonder": true
   },
   {
     "id": 28,
+    "canonicalId": "peacock_lake",
     "name": "Peacock Lake",
     "shortName": "Peacock Lake",
+    "aliases": [
+      "Peacock Lake",
+      "Mor Sarovar",
+      "East Campus Lake"
+    ],
     "section": "east",
     "zone": "central",
     "category": "nature-rocks",
     "x": 1040,
     "y": 1360,
+    "worldPosition": {
+      "x": 2740,
+      "y": 1360
+    },
     "width": 480,
     "height": 180,
     "points": 90,
     "description": "Expansive shimmering lake nestled in the protected southern wildlife sanctuary.",
     "trivia": "Indian peafowl roam freely along its banks at dawn, displaying vibrant iridescent feathers.",
-    "isLake": true,
+    "interactive": false,
+    "discoverable": true,
     "hasInterior": false,
     "isMajorWonder": true
   },
   {
     "id": 29,
+    "canonicalId": "auroya_dam",
     "name": "Auroya Dam",
     "shortName": "Auroya Dam",
+    "aliases": [
+      "Auroya Dam",
+      "North Check Dam",
+      "Auroya Reservoir"
+    ],
     "section": "main",
     "zone": "central",
     "category": "nature-rocks",
     "x": 980,
     "y": 1180,
+    "worldPosition": {
+      "x": 980,
+      "y": 1180
+    },
     "width": 70,
     "height": 50,
     "points": 50,
     "description": "Engineered stone weir and reservoir dam regulating watershed flow between the lakes.",
     "trivia": "Provides a magnificent vantage point across the dense southern forest canopy.",
+    "interactive": false,
+    "discoverable": true,
     "hasInterior": false
   },
   {
     "id": 30,
+    "canonicalId": "indoor_stadium_gym",
     "name": "Indoor Stadium and Gym",
     "shortName": "Indoor Stadium & Gym",
+    "aliases": [
+      "Indoor Stadium",
+      "University Gym",
+      "Fitness Center"
+    ],
     "section": "west",
     "zone": "west",
     "category": "sports",
     "x": 550,
     "y": 220,
+    "worldPosition": {
+      "x": -850,
+      "y": 1570
+    },
     "width": 105,
     "height": 80,
     "points": 50,
     "description": "Comprehensive indoor sports complex featuring badminton courts, table tennis arenas, and modern gymnasium.",
     "trivia": "Produced multiple national-level university athletes and inter-university championship teams.",
+    "interactive": false,
+    "discoverable": true,
     "hasInterior": false
   },
   {
     "id": 31,
+    "canonicalId": "sbi_campus_branch",
     "name": "State Bank of India (SBI) Campus Branch & ATM",
     "shortName": "SBI Campus Branch",
+    "aliases": [
+      "SBI UoH",
+      "State Bank ATM",
+      "Campus Bank"
+    ],
     "section": "main",
     "zone": "north",
     "category": "amenities",
     "x": 480,
     "y": 200,
+    "worldPosition": {
+      "x": 480,
+      "y": 200
+    },
     "width": 65,
     "height": 50,
     "points": 30,
     "description": "Full-service on-campus State Bank of India branch, ATM kiosk, and scholarship stipend center.",
     "trivia": "A busy hub during the first week of every month when student fellowship stipends are processed.",
+    "interactive": false,
+    "discoverable": true,
     "hasInterior": false
   },
   {
     "id": 32,
+    "canonicalId": "hostel_c",
     "name": "Hostel C",
     "shortName": "Hostel C",
+    "aliases": [
+      "MH-C",
+      "Hostel C",
+      "Men's Hostel C"
+    ],
     "section": "main",
     "zone": "north",
     "category": "residential",
     "x": 380,
     "y": 280,
+    "worldPosition": {
+      "x": 380,
+      "y": 280
+    },
     "width": 70,
     "height": 55,
     "points": 30,
     "description": "North campus men's postgraduate hostel quadrangle situated close to the library and sciences.",
     "trivia": "Boasts a breezy open-air terrace with sweeping views of the northern hillocks.",
+    "interactive": false,
+    "discoverable": true,
     "hasInterior": false
   },
   {
     "id": 33,
+    "canonicalId": "north_shop_complex",
     "name": "North Shopping Complex",
     "shortName": "North Shop Complex",
+    "aliases": [
+      "North Complex",
+      "North Canteen",
+      "Xerox & Stationery Complex"
+    ],
     "section": "main",
     "zone": "north",
     "category": "amenities",
     "x": 580,
     "y": 290,
+    "worldPosition": {
+      "x": 580,
+      "y": 290
+    },
     "width": 80,
     "height": 55,
     "points": 35,
     "description": "Central North commercial arcade housing photocopy centers, bookbinders, general stores, and tea shops.",
     "trivia": "Lifesaver for emergency assignment prints and midnight stationery supplies.",
+    "interactive": false,
+    "discoverable": true,
     "hasInterior": false
   },
   {
     "id": 34,
+    "canonicalId": "hostel_h_mh_h",
     "name": "Men's Hostel H",
     "shortName": "Hostel H (MH-H)",
+    "aliases": [
+      "MH-H",
+      "Hostel H",
+      "Men's Hostel H"
+    ],
     "section": "main",
     "zone": "north",
     "category": "residential",
     "x": 380,
     "y": 400,
+    "worldPosition": {
+      "x": 380,
+      "y": 400
+    },
     "width": 70,
     "height": 55,
     "points": 30,
     "description": "Spacious north campus men's dormitory with comfortable residential wings and tree-lined walkways.",
     "trivia": "Known for vibrant hostel day cultural feasts and festive decorations.",
+    "interactive": false,
+    "discoverable": true,
     "hasInterior": false
   },
   {
     "id": 35,
+    "canonicalId": "hostel_d_mh_d",
     "name": "Men's Hostel D (MH-D)",
     "shortName": "Hostel D (MH-D)",
+    "aliases": [
+      "MH-D",
+      "Hostel D",
+      "Men's Hostel D"
+    ],
     "section": "main",
     "zone": "north",
     "category": "residential",
     "x": 500,
     "y": 410,
+    "worldPosition": {
+      "x": 500,
+      "y": 410
+    },
     "width": 70,
     "height": 55,
     "points": 30,
     "description": "Adjacent twin hostel quadrangle serving senior research scholars and master's students.",
     "trivia": "Surrounded by shaded banyan trees where scholars gather for evening discussions.",
+    "interactive": false,
+    "discoverable": true,
     "hasInterior": false
   },
   {
     "id": 36,
+    "canonicalId": "admin_building",
     "name": "Administration Building",
     "shortName": "Admin Building",
+    "aliases": [
+      "Administration Block",
+      "Admin Quad",
+      "Registrar Office",
+      "Vice Chancellor Building"
+    ],
     "section": "east",
     "zone": "north",
     "category": "administrative",
     "x": 940,
     "y": 100,
+    "worldPosition": {
+      "x": 2640,
+      "y": 100
+    },
     "width": 150,
     "height": 110,
     "points": 60,
     "description": "The administrative heart of the university housing the Vice Chancellor's Secretariat, Registrar, and Finance Office.",
     "trivia": "The grand white portico is the official welcoming landmark for dignitaries and new university scholars.",
-    "hasInterior": false,
-    "isAdminBuilding": true
+    "interactive": false,
+    "discoverable": true,
+    "hasInterior": false
   },
   {
     "id": 37,
+    "canonicalId": "admission_office",
     "name": "Admission Office",
     "shortName": "Admission Office",
+    "aliases": [
+      "Admissions",
+      "Academic Section",
+      "Counseling Cell"
+    ],
     "section": "main",
     "zone": "north",
     "category": "administrative",
     "x": 880,
     "y": 220,
+    "worldPosition": {
+      "x": 880,
+      "y": 220
+    },
     "width": 70,
     "height": 50,
     "points": 40,
     "description": "Central admissions counter handling national entrance verification, certificates, and scholar enrollment.",
     "trivia": "The very first official stepping stone where students collect their university registration badges.",
+    "interactive": false,
+    "discoverable": true,
     "hasInterior": false
   },
   {
     "id": 38,
+    "canonicalId": "health_center",
     "name": "Health Center",
     "shortName": "Health Center",
+    "aliases": [
+      "Health Centre",
+      "Campus Clinic",
+      "Medical Center"
+    ],
     "section": "east",
     "zone": "north",
     "category": "amenities",
     "x": 970,
     "y": 300,
+    "worldPosition": {
+      "x": 2670,
+      "y": 300
+    },
     "width": 85,
     "height": 65,
     "points": 40,
     "description": "24x7 primary medical clinic, pharmacy dispensary, and emergency care unit serving the entire campus community.",
     "trivia": "Equipped with round-the-clock ambulance emergency response and free doctor consultations.",
-    "hasInterior": false,
-    "isHealthCenter": true
+    "interactive": false,
+    "discoverable": true,
+    "hasInterior": false
   },
   {
     "id": 39,
+    "canonicalId": "tea_snack_shop",
     "name": "Tea and Snack Shop",
     "shortName": "Tea & Snack Shop",
+    "aliases": [
+      "Chai Kiosk",
+      "East Snack Corner",
+      "Tea Point"
+    ],
     "section": "east",
     "zone": "east",
     "category": "amenities",
     "x": 560,
     "y": 380,
+    "worldPosition": {
+      "x": 2260,
+      "y": 380
+    },
     "width": 65,
     "height": 50,
     "points": 25,
     "description": "Cozy roadside kiosk serving hot filter coffee, Osmania biscuits, and freshly fried samosas.",
     "trivia": "A favorite quick pit-stop for researchers walking between the East Gate and main academic complex.",
+    "interactive": false,
+    "discoverable": true,
     "hasInterior": false
   },
   {
     "id": 40,
+    "canonicalId": "bovine_breeding_cabb",
     "name": "Centre for Advancement of Bovine Breeding",
     "shortName": "Bovine Breeding (CABB)",
+    "aliases": [
+      "CABB",
+      "Bovine Research Center",
+      "Dairy Science Unit"
+    ],
     "section": "east",
     "zone": "east",
     "category": "research",
     "x": 700,
     "y": 360,
+    "worldPosition": {
+      "x": 2400,
+      "y": 360
+    },
     "width": 85,
     "height": 65,
     "points": 40,
     "description": "Specialized animal biotechnology and genetics research institute focusing on indigenous livestock breeding.",
     "trivia": "Maintains dedicated research facilities for embryo transfer, cryopreservation, and livestock genetics.",
+    "interactive": false,
+    "discoverable": true,
     "hasInterior": false
   },
   {
     "id": 41,
+    "canonicalId": "hcu_small_gate",
     "name": "HCU Small Gate / Security Office",
     "shortName": "HCU Small Gate",
+    "aliases": [
+      "Small Gate",
+      "HCU Small Gate Security",
+      "East Entry Gate"
+    ],
     "section": "east",
     "zone": "east",
     "category": "gates",
     "x": 1440,
     "y": 440,
+    "worldPosition": {
+      "x": 3140,
+      "y": 440
+    },
     "width": 80,
     "height": 55,
     "points": 40,
     "description": "Eastern pedestrian and two-wheeler access gate connecting to the vibrant Gachibowli-Lingampally road.",
     "trivia": "Manned 24/7 by friendly campus security checking student ID smart cards.",
-    "isGate": true,
+    "interactive": false,
+    "discoverable": true,
     "hasInterior": false,
-    "isSmallGate": true
+    "isGate": true
   },
   {
     "id": 42,
+    "canonicalId": "karthik_xerox_sim",
     "name": "Karthik Sim Cards and Xerox",
     "shortName": "Karthik Xerox & Sim",
+    "aliases": [
+      "Karthik Xerox",
+      "Sim & Print Shop",
+      "Telecom Store"
+    ],
     "section": "east",
     "zone": "east",
     "category": "amenities",
     "x": 1720,
     "y": 560,
+    "worldPosition": {
+      "x": 3420,
+      "y": 560
+    },
     "width": 75,
     "height": 55,
     "points": 25,
     "description": "Popular student service shop offering mobile recharge, SIM activations, book spiral binding, and thesis printing.",
     "trivia": "The go-to shop for scholars submitting hardbound PhD and MTech final theses.",
-    "hasInterior": false,
-    "isKarthikXerox": true
+    "interactive": false,
+    "discoverable": true,
+    "hasInterior": false
   },
   {
     "id": 43,
+    "canonicalId": "dept_of_music",
     "name": "Department of Music",
     "shortName": "Dept of Music",
+    "aliases": [
+      "Music Department",
+      "Performing Arts Music Wing",
+      "Sangeet Bhavan"
+    ],
     "section": "main",
     "zone": "central",
     "category": "academic",
     "x": 1080,
     "y": 350,
+    "worldPosition": {
+      "x": 1080,
+      "y": 350
+    },
     "width": 70,
     "height": 55,
     "points": 40,
     "description": "Acoustically treated department nurturing Carnatic and Hindustani classical vocal and instrumental music.",
     "trivia": "Melodious veena, sitar, and mridangam practice notes drift across the surrounding grove in the evenings.",
+    "interactive": false,
+    "discoverable": true,
     "hasInterior": false
   },
   {
     "id": 44,
+    "canonicalId": "cv_raman_auditorium",
     "name": "CV Raman Auditorium",
     "shortName": "CV Raman Auditorium",
+    "aliases": [
+      "CV Raman Hall",
+      "Physics Auditorium",
+      "Science Hall"
+    ],
     "section": "main",
     "zone": "central",
     "category": "academic",
     "x": 720,
     "y": 500,
+    "worldPosition": {
+      "x": 720,
+      "y": 500
+    },
     "width": 75,
     "height": 60,
     "points": 40,
     "description": "Prominent auditorium named in honor of Nobel Laureate Sir C. V. Raman, hosting international science conferences.",
     "trivia": "Regularly hosts Nobel laureate public lectures and prestigious national science conclaves.",
+    "interactive": false,
+    "discoverable": true,
     "hasInterior": false
   },
   {
     "id": 45,
+    "canonicalId": "computer_science_scis",
     "name": "School of Computer and Information Sciences",
     "shortName": "Computer Science (SCIS)",
+    "aliases": [
+      "SCIS",
+      "Computer Science Dept",
+      "Informatics Block",
+      "AI & ML Labs"
+    ],
     "section": "east",
     "zone": "central",
     "category": "academic",
     "x": 740,
     "y": 640,
+    "worldPosition": {
+      "x": 2440,
+      "y": 640
+    },
     "width": 130,
     "height": 95,
     "points": 60,
     "description": "Premier department for AI, machine learning, systems, cyber security, and high-performance computing.",
     "trivia": "Features high-end GPU computing clusters and 24/7 labs where legendary hackathons take place.",
+    "interactive": true,
+    "discoverable": true,
     "hasInterior": true,
-    "interiorType": "cs_dept",
-    "isSCIS": true
+    "interiorType": "cs_dept"
   },
   {
     "id": 46,
+    "canonicalId": "srk_lecture_halls",
     "name": "Dr. S. Radhakrishnan Lecture Hall Complex (SRK LHC)",
     "shortName": "SRK Lecture Halls",
+    "aliases": [
+      "SRK Lecture Halls",
+      "Silver Jubilee LHC",
+      "Radhakrishnan Halls"
+    ],
     "section": "main",
     "zone": "central",
     "category": "academic",
     "x": 680,
     "y": 620,
+    "worldPosition": {
+      "x": 680,
+      "y": 620
+    },
     "width": 85,
     "height": 60,
     "points": 45,
     "description": "Major interdisciplinary lecture theater complex with smart audiovisual tiered halls.",
     "trivia": "Named to commemorate both UoH's 25th Silver Jubilee and philosopher-statesman Dr. S. Radhakrishnan.",
+    "interactive": false,
+    "discoverable": true,
     "hasInterior": false
   },
   {
     "id": 47,
+    "canonicalId": "dst_auditorium",
     "name": "Savitribai Phule DST Auditorium",
     "shortName": "DST Auditorium",
+    "aliases": [
+      "DST Auditorium",
+      "Phule Hall",
+      "Savitribai Auditorium"
+    ],
     "section": "main",
     "zone": "central",
     "category": "academic",
     "x": 640,
     "y": 750,
+    "worldPosition": {
+      "x": 640,
+      "y": 750
+    },
     "width": 80,
     "height": 60,
     "points": 45,
     "description": "Modern auditorium dedicated to pioneer social reformer and educator Savitribai Phule.",
     "trivia": "Acoustically tuned for university symposiums, theatre festivals, and academic convocations.",
+    "interactive": false,
+    "discoverable": true,
     "hasInterior": false
   },
   {
     "id": 48,
+    "canonicalId": "social_sciences",
     "name": "Social Science Complex",
     "shortName": "Social Sciences",
+    "aliases": [
+      "Social Sciences",
+      "SSS Complex",
+      "Humanities & Social Sciences Wing"
+    ],
     "section": "main",
     "zone": "central",
     "category": "academic",
     "x": 860,
     "y": 680,
+    "worldPosition": {
+      "x": 860,
+      "y": 680
+    },
     "width": 90,
     "height": 70,
     "points": 50,
     "description": "Home to the School of Social Sciences spanning History, Political Science, Sociology, Economics, and Anthropology.",
     "trivia": "Famous for intellectually stimulating debates on policy, development, and social justice.",
+    "interactive": false,
+    "discoverable": true,
     "hasInterior": false
   },
   {
     "id": 49,
+    "canonicalId": "cil_electronics_block",
     "name": "Central Instruments Laboratory / Electronics Block",
     "shortName": "CIL / Electronics Block",
+    "aliases": [
+      "CIL",
+      "Electronics Block",
+      "Instrumentation Lab",
+      "Central Instruments"
+    ],
     "section": "main",
     "zone": "central",
     "category": "research",
     "x": 1080,
     "y": 660,
+    "worldPosition": {
+      "x": 1080,
+      "y": 660
+    },
     "width": 85,
     "height": 60,
     "points": 45,
     "description": "Central analytical instrumentation facility with advanced NMR, XRD, Mass Spectrometry, and electron microscopes.",
     "trivia": "Serves researchers and doctoral scientists across India with precision nanoscale materials characterization.",
+    "interactive": false,
+    "discoverable": true,
     "hasInterior": false
   },
   {
     "id": 50,
+    "canonicalId": "cognitive_sciences_cncs",
     "name": "Centre for Neural & Cognitive Sciences (CNCS)",
     "shortName": "Cognitive Sciences (CNCS)",
+    "aliases": [
+      "CNCS",
+      "Cognitive Sciences",
+      "Neural Theory Lab",
+      "Computational Neuroscience"
+    ],
     "section": "main",
     "zone": "central",
     "category": "academic",
     "x": 980,
     "y": 780,
+    "worldPosition": {
+      "x": 980,
+      "y": 780
+    },
     "width": 75,
     "height": 55,
     "points": 35,
     "description": "Specialized interdisciplinary laboratory for cognitive science, computational neuroscience, and neural theory research.",
     "trivia": "Pioneering brain-computer interaction and cognitive linguistics in India.",
+    "interactive": false,
+    "discoverable": true,
     "hasInterior": false
   },
   {
     "id": 51,
+    "canonicalId": "igm_library",
     "name": "IGM Library, UoH",
     "shortName": "IGM Library",
+    "aliases": [
+      "IGM Library",
+      "Central Library",
+      "Indira Gandhi Memorial Library",
+      "UoH Library"
+    ],
     "section": "east",
     "zone": "central",
     "category": "academic",
     "x": 530,
     "y": 880,
+    "worldPosition": {
+      "x": 2230,
+      "y": 880
+    },
     "width": 140,
     "height": 105,
     "points": 70,
     "description": "Indira Gandhi Memorial Library, one of India's largest university repositories with over 400,000 volumes.",
     "trivia": "Features 24/7 air-conditioned reading halls, rare manuscript archives, and quiet study carrels.",
+    "interactive": true,
+    "discoverable": true,
     "hasInterior": true,
-    "interiorType": "library",
-    "isIGMLibrary": true
+    "interiorType": "library"
   },
   {
     "id": 52,
+    "canonicalId": "school_of_humanities",
     "name": "School of Humanities",
     "shortName": "School of Humanities",
+    "aliases": [
+      "Humanities School",
+      "Languages Complex",
+      "Literature Wing"
+    ],
     "section": "main",
     "zone": "central",
     "category": "academic",
     "x": 980,
     "y": 910,
+    "worldPosition": {
+      "x": 980,
+      "y": 910
+    },
     "width": 85,
     "height": 65,
     "points": 50,
     "description": "Prestigious academic school housing English, Hindi, Telugu, Urdu, Philosophy, and Comparative Literature.",
     "trivia": "Regularly hosts international literary symposiums, poetry translations, and philosophical dialogues.",
+    "interactive": false,
+    "discoverable": true,
     "hasInterior": false
   },
   {
     "id": 53,
+    "canonicalId": "sanskrit_studies",
     "name": "Department of Sanskrit Studies",
     "shortName": "Sanskrit Studies",
+    "aliases": [
+      "Sanskrit Dept",
+      "Computational Linguistics Sanskrit",
+      "Sanskrit Studies"
+    ],
     "section": "main",
     "zone": "central",
     "category": "academic",
     "x": 1140,
     "y": 910,
+    "worldPosition": {
+      "x": 1140,
+      "y": 910
+    },
     "width": 75,
     "height": 55,
     "points": 40,
     "description": "Department dedicated to computational linguistics, Sanskrit literature, and ancient Indian scientific treatises.",
     "trivia": "Pioneered worldwide NLP algorithms using Paninian Sanskrit grammar for computational parsing.",
+    "interactive": false,
+    "discoverable": true,
     "hasInterior": false
   },
   {
     "id": 54,
-    "name": "Department of Fine Arts & Theatre Studio",
-    "shortName": "Fine Arts & Theatre",
+    "canonicalId": "theatre_arts_wing",
+    "name": "SN School Theatre & Performing Arts Wing",
+    "shortName": "Theatre & Arts Wing",
+    "aliases": [
+      "Theatre Studio",
+      "Performing Arts Wing",
+      "SN School Theatre"
+    ],
     "section": "east",
     "zone": "east",
     "category": "academic",
     "x": 1380,
     "y": 1140,
+    "worldPosition": {
+      "x": 3080,
+      "y": 1140
+    },
     "width": 100,
     "height": 75,
     "points": 50,
-    "description": "Sprawling studio building for visual arts, printmaking, sculpture, and contemporary digital media.",
-    "trivia": "Features expansive art galleries where graduating scholars present annual master's art exhibitions.",
+    "description": "Dedicated performing arts studio for theatrical rehearsals, dramatics, stagecraft, and visual arts exhibitions.",
+    "trivia": "Features expansive wooden stage floors where legendary student productions are staged.",
+    "interactive": false,
+    "discoverable": true,
     "hasInterior": false
   },
   {
     "id": 55,
-    "name": "Department of Communication & Media Lab",
-    "shortName": "Dept of Communication",
+    "canonicalId": "media_broadcast_studio",
+    "name": "SN School Media & Broadcast Studio",
+    "shortName": "Media & Broadcast Studio",
+    "aliases": [
+      "Media Lab",
+      "Broadcast Studio",
+      "Bol Hyderabad Radio",
+      "Communication Dept"
+    ],
     "section": "east",
     "zone": "east",
     "category": "academic",
     "x": 1240,
     "y": 1140,
+    "worldPosition": {
+      "x": 2940,
+      "y": 1140
+    },
     "width": 90,
     "height": 70,
     "points": 40,
-    "description": "Leading department for journalism, documentary film production, television broadcasting, and media studies.",
-    "trivia": "Equipped with professional TV recording studios, sound mixing booths, and Bol Hyderabad radio station.",
+    "description": "State-of-the-art journalism, television broadcasting, sound mixing, and Bol Hyderabad radio recording studio.",
+    "trivia": "Equipped with professional TV broadcast cameras and acoustic audio mixing suites.",
+    "interactive": false,
+    "discoverable": true,
     "hasInterior": false
   },
   {
     "id": 56,
-    "name": "Sarojini Naidu School of Arts and Communication",
-    "shortName": "SN School Arts & Comm",
+    "canonicalId": "sn_school_main",
+    "name": "Sarojini Naidu School Main Building",
+    "shortName": "SN School Main",
+    "aliases": [
+      "SN School",
+      "Sarojini Naidu School",
+      "Arts & Communication Main"
+    ],
     "section": "east",
     "zone": "east",
     "category": "academic",
     "x": 1380,
     "y": 1240,
+    "worldPosition": {
+      "x": 3080,
+      "y": 1240
+    },
     "width": 110,
     "height": 80,
     "points": 50,
-    "description": "Named after the Nightingale of India Sarojini Naidu, this acclaimed school nurtures Theatre Arts, Dance, and Fine Arts.",
-    "trivia": "Known for open-air rehearsals of classical Bharatanatyam, Kuchipudi, and experimental theatre.",
+    "description": "Flagship academic headquarters of the Sarojini Naidu School of Arts & Communication.",
+    "trivia": "Known for classical dance recitals and vibrant student cultural festivals.",
+    "interactive": false,
+    "discoverable": true,
     "hasInterior": false
   },
   {
     "id": 57,
+    "canonicalId": "vc_camp_office",
     "name": "VC Camp Office",
     "shortName": "VC Camp Office",
+    "aliases": [
+      "VC Camp",
+      "Vice Chancellor Office Annex"
+    ],
     "section": "main",
     "zone": "central",
     "category": "administrative",
     "x": 740,
     "y": 1050,
+    "worldPosition": {
+      "x": 740,
+      "y": 1050
+    },
     "width": 70,
     "height": 50,
     "points": 40,
     "description": "Executive annex office assisting the Vice Chancellor in campus governance and emergency administrative tasks.",
     "trivia": "Surrounded by landscaped heritage gardens and historic stone pillars.",
+    "interactive": false,
+    "discoverable": true,
     "hasInterior": false
   },
   {
     "id": 58,
+    "canonicalId": "vc_residence",
     "name": "Vice Chancellor's Residence",
     "shortName": "VC Residence",
+    "aliases": [
+      "VC Lodge",
+      "Vice Chancellor Residence",
+      "VC Bungalow"
+    ],
     "section": "main",
     "zone": "central",
     "category": "administrative",
     "x": 880,
     "y": 1080,
+    "worldPosition": {
+      "x": 880,
+      "y": 1080
+    },
     "width": 80,
     "height": 60,
     "points": 40,
     "description": "The official colonial-style heritage residence of the Vice Chancellor of the University of Hyderabad.",
     "trivia": "Surrounded by ancient banyan groves where peacocks and deer wander peacefully.",
+    "interactive": false,
+    "discoverable": true,
     "hasInterior": false
   },
   {
     "id": 59,
+    "canonicalId": "sukoon_canteen",
     "name": "Sukoon Canteen",
     "shortName": "Sukoon Canteen",
+    "aliases": [
+      "Sukoon",
+      "Sukoon Tea & Maggi",
+      "East Student Canteen"
+    ],
     "section": "east",
     "zone": "east",
     "category": "amenities",
     "x": 1020,
     "y": 780,
+    "worldPosition": {
+      "x": 2720,
+      "y": 780
+    },
     "width": 105,
     "height": 80,
     "points": 35,
     "description": "Beloved campus open-air cafe nestled under large shady trees, serving steaming chai, parathas, and samosas.",
     "trivia": "The epicentre of intellectual debates, musical jamming, and friendships across departments.",
-    "isNightCanteen": true,
+    "interactive": true,
+    "discoverable": true,
     "hasInterior": true,
-    "isSukoonCanteen": true,
-    "interiorType": "sukoon_canteen"
+    "interiorType": "sukoon_canteen",
+    "isNightCanteen": true
   },
   {
     "id": 60,
+    "canonicalId": "ugc_nrc_canteen",
     "name": "UGC-NRC Canteen",
     "shortName": "UGC-NRC Canteen",
+    "aliases": [
+      "NRC Canteen",
+      "UGC Canteen",
+      "Science Canteen"
+    ],
     "section": "east",
     "zone": "east",
     "category": "amenities",
     "x": 1160,
     "y": 780,
+    "worldPosition": {
+      "x": 2860,
+      "y": 780
+    },
     "width": 80,
     "height": 60,
     "points": 30,
     "description": "Convenient dining cafe serving scientific researchers, mathematics scholars, and chemistry students.",
     "trivia": "Renowned for its freshly brewed South Indian filter coffee and evening dosa snacks.",
+    "interactive": false,
+    "discoverable": true,
     "hasInterior": false
   },
   {
     "id": 61,
+    "canonicalId": "chemistry_annex",
     "name": "School of Chemistry Annex Building",
     "shortName": "Chemistry Annex",
+    "aliases": [
+      "Chemistry Annex",
+      "School of Chemistry",
+      "Chemical Sciences Block"
+    ],
     "section": "east",
     "zone": "east",
     "category": "academic",
     "x": 1360,
     "y": 990,
+    "worldPosition": {
+      "x": 3060,
+      "y": 990
+    },
     "width": 110,
     "height": 80,
     "points": 45,
     "description": "Modern synthetic and materials chemistry research laboratories equipped with advanced fume hoods and laser spectroscopy.",
     "trivia": "Ranked consistently among India's top chemical science research facilities.",
+    "interactive": false,
+    "discoverable": true,
     "hasInterior": false
   },
   {
     "id": 62,
+    "canonicalId": "cr_rao_aimscs",
     "name": "CR Rao Advanced Institute of Mathematics",
     "shortName": "CR Rao AIMSCS",
+    "aliases": [
+      "CR Rao Institute",
+      "AIMSCS",
+      "CR Rao Advanced Math & Cryptography"
+    ],
     "section": "east",
     "zone": "east",
     "category": "research",
     "x": 1620,
     "y": 990,
+    "worldPosition": {
+      "x": 3320,
+      "y": 990
+    },
     "width": 150,
     "height": 110,
     "points": 50,
     "description": "C.R. Rao Advanced Institute of Mathematics, Statistics and Computer Science, dedicated to foundational mathematical sciences.",
     "trivia": "Named after legendary statistician Prof. C.R. Rao, pioneer of the Cramér-Rao bound.",
-    "hasInterior": false,
-    "isCRRao": true
+    "interactive": false,
+    "discoverable": true,
+    "hasInterior": false
   },
   {
     "id": 63,
+    "canonicalId": "tennis_court",
     "name": "Tennis Court - UoH",
     "shortName": "Tennis Court",
+    "aliases": [
+      "Tennis Arena",
+      "UoH Tennis Courts",
+      "Lawn Tennis"
+    ],
     "section": "east",
     "zone": "east",
     "category": "sports",
     "x": 1480,
     "y": 900,
+    "worldPosition": {
+      "x": 3180,
+      "y": 900
+    },
     "width": 85,
     "height": 60,
     "points": 35,
     "description": "Championship standard synthetic hard-surface tennis courts with floodlighting for evening matches.",
     "trivia": "Venue for inter-collegiate tennis tournaments and student training camps.",
+    "interactive": false,
+    "discoverable": true,
     "hasInterior": false
   },
   {
     "id": 64,
+    "canonicalId": "ladies_hostel_1",
     "name": "Ladies Hostel 1",
     "shortName": "Ladies Hostel 1",
+    "aliases": [
+      "LH-1",
+      "Hostel 1",
+      "Ladies Hostel 1"
+    ],
     "section": "east",
     "zone": "east",
     "category": "residential",
     "x": 740,
     "y": 840,
+    "worldPosition": {
+      "x": 2440,
+      "y": 840
+    },
     "width": 80,
     "height": 60,
     "points": 30,
     "description": "Historic residential hostel for women scholars on the scenic eastern side of campus.",
     "trivia": "Surrounded by flowering frangipani trees and lush green lawn courtyards.",
+    "interactive": false,
+    "discoverable": true,
     "hasInterior": false
   },
   {
     "id": 65,
+    "canonicalId": "ladies_hostel_2",
     "name": "Ladies Hostel 2",
     "shortName": "Ladies Hostel 2",
+    "aliases": [
+      "LH-2",
+      "Hostel 2",
+      "Ladies Hostel 2"
+    ],
     "section": "east",
     "zone": "east",
     "category": "residential",
     "x": 860,
     "y": 840,
+    "worldPosition": {
+      "x": 2560,
+      "y": 840
+    },
     "width": 80,
     "height": 60,
     "points": 30,
     "description": "Comfortable multi-storey residential complex overlooking the eastern nature forest.",
     "trivia": "Students often spot peacocks strolling right outside their hostel balcony gardens.",
+    "interactive": false,
+    "discoverable": true,
     "hasInterior": false
   },
   {
     "id": 66,
+    "canonicalId": "ladies_hostel_3_mess",
     "name": "Ladies Hostel 3 and Mess",
     "shortName": "Ladies Hostel 3 & Mess",
+    "aliases": [
+      "LH-3",
+      "Hostel 3",
+      "LH-3 Dining Mess"
+    ],
     "section": "east",
     "zone": "east",
     "category": "residential",
     "x": 740,
     "y": 960,
+    "worldPosition": {
+      "x": 2440,
+      "y": 960
+    },
     "width": 80,
     "height": 60,
     "points": 30,
     "description": "Hostel complex with an expansive central dining hall serving wholesome student meals.",
     "trivia": "Known for delicious special feast days and festival celebrations.",
+    "interactive": false,
+    "discoverable": true,
     "hasInterior": false
   },
   {
     "id": 67,
+    "canonicalId": "ladies_hostel_4",
     "name": "Ladies Hostel 4",
     "shortName": "Ladies Hostel 4",
+    "aliases": [
+      "LH-4",
+      "Hostel 4",
+      "Ladies Hostel 4"
+    ],
     "section": "east",
     "zone": "east",
     "category": "residential",
     "x": 860,
     "y": 960,
+    "worldPosition": {
+      "x": 2560,
+      "y": 960
+    },
     "width": 80,
     "height": 60,
     "points": 30,
     "description": "Modern residential dormitory situated near the southern peacock nature sanctuary.",
     "trivia": "Enjoys soothing fresh breezes coming off Peacock Lake during summer evenings.",
+    "interactive": false,
+    "discoverable": true,
     "hasInterior": false
   },
   {
     "id": 68,
+    "canonicalId": "hostel_m_mh_m",
     "name": "Men's Hostel M (MH-M)",
     "shortName": "Hostel M (MH-M)",
+    "aliases": [
+      "MH-M",
+      "Hostel M",
+      "Men's Hostel M"
+    ],
     "section": "east",
     "zone": "east",
     "category": "residential",
     "x": 1240,
     "y": 1000,
+    "worldPosition": {
+      "x": 2940,
+      "y": 1000
+    },
     "width": 85,
     "height": 65,
     "points": 30,
     "description": "Prominent men's hostel accommodating postgraduate scholars from arts, communications, and sciences.",
     "trivia": "Famous for its energetic common room table-tennis and chess battles.",
+    "interactive": false,
+    "discoverable": true,
     "hasInterior": false
   },
   {
     "id": 69,
-    "name": "Security Office and Dhobi Shop",
-    "shortName": "Security & Dhobi Shop",
+    "canonicalId": "dhobi_laundry",
+    "name": "Campus Dhobi & Laundry Center",
+    "shortName": "Dhobi & Laundry",
+    "aliases": [
+      "Laundry Center",
+      "Campus Dhobi",
+      "Dhobi Ghat & Press"
+    ],
     "section": "east",
     "zone": "east",
     "category": "amenities",
     "x": 1160,
     "y": 900,
+    "worldPosition": {
+      "x": 2860,
+      "y": 900
+    },
     "width": 75,
     "height": 55,
     "points": 25,
-    "description": "Campus convenience facility providing laundry services, dry cleaning, and security personnel assistance.",
-    "trivia": "A time-honoured student essential for weekly laundry washing and ironed shirts.",
+    "description": "Central campus facility providing professional laundry washing, dry cleaning, and ironed clothing services.",
+    "trivia": "A time-honoured student essential for weekly hostel laundry.",
+    "interactive": false,
+    "discoverable": true,
     "hasInterior": false
   },
   {
     "id": 70,
+    "canonicalId": "east_faculty_quarters",
     "name": "East Campus Faculty Residences",
     "shortName": "East Faculty Quarters",
+    "aliases": [
+      "Faculty Quarters",
+      "East Residences",
+      "Professors Enclave"
+    ],
     "section": "east",
     "zone": "east",
     "category": "residential",
     "x": 1480,
     "y": 380,
+    "worldPosition": {
+      "x": 3180,
+      "y": 380
+    },
     "width": 90,
     "height": 65,
     "points": 30,
     "description": "Peaceful leafy residential enclave housing distinguished professors, faculty, and their families.",
     "trivia": "Nestled amongst tall mahogany trees with quiet walking paths and children's play parks.",
+    "interactive": false,
+    "discoverable": true,
     "hasInterior": false
   },
   {
     "id": 71,
-    "name": "Faculty gates",
-    "shortName": "Faculty Gates",
+    "canonicalId": "east_checkpoint",
+    "name": "East Boundary Security Gate",
+    "shortName": "East Checkpoint",
+    "aliases": [
+      "East Gate",
+      "East Security Boom Barrier",
+      "East Checkpoint"
+    ],
     "section": "east",
     "zone": "east",
     "category": "gates",
     "x": 1380,
     "y": 340,
+    "worldPosition": {
+      "x": 3080,
+      "y": 340
+    },
     "width": 70,
     "height": 50,
-    "points": 30,
-    "description": "Designated security arch gate connecting the faculty residential enclave with central campus boulevards.",
-    "trivia": "Flanked by flowering gulmohar trees that burst into crimson blossoms every spring.",
-    "isGate": true,
+    "points": 20,
+    "description": "Manned security barrier and boom barrier controlling entry into the eastern residential sectors.",
+    "trivia": "Safeguards the quiet residential neighborhoods along the forest fringe.",
+    "interactive": false,
+    "discoverable": true,
     "hasInterior": false
   },
   {
     "id": 72,
+    "canonicalId": "silver_jubilee_guest_house",
     "name": "Silver Jubilee Guest House",
     "shortName": "Silver Jubilee Guest House",
+    "aliases": [
+      "Guest House",
+      "Silver Jubilee Guest House",
+      "VIP Transit House"
+    ],
     "section": "main",
     "zone": "central",
     "category": "hospitality",
     "x": 720,
     "y": 360,
+    "worldPosition": {
+      "x": 720,
+      "y": 360
+    },
     "width": 75,
     "height": 55,
     "points": 40,
     "description": "University guest house offering hospitality, suites, and dining for visiting professors, examiners, and delegates.",
     "trivia": "Overlooks a peaceful landscaped rock garden with fountains and palm trees.",
+    "interactive": false,
+    "discoverable": true,
     "hasInterior": false
   },
   {
     "id": 73,
+    "canonicalId": "central_workshop",
     "name": "Central Workshop",
     "shortName": "Central Workshop",
+    "aliases": [
+      "Workshop",
+      "Engineering Workshop",
+      "Central Mechanical Shop"
+    ],
     "section": "west",
     "zone": "west",
     "category": "research",
     "x": 820,
     "y": 600,
+    "worldPosition": {
+      "x": -580,
+      "y": 1950
+    },
     "width": 85,
     "height": 65,
     "points": 40,
     "description": "Precision mechanical, electrical, and carpentry engineering workshop supporting experimental scientific apparatus.",
     "trivia": "Fabricates custom research components, metal chambers, and precision scientific instruments.",
+    "interactive": false,
+    "discoverable": true,
     "hasInterior": false
   },
   {
     "id": 74,
+    "canonicalId": "india_post_office",
     "name": "India Post",
     "shortName": "India Post Office",
+    "aliases": [
+      "Post Office",
+      "India Post UoH",
+      "Campus Post"
+    ],
     "section": "east",
     "zone": "west",
     "category": "amenities",
     "x": 260,
     "y": 550,
+    "worldPosition": {
+      "x": 1960,
+      "y": 550
+    },
     "width": 85,
     "height": 60,
     "points": 30,
     "description": "University campus post office (PIN: 500046) handling letters, parcels, books, and speed post dispatches.",
     "trivia": "The essential lifeline for dispatching research fellowship forms and receiving holiday care packages from home.",
-    "hasInterior": false,
-    "isIndiaPost": true
+    "interactive": false,
+    "discoverable": true,
+    "hasInterior": false
   },
   {
     "id": 75,
+    "canonicalId": "gate_3_idc_gate",
     "name": "Gate 3, Interdisciplinary Research Center",
     "shortName": "Gate 3 (IDC Gate)",
+    "aliases": [
+      "IDC Gate",
+      "Gate 3",
+      "West Security Gate 3"
+    ],
     "section": "west",
     "zone": "west",
     "category": "gates",
     "x": 680,
     "y": 420,
+    "worldPosition": {
+      "x": -720,
+      "y": 1770
+    },
     "width": 75,
     "height": 55,
     "points": 40,
     "description": "Key northern entrance gate leading directly to the Interdisciplinary Research Center and workshop area.",
     "trivia": "A landmark entrance for academic researchers visiting high-technology campus institutes.",
-    "isGate": true,
-    "hasInterior": false
+    "interactive": false,
+    "discoverable": true,
+    "hasInterior": false,
+    "isGate": true
   },
   {
     "id": 76,
+    "canonicalId": "idc_building",
     "name": "IDC Building",
     "shortName": "IDC Building",
+    "aliases": [
+      "IDC",
+      "Interdisciplinary Center",
+      "West Research Block"
+    ],
     "section": "west",
     "zone": "west",
     "category": "research",
     "x": 850,
     "y": 420,
+    "worldPosition": {
+      "x": -550,
+      "y": 1770
+    },
     "width": 90,
     "height": 70,
     "points": 45,
     "description": "Interdisciplinary Centre for Research and Innovation fostering collaborative cross-domain research programs.",
     "trivia": "Brings together computer scientists, physicists, and material engineers for multidisciplinary breakthroughs.",
+    "interactive": false,
+    "discoverable": true,
     "hasInterior": false
   },
   {
     "id": 77,
+    "canonicalId": "uoh_campus_school",
     "name": "UoH Campus School Revolver / Security",
     "shortName": "UoH Campus School",
+    "aliases": [
+      "Campus School",
+      "Kendriya Vidyalaya / UoH Model School"
+    ],
     "section": "west",
     "zone": "west",
     "category": "academic",
     "x": 1240,
     "y": 320,
+    "worldPosition": {
+      "x": -160,
+      "y": 1670
+    },
     "width": 90,
     "height": 70,
     "points": 35,
     "description": "Campus primary and high school providing quality education for the children of university staff and faculty.",
     "trivia": "Features lively green playgrounds where annual campus sports days and children's fairs are held.",
+    "interactive": false,
+    "discoverable": true,
     "hasInterior": false
   },
   {
     "id": 78,
+    "canonicalId": "sajon_ray_kirana",
     "name": "Sajon Ray Kirana",
     "shortName": "Sajon Ray Kirana",
+    "aliases": [
+      "Sajon Ray",
+      "West Kirana",
+      "West Campus Groceries"
+    ],
     "section": "west",
     "zone": "west",
     "category": "amenities",
     "x": 360,
     "y": 300,
+    "worldPosition": {
+      "x": -1040,
+      "y": 1650
+    },
     "width": 65,
     "height": 50,
     "points": 25,
     "description": "Traditional convenience grocery store stocking fresh fruit, dairy, snacks, and daily household essentials.",
     "trivia": "A beloved friendly campus store known for fresh bananas, biscuits, and chilled juice packs.",
+    "interactive": false,
+    "discoverable": true,
     "hasInterior": false
   },
   {
     "id": 79,
+    "canonicalId": "ladies_hostel_9_lh_9",
     "name": "Ladies Hostel 9",
     "shortName": "Ladies Hostel 9 (LH-9)",
+    "aliases": [
+      "LH-9",
+      "Hostel 9",
+      "Ladies Hostel 9"
+    ],
     "section": "south",
     "zone": "south",
     "category": "residential",
     "x": 1800,
     "y": 1040,
+    "worldPosition": {
+      "x": 1800,
+      "y": 2390
+    },
     "width": 85,
     "height": 65,
     "points": 30,
     "description": "Spacious residential dormitory for women scholars on the eastern South Campus hostels avenue.",
     "trivia": "Known for serene garden lawns and active student committee meetings in the recreation lounge.",
+    "interactive": false,
+    "discoverable": true,
     "hasInterior": false
   },
   {
     "id": 80,
+    "canonicalId": "ladies_hostel_7_lh_7",
     "name": "Ladies Hostel 7",
     "shortName": "Ladies Hostel 7 (LH-7)",
+    "aliases": [
+      "LH-7",
+      "Hostel 7",
+      "Ladies Hostel 7"
+    ],
     "section": "south",
     "zone": "south",
     "category": "residential",
     "x": 1260,
     "y": 1340,
+    "worldPosition": {
+      "x": 1260,
+      "y": 2690
+    },
     "width": 85,
     "height": 65,
     "points": 30,
     "description": "Postgraduate women's residential hostel with quiet study spaces and internal courtyards.",
     "trivia": "Features shaded outdoor study benches surrounded by flowering frangipani trees.",
+    "interactive": false,
+    "discoverable": true,
     "hasInterior": false
   },
   {
     "id": 81,
+    "canonicalId": "hostel_l_mh_l",
     "name": "Men's Hostel L",
     "shortName": "Hostel L (MH-L)",
+    "aliases": [
+      "MH-L",
+      "Hostel L",
+      "Men's Hostel L"
+    ],
     "section": "south",
     "zone": "south",
     "category": "residential",
     "x": 1560,
     "y": 1340,
+    "worldPosition": {
+      "x": 1560,
+      "y": 2690
+    },
     "width": 85,
     "height": 65,
     "points": 30,
     "description": "Residential dormitory complex housing research scholars and master's students on South Campus.",
     "trivia": "Famous for high-energy common room table tennis rallies and group study sessions.",
+    "interactive": false,
+    "discoverable": true,
     "hasInterior": false
   },
   {
     "id": 82,
+    "canonicalId": "faculty_a_quarters",
     "name": "Faculty A Quarters",
     "shortName": "Faculty A Quarters",
+    "aliases": [
+      "Faculty A",
+      "South Faculty Quarters",
+      "Type A Residences"
+    ],
     "section": "south",
     "zone": "south",
     "category": "residential",
     "x": 1300,
     "y": 750,
+    "worldPosition": {
+      "x": 1300,
+      "y": 2100
+    },
     "width": 90,
     "height": 70,
     "points": 35,
     "description": "Peaceful residential quarters for university professors, teaching faculty, and their families.",
     "trivia": "Flanked by broad tree-canopied avenues and quiet green gardens.",
+    "interactive": false,
+    "discoverable": true,
     "hasInterior": false
   },
   {
     "id": 83,
+    "canonicalId": "south_gate",
     "name": "South Gate, University of Hyderabad",
     "shortName": "South Gate",
+    "aliases": [
+      "South Gate",
+      "Main South Entrance",
+      "Gachibowli South Gate"
+    ],
     "section": "south",
     "zone": "south",
     "category": "gates",
     "x": 950,
     "y": 1850,
+    "worldPosition": {
+      "x": 950,
+      "y": 3200
+    },
     "width": 90,
     "height": 65,
     "points": 40,
     "description": "Grand southern entrance gate of the University of Hyderabad connecting to regional campus highways.",
     "trivia": "Marked by historic stone gate pillars and a round-the-clock campus security station.",
-    "isGate": true,
-    "hasInterior": false
+    "interactive": false,
+    "discoverable": true,
+    "hasInterior": false,
+    "isGate": true
   },
   {
     "id": 84,
+    "canonicalId": "sip_building",
     "name": "Study India Program (SIP) Building",
     "shortName": "SIP Building",
+    "aliases": [
+      "SIP",
+      "Study India Program",
+      "International Exchange Center"
+    ],
     "section": "south",
     "zone": "south",
     "category": "academic",
     "x": 320,
     "y": 1340,
+    "worldPosition": {
+      "x": 320,
+      "y": 2690
+    },
     "width": 80,
     "height": 60,
     "points": 35,
     "description": "Academic center hosting international exchange students studying Indian history, heritage, and languages.",
     "trivia": "Hosts dynamic cultural exchange forums, language workshops, and immersion tours.",
+    "interactive": false,
+    "discoverable": true,
     "hasInterior": false
   },
   {
     "id": 85,
-    "name": "Central Administrative Pavilion",
-    "shortName": "Central Dome",
+    "canonicalId": "convocation_pavilion",
+    "name": "Central Convocation & Floral Pavilion",
+    "shortName": "Convocation Pavilion",
+    "aliases": [
+      "Convocation Pavilion",
+      "Central Rotunda",
+      "Floral Arena"
+    ],
     "section": "east",
     "zone": "east",
-    "category": "administrative",
+    "category": "heritage",
     "x": 990,
     "y": 20,
+    "worldPosition": {
+      "x": 2690,
+      "y": 20
+    },
     "width": 70,
     "height": 70,
     "points": 40,
-    "description": "Iconic classical rotunda dome pavilion presiding over the northern academic core.",
-    "trivia": "Distinguished landmark visible across northern campus vistas.",
-    "isCentralDome": true,
-    "hasInterior": false
+    "description": "Grand open-air ceremonial rotunda dome pavilion presiding over the ceremonial gardens.",
+    "trivia": "Historic site for university honors convocations and commemorative photos.",
+    "interactive": false,
+    "discoverable": true,
+    "hasInterior": false,
+    "isCentralDome": true
   },
   {
     "id": 86,
+    "canonicalId": "uoh_monument",
     "name": "University of Hyderabad Entrance Monument",
     "shortName": "UoH Monument",
+    "aliases": [
+      "Main Entrance Monument",
+      "UoH Stone Memorial",
+      "Campus Pillar Monument"
+    ],
     "section": "east",
     "zone": "east",
     "category": "heritage",
     "x": 60,
     "y": 390,
+    "worldPosition": {
+      "x": 1760,
+      "y": 390
+    },
     "width": 90,
     "height": 90,
     "points": 50,
     "description": "Grand circular stone monolith memorial with concentric ring pillars commemorating the university founding.",
     "trivia": "Pinnacle landmark symbol of excellence in higher learning.",
-    "isMonument": true,
-    "hasInterior": false
+    "interactive": false,
+    "discoverable": true,
+    "hasInterior": false,
+    "isMonument": true
   },
   {
     "id": 87,
+    "canonicalId": "satg_shooting_range",
     "name": "SATG Shooting Ranges & Athletic Grounds",
     "shortName": "SATG Shooting Range",
+    "aliases": [
+      "Shooting Range",
+      "SATG Range",
+      "Athletics Target Ground"
+    ],
     "section": "east",
     "zone": "east",
     "category": "sports",
     "x": 120,
     "y": 70,
+    "worldPosition": {
+      "x": 1820,
+      "y": 70
+    },
     "width": 140,
     "height": 85,
     "points": 45,
     "description": "Premier sports marksmanship and athletic training facility with dirt running track and target range.",
     "trivia": "Site of university precision shooting championships and sports conditioning.",
-    "isShootingRange": true,
-    "hasInterior": false
+    "interactive": false,
+    "discoverable": true,
+    "hasInterior": false,
+    "isShootingRange": true
   },
   {
     "id": 88,
+    "canonicalId": "rv_panchajanya",
     "name": "RV Panchajanya Kondapur",
     "shortName": "RV Panchajanya",
+    "aliases": [
+      "RV Panchajanya",
+      "Panchajanya Towers",
+      "Kondapur Highrise Enclave"
+    ],
     "section": "east",
     "zone": "east",
     "category": "residential",
     "x": 1800,
     "y": 20,
+    "worldPosition": {
+      "x": 3500,
+      "y": 20
+    },
     "width": 180,
     "height": 120,
     "points": 35,
     "description": "Vibrant modern high-rise residential complex bordering the north-eastern university enclave.",
     "trivia": "Home to many faculty members and scholars enjoying views of the tranquil campus ridge.",
-    "isRVPanchajanya": true,
-    "hasInterior": false
+    "interactive": false,
+    "discoverable": true,
+    "hasInterior": false,
+    "isRVPanchajanya": true
   },
   {
     "id": 89,
+    "canonicalId": "sai_baba_temple",
     "name": "Sai Baba Temple",
     "shortName": "Sai Baba Temple",
+    "aliases": [
+      "Sai Temple",
+      "Campus Sai Baba Mandir",
+      "Sri Sai Baba Temple"
+    ],
     "section": "east",
     "zone": "east",
     "category": "heritage",
     "x": 2000,
     "y": 200,
+    "worldPosition": {
+      "x": 3700,
+      "y": 200
+    },
     "width": 100,
     "height": 90,
     "points": 50,
     "description": "Beautiful sacred temple with golden gopuram, peaceful stone courtyard, and sacred sanctum.",
     "trivia": "Serene spiritual sanctuary nestled beside northern rocky woodlands.",
-    "isSaiBabaTemple": true,
-    "hasInterior": false
+    "interactive": false,
+    "discoverable": true,
+    "hasInterior": false,
+    "isSaiBabaTemple": true
   },
   {
     "id": 90,
+    "canonicalId": "indian_immunologicals",
     "name": "Indian Immunologicals Limited",
     "shortName": "Indian Immunologicals",
+    "aliases": [
+      "IIL",
+      "Indian Immunologicals",
+      "Immunology Research Unit"
+    ],
     "section": "east",
     "zone": "east",
     "category": "research",
     "x": 2060,
     "y": 840,
+    "worldPosition": {
+      "x": 3760,
+      "y": 840
+    },
     "width": 170,
     "height": 120,
     "points": 50,
     "description": "Major biopharmaceutical enterprise and biotechnology manufacturing plant advancing global immunology research.",
     "trivia": "Collaborates with UoH scholars on pioneering vaccine development and animal health immunology.",
-    "isIndianImmunologicals": true,
+    "interactive": false,
+    "discoverable": true,
     "hasInterior": false
   },
   {
     "id": 91,
+    "canonicalId": "water_tank_tower",
     "name": "Overhead Water Tank",
     "shortName": "Water Tank Tower",
+    "aliases": [
+      "Water Tank",
+      "Overhead Tower",
+      "Campus Water Reservoir"
+    ],
     "section": "east",
     "zone": "east",
     "category": "amenities",
     "x": 1940,
     "y": 1100,
+    "worldPosition": {
+      "x": 3640,
+      "y": 1100
+    },
     "width": 80,
     "height": 95,
     "points": 35,
     "description": "Iconic elevated sky-blue cylindrical water tower on 4 criss-crossed steel support legs supplying the eastern grid.",
     "trivia": "A striking navigation beacon visible from miles around along the Gachibowli highway.",
-    "isWaterTank": true,
-    "hasInterior": false
+    "interactive": false,
+    "discoverable": true,
+    "hasInterior": false,
+    "isWaterTank": true
   },
   {
     "id": 92,
-    "name": "GMC Balayogi Sports Complex",
-    "shortName": "Balayogi Sports Complex",
+    "canonicalId": "balayogi_athletics",
+    "name": "GMC Balayogi Athletics Stadium",
+    "shortName": "Balayogi Athletics",
+    "aliases": [
+      "Balayogi Stadium",
+      "GMC Balayogi Athletics",
+      "Athletic Track Colosseum"
+    ],
     "section": "east",
     "zone": "east",
     "category": "sports",
     "x": 1600,
     "y": 1320,
+    "worldPosition": {
+      "x": 3300,
+      "y": 1320
+    },
     "width": 120,
     "height": 120,
     "points": 60,
-    "description": "Monumental circular stone colosseum arena hosting regional tournaments, gymnastics, and athletic events.",
+    "description": "Monumental stadium colosseum arena with professional red synthetic running track hosting university athletics meets.",
     "trivia": "Built to Olympic standards with massive spectator tiers and central green arena.",
-    "isBalayogi": true,
-    "hasInterior": false
+    "interactive": true,
+    "discoverable": true,
+    "hasInterior": false,
+    "isBalayogi": true
   },
   {
     "id": 93,
-    "name": "Gachibowli Stadium",
-    "shortName": "Gachibowli Stadium",
+    "canonicalId": "gachibowli_aquatics",
+    "name": "Gachibowli Aquatics & Indoor Arena",
+    "shortName": "Gachibowli Aquatics",
+    "aliases": [
+      "Gachibowli Aquatics",
+      "Indoor Arena",
+      "Olympic Swimming Stadium"
+    ],
     "section": "east",
     "zone": "east",
     "category": "sports",
     "x": 1850,
     "y": 1420,
+    "worldPosition": {
+      "x": 3550,
+      "y": 1420
+    },
     "width": 170,
     "height": 120,
     "points": 60,
-    "description": "Grand oval sports stadium with professional red synthetic running track and lush green soccer field.",
-    "trivia": "Flagship stadium hosting national games and international athletic meets.",
-    "isGachibowliStadium": true,
-    "hasInterior": false
+    "description": "Premier Olympic-size indoor swimming stadium, diving pools, and indoor multi-sport arena.",
+    "trivia": "Premier aquatic sports complex in Southern India.",
+    "interactive": true,
+    "discoverable": true,
+    "hasInterior": false,
+    "isGachibowliStadium": true
   },
   {
     "id": 94,
+    "canonicalId": "sports_turf",
     "name": "Sports Turf & Football Field",
     "shortName": "Sports Turf",
+    "aliases": [
+      "Football Ground",
+      "Sports Turf Field",
+      "Synthetic Soccer Turf"
+    ],
     "section": "east",
     "zone": "east",
     "category": "sports",
     "x": 2060,
     "y": 1300,
+    "worldPosition": {
+      "x": 3760,
+      "y": 1300
+    },
     "width": 95,
     "height": 75,
     "points": 30,
     "description": "All-weather green turf practice field with goal posts and floodlighting.",
     "trivia": "Packed with spirited student football matches every evening.",
-    "isFootballField": true,
-    "hasInterior": false
+    "interactive": false,
+    "discoverable": true,
+    "hasInterior": false,
+    "isFootballField": true
   },
   {
     "id": 95,
+    "canonicalId": "sports_parking_p",
     "name": "Gachibowli Sports Complex Parking",
     "shortName": "Sports Parking (P)",
+    "aliases": [
+      "Sports Parking",
+      "Stadium Visitor Parking",
+      "Gachibowli Parking Area"
+    ],
     "section": "east",
     "zone": "east",
     "category": "amenities",
     "x": 2240,
     "y": 1200,
+    "worldPosition": {
+      "x": 3940,
+      "y": 1200
+    },
     "width": 65,
     "height": 55,
     "points": 20,
     "description": "Spacious asphalt visitor parking ground marked by blue P signage.",
     "trivia": "Convenient transit hub for sports fans and campus shuttles.",
-    "isParkingArea": true,
-    "hasInterior": false
+    "interactive": false,
+    "discoverable": true,
+    "hasInterior": false,
+    "isParkingArea": true
   }
 ]

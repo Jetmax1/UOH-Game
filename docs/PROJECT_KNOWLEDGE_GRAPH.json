@@ -1,0 +1,33 @@
+{
+  "projectName": "University of Hyderabad Campus Adventure",
+  "version": "1.0.0",
+  "architecture": {
+    "engine": "HTML5 Canvas 2D / Vanilla JS + Vite",
+    "singletonRegistry": "src/game/LocationRegistry.js",
+    "navigationEngine": "src/game/NavigationEngine.js",
+    "worldEngine": "src/game/WorldMap.js",
+    "uiManager": "src/ui/UIManager.js"
+  },
+  "sections": {
+    "main": { "originX": 0, "originY": 0, "width": 1700, "height": 1350, "locationCount": 21 },
+    "east": { "originX": 1700, "originY": 0, "width": 2400, "height": 1600, "locationCount": 40 },
+    "south": { "originX": 0, "originY": 1350, "width": 2000, "height": 1900, "locationCount": 24 },
+    "west": { "originX": -1400, "originY": 1350, "width": 1400, "height": 1200, "locationCount": 6 },
+    "amphi_valley": { "originX": 1600, "originY": 1350, "width": 1600, "height": 1200, "locationCount": 1 },
+    "checkdam_buffer": { "originX": 400, "originY": 1000, "width": 1400, "height": 1000, "locationCount": 3 }
+  },
+  "canonicalStats": {
+    "totalLocations": 95,
+    "totalNPCs": 14,
+    "totalQuests": 7,
+    "migratedIds": {
+      "98": 27,
+      "mushroom_rock": 27
+    }
+  },
+  "verifiedTestSuites": [
+    "scratch/audit_canonical_integrity.mjs",
+    "scratch/test_map_verification.mjs",
+    "scratch/test_navigation_verification.mjs"
+  ]
+}

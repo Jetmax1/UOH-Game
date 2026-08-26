@@ -1,4 +1,5 @@
 import { soundManager } from './AudioSynth.js';
+import { locationRegistry } from './LocationRegistry.js';
 
 /**
  * Data-Driven Quest Progression System
@@ -40,6 +41,7 @@ export class QuestSystem {
   }
 
   onLocationVisited(locationId) {
+    const canonicalId = locationRegistry.migrateId(locationId);
     let questProgressed = false;
 
     for (const quest of this.quests) {
@@ -47,7 +49,8 @@ export class QuestSystem {
 
       let changedInThisQuest = false;
       for (const obj of quest.objectives) {
-        if (!obj.completed && obj.targetLocationId === locationId) {
+        const targetCanonical = locationRegistry.migrateId(obj.targetLocationId);
+        if (!obj.completed && targetCanonical === canonicalId) {
           obj.completed = true;
           changedInThisQuest = true;
           questProgressed = true;
