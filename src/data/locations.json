@@ -83,7 +83,12 @@
     "interactive": true,
     "discoverable": true,
     "hasInterior": true,
-    "interiorType": "sls_dept"
+    "interiorType": "sls_dept",
+    "openingHours": {
+      "open": 8,
+      "close": 21,
+      "label": "08:00 AM - 09:00 PM"
+    }
   },
   {
     "id": 4,
@@ -251,8 +256,14 @@
     "trivia": "Famous for late-night chai debates and post-dinner egg rolls amongst hostelers.",
     "interactive": true,
     "discoverable": true,
-    "hasInterior": false,
-    "isNightCanteen": true
+    "hasInterior": true,
+    "interiorType": "zakir_complex",
+    "isNightCanteen": true,
+    "openingHours": {
+      "open": 7,
+      "close": 23,
+      "label": "07:00 AM - 11:00 PM"
+    }
   },
   {
     "id": 10,
@@ -365,7 +376,12 @@
     "interactive": true,
     "discoverable": true,
     "hasInterior": true,
-    "interiorType": "hostel_mhk"
+    "interiorType": "mhk_hostel",
+    "openingHours": {
+      "open": 0,
+      "close": 24,
+      "label": "24/7 Residential Access"
+    }
   },
   {
     "id": 14,
@@ -845,9 +861,15 @@
     "points": 50,
     "description": "Comprehensive indoor sports complex featuring badminton courts, table tennis arenas, and modern gymnasium.",
     "trivia": "Produced multiple national-level university athletes and inter-university championship teams.",
-    "interactive": false,
+    "interactive": true,
     "discoverable": true,
-    "hasInterior": false
+    "hasInterior": true,
+    "interiorType": "sports_complex",
+    "openingHours": {
+      "open": 6,
+      "close": 21,
+      "label": "06:00 AM - 09:00 PM"
+    }
   },
   {
     "id": 31,
@@ -1014,9 +1036,15 @@
     "points": 60,
     "description": "The administrative heart of the university housing the Vice Chancellor's Secretariat, Registrar, and Finance Office.",
     "trivia": "The grand white portico is the official welcoming landmark for dignitaries and new university scholars.",
-    "interactive": false,
+    "interactive": true,
     "discoverable": true,
-    "hasInterior": false
+    "hasInterior": true,
+    "interiorType": "admin_building",
+    "openingHours": {
+      "open": 9,
+      "close": 18,
+      "label": "09:00 AM - 06:00 PM"
+    }
   },
   {
     "id": 37,
@@ -1042,9 +1070,15 @@
     "points": 40,
     "description": "Central admissions counter handling national entrance verification, certificates, and scholar enrollment.",
     "trivia": "The very first official stepping stone where students collect their university registration badges.",
-    "interactive": false,
+    "interactive": true,
     "discoverable": true,
-    "hasInterior": false
+    "hasInterior": true,
+    "interiorType": "admission_office",
+    "openingHours": {
+      "open": 9,
+      "close": 17,
+      "label": "09:00 AM - 05:00 PM"
+    }
   },
   {
     "id": 38,
@@ -1070,9 +1104,15 @@
     "points": 40,
     "description": "24x7 primary medical clinic, pharmacy dispensary, and emergency care unit serving the entire campus community.",
     "trivia": "Equipped with round-the-clock ambulance emergency response and free doctor consultations.",
-    "interactive": false,
+    "interactive": true,
     "discoverable": true,
-    "hasInterior": false
+    "hasInterior": true,
+    "interiorType": "health_centre",
+    "openingHours": {
+      "open": 0,
+      "close": 24,
+      "label": "24/7 Emergency Care"
+    }
   },
   {
     "id": 39,
@@ -1271,7 +1311,12 @@
     "interactive": true,
     "discoverable": true,
     "hasInterior": true,
-    "interiorType": "cs_dept"
+    "interiorType": "cs_dept",
+    "openingHours": {
+      "open": 8,
+      "close": 22,
+      "label": "08:00 AM - 10:00 PM"
+    }
   },
   {
     "id": 46,
@@ -1443,7 +1488,12 @@
     "interactive": true,
     "discoverable": true,
     "hasInterior": true,
-    "interiorType": "library"
+    "interiorType": "library",
+    "openingHours": {
+      "open": 8,
+      "close": 22,
+      "label": "08:00 AM - 10:00 PM"
+    }
   },
   {
     "id": 52,
@@ -1669,7 +1719,12 @@
     "discoverable": true,
     "hasInterior": true,
     "interiorType": "sukoon_canteen",
-    "isNightCanteen": true
+    "isNightCanteen": true,
+    "openingHours": {
+      "open": 7,
+      "close": 23,
+      "label": "07:00 AM - 11:00 PM"
+    }
   },
   {
     "id": 60,

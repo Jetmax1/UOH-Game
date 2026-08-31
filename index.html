@@ -96,6 +96,14 @@
           </div>
         </div>
 
+        <div class="hud-pill hud-money-pill" title="Student Money (₹ Rupees)">
+          <span class="hud-pill-icon">₹</span>
+          <div class="hud-pill-text">
+            <span class="hud-label">MONEY</span>
+            <span class="hud-val" id="hud-money">₹500</span>
+          </div>
+        </div>
+
         <div class="hud-pill hud-time-pill">
           <span class="hud-pill-icon" id="hud-time-icon">☀️</span>
           <div class="hud-pill-text">
@@ -119,14 +127,36 @@
 
       <!-- Right Action Controls -->
       <div class="hud-right">
+        <div class="stamina-wrapper" title="Student Energy ⚡ (Restored by sleeping/food)">
+          <div class="stamina-label">⚡ ENERGY</div>
+          <div class="stamina-track">
+            <div class="stamina-bar" id="energy-fill" style="width: 100%; background: #38bdf8;"></div>
+          </div>
+        </div>
+
         <div class="stamina-wrapper" title="Sprint Stamina (Hold Shift / RUN button)">
-          <div class="stamina-label">⚡ RUN</div>
+          <div class="stamina-label">🏃 SPRINT</div>
           <div class="stamina-track">
             <div class="stamina-bar" id="stamina-fill" style="width: 100%;"></div>
           </div>
         </div>
 
         <div class="hud-actions-group">
+          <button class="nes-btn is-warning hud-action-btn" id="btn-phone" title="Student Smartphone (H / P)">
+            📱 PHONE
+          </button>
+          <button class="nes-btn is-primary hud-action-btn" id="btn-profile" title="Student ID & Profile (P)">
+            🎓 ID CARD
+          </button>
+          <button class="nes-btn is-success hud-action-btn" id="btn-clubs" title="University Clubs (C)">
+            🏛️ CLUBS
+          </button>
+          <button class="nes-btn is-warning hud-action-btn" id="btn-social" title="Friends & Squad (F)">
+            👥 SOCIAL
+          </button>
+          <button class="nes-btn hud-action-btn" id="btn-emotes" title="Emotes & Reactions (Y)">
+            👋 EMOTE
+          </button>
           <button class="nes-btn is-primary hud-action-btn" id="btn-map" title="Campus Map (M)">
             🗺️ MAP
           </button>
@@ -151,6 +181,49 @@
         </div>
       </div>
     </header>
+
+    <!-- Campus Live Event Notification Banner -->
+    <div id="campus-event-banner" class="hidden"></div>
+
+    <!-- Campus Live Event Active HUD Widget -->
+    <div id="campus-event-widget" class="hidden"></div>
+
+    <!-- Collapsible Campus Chat Dock (Bottom-Left) -->
+    <div id="campus-chat-dock" class="pixel-corners">
+      <div class="chat-header">
+        <div class="chat-tabs">
+          <button class="chat-tab-btn active" data-channel="local">📍 Local</button>
+          <button class="chat-tab-btn" data-channel="party">🤝 Party</button>
+          <button class="chat-tab-btn" data-channel="club">🏛️ Club</button>
+          <button class="chat-tab-btn" data-channel="event">🏆 Event</button>
+        </div>
+        <button class="chat-toggle-btn" id="btn-toggle-chat" title="Minimize Chat">−</button>
+      </div>
+      <div class="chat-messages-wrap" id="chat-messages-container">
+        <div class="chat-msg system">
+          <span class="msg-text">🎓 Welcome to UoH Multiplayer Campus! Press Enter or type below to chat with nearby students.</span>
+        </div>
+      </div>
+      <form class="chat-input-form" id="chat-form">
+        <input type="text" id="chat-input" placeholder="Type campus message... (Enter to send)" maxlength="180" autocomplete="off" />
+        <button type="submit" class="chat-send-btn">SEND</button>
+      </form>
+    </div>
+
+    <!-- Quick Emote Tray Bar (Floating) -->
+    <div id="emote-tray-bar" class="pixel-corners hidden">
+      <div class="emote-tray-title">EXPRESS EMOTE:</div>
+      <div class="emote-buttons-grid">
+        <button class="emote-btn" data-emote="wave" title="Wave Hello">👋</button>
+        <button class="emote-btn" data-emote="thumbsup" title="Thumbs Up">👍</button>
+        <button class="emote-btn" data-emote="laugh" title="Laugh">😂</button>
+        <button class="emote-btn" data-emote="clap" title="Clap / Applaud">👏</button>
+        <button class="emote-btn" data-emote="heart" title="Heart / Love">❤️</button>
+        <button class="emote-btn" data-emote="celebrate" title="Party / Celebrate">🎉</button>
+        <button class="emote-btn" data-emote="idea" title="Great Idea">💡</button>
+        <button class="emote-btn" data-emote="photo" title="Snap Photo">📸</button>
+      </div>
+    </div>
 
     <!-- 5. Bottom Right Minimap HUD -->
     <div id="minimap-container" class="pixel-corners">

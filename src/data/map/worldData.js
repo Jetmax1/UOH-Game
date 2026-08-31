@@ -101,18 +101,30 @@ export const sectionConfigs = {
       [980, 940, 1140, 940, 22, false],
       [800, 920, 740, 1075, 20, false],
       [740, 1075, 880, 1110, 20, false],
-      // Nature & Lake Trails
+      // Nature & Lake Trails (Dirt Roads)
       [940, 550, 1240, 540, 14, true],
+      [1240, 540, 1380, 620, 14, true],  // North-East Nature Path
       [1080, 690, 1080, 760, 14, true],
       [1080, 760, 1260, 820, 14, true],  // Trail to Masoom's Rock
-      [880, 1110, 980, 1180, 14, true],
-      [980, 1180, 1120, 1100, 14, true]
+      [1260, 820, 1360, 940, 14, true],  // Masoom's Rock to Southern Grove
+      [1140, 940, 1360, 940, 14, true],  // Connecting Library Avenue to Masoom's Trail
+      [1080, 760, 1020, 820, 14, true],  // Buffalo Lake Western Shoreline
+      [1020, 820, 1120, 860, 14, true],  // Buffalo Lake Southern Loop
+      [1120, 860, 1260, 820, 14, true],  // Buffalo Lake Loop to Masoom Rock
+      [880, 1110, 980, 1180, 14, true],  // Trail to Auroya Dam
+      [980, 1180, 1120, 1100, 14, true], // Auroya Dam East Trail
+      [980, 1180, 820, 1220, 14, true],  // Auroya Dam West Wetlands Trail
+      [700, 250, 720, 360, 14, true],   // Guest House Woodland Path
+      [720, 360, 860, 420, 14, true],   // North Grove Connector
+      [860, 420, 880, 360, 14, true]    // North Grove Loop
     ],
     plazas: [
       { x: 670, y: 220, w: 120, h: 60 },  // Admin Quad
       { x: 760, y: 860, w: 140, h: 70 },  // Library Square
       { x: 910, y: 500, w: 110, h: 60 },  // SCIS Plaza
-      { x: 550, y: 270, w: 90, h: 50 }    // North Shopping Quad
+      { x: 550, y: 270, w: 90, h: 50 },   // North Shopping Quad
+      { x: 1220, y: 790, w: 100, h: 60 }, // Masoom Rock Overlook Plaza
+      { x: 1020, y: 740, w: 90, h: 50 }   // Buffalo Lake Shoreline Garden
     ],
     zebraCrossings: [
       { x: 685, y: 240, w: 18, h: 26, isVertical: false },
@@ -124,16 +136,20 @@ export const sectionConfigs = {
       { x: 710, y: 290 }, { x: 770, y: 290 },
       { x: 820, y: 940 }, { x: 880, y: 940 },
       { x: 960, y: 590 }, { x: 1010, y: 590 },
-      { x: 880, y: 730 }, { x: 1000, y: 970 }
+      { x: 880, y: 730 }, { x: 1000, y: 970 },
+      { x: 1230, y: 810 }, { x: 1280, y: 810 },
+      { x: 1030, y: 755 }, { x: 1080, y: 755 }
     ],
     fountains: [
       { x: 745, y: 200 },
-      { x: 850, y: 860 }
+      { x: 850, y: 860 },
+      { x: 1270, y: 820 }
     ],
     hedges: [
       { x: 650, y: 190, tilesX: 5, tilesY: 1 },
       { x: 750, y: 840, tilesX: 1, tilesY: 5 },
-      { x: 910, y: 840, tilesX: 1, tilesY: 5 }
+      { x: 910, y: 840, tilesX: 1, tilesY: 5 },
+      { x: 1210, y: 780, tilesX: 4, tilesY: 1 }
     ],
     fences: [
       { x: 60, y: 190, length: 6 },
@@ -156,7 +172,8 @@ export const sectionConfigs = {
       { x: 200, y: 235 }, { x: 480, y: 235 }, { x: 700, y: 235 }, { x: 880, y: 235 },
       { x: 700, y: 510 }, { x: 940, y: 535 }, { x: 1200, y: 535 }, { x: 1450, y: 535 },
       { x: 680, y: 635 }, { x: 640, y: 765 }, { x: 350, y: 795 },
-      { x: 860, y: 700 }, { x: 800, y: 900 }, { x: 980, y: 925 }, { x: 1140, y: 925 }
+      { x: 860, y: 700 }, { x: 800, y: 900 }, { x: 980, y: 925 }, { x: 1140, y: 925 },
+      { x: 1240, y: 810 }, { x: 1060, y: 760 }
     ],
     wildlife: [
       { type: 'peacock', x: 1140, y: 1080, startX: 1140, startY: 1080, vx: 12, timer: 0 },
@@ -254,7 +271,24 @@ export const sectionConfigs = {
       [1100, 1200, 1100, 1340, 22, false], // To Ladies Hostel 8 (#14)
       [1240, 1200, 1240, 1340, 22, false], // To Ladies Hostel 7 (#80)
       [1380, 1200, 1380, 1340, 22, false], // To Men's Hostel I (#12)
-      [1520, 1200, 1520, 1340, 22, false]  // To Men's Hostel L (#81)
+      [1520, 1200, 1520, 1340, 22, false], // To Men's Hostel L (#81)
+
+      // 3. Scenic Earthen Trails & Dirt Roads:
+      [350, 480, 220, 560, 14, true],     // Check Dam wetland path
+      [220, 560, 160, 800, 14, true],     // West forest nature route
+      [160, 800, 160, 1020, 14, true],    // Nature trail to BioNEST & Greenhouse
+      [1400, 300, 1560, 220, 14, true],   // Amphi Lake North Loop
+      [1560, 220, 1680, 320, 14, true],   // Amphi Lake Eastern Shoreline
+      [1680, 320, 1560, 440, 14, true],   // Amphi Lake South Loop
+      [1560, 440, 1400, 300, 14, true],   // Lake Loop return
+      [1560, 440, 1660, 750, 14, true],   // Forest woodland route towards Hostels
+      [1660, 750, 1660, 1020, 14, true],  // Woodland trail to MHK & LH-10
+      [800, 1340, 950, 1480, 14, true],   // Shopping Complex to South Glade
+      [950, 1480, 1100, 1340, 14, true],  // South Glade to LH-8
+      [1100, 1340, 1380, 1480, 14, true], // LH-8 to Men's Hostels
+      [1380, 1480, 1520, 1340, 14, true], // Men's Hostels to MH-L
+      [950, 1850, 600, 1750, 14, true],   // South Boundary West Trail
+      [950, 1850, 1400, 1750, 14, true]   // South Boundary East Trail
     ],
     plazas: [
       { x: 910, y: 1160, w: 80, h: 80 },   // Central Spine × SLS Road Crossroad Plaza
@@ -396,7 +430,16 @@ export const sectionConfigs = {
       [850, 260, 850, 635, 24, false],
       [850, 635, 1020, 630, 20, false],
       // South Connector Spine
-      [550, 450, 700, 1020, 24, false]
+      [550, 450, 700, 1020, 24, false],
+
+      // Scenic Earthen Nature Trails (Dirt Roads)
+      [360, 325, 260, 480, 14, true],   // Stadium Backwoods Cross-Country Trail
+      [260, 480, 480, 680, 14, true],   // Stadium Trail to South Path
+      [480, 680, 700, 1020, 14, true],  // South Nature Connector
+      [850, 455, 1020, 450, 14, true],  // IDC to Workshop Forest Path
+      [1020, 450, 1020, 630, 14, true], // Workshop Loop
+      [850, 260, 1100, 160, 14, true],  // Gate 3 Perimeter Trail
+      [1100, 160, 1380, 250, 14, true]  // North Ridge Scenic Path
     ],
     plazas: [
       { x: 510, y: 180, w: 130, h: 70 },  // Stadium Plaza
@@ -544,10 +587,25 @@ export const sectionConfigs = {
       [400, 1400, 780, 1460, 14, true],
       [780, 1460, 1040, 1480, 14, true],
       [1040, 1480, 1500, 1480, 14, true], // Trail along southern shore of Peacock Lake
+      // Peacock Lake Full Circumferential Loop Trail
+      [1040, 1240, 1280, 1280, 16, true],
+      [1280, 1280, 1520, 1320, 16, true],
+      [1520, 1320, 1600, 1420, 16, true],
+      [1600, 1420, 1500, 1480, 16, true],
+      // Library Lakeside Nature Walk
+      [420, 860, 320, 940, 14, true],
+      [320, 940, 360, 1080, 14, true],
+      [360, 1080, 580, 1060, 14, true],
+      // Sukoon Canteen to SN School & CR Rao woodland trails
+      [1020, 760, 1200, 840, 14, true],
+      [1200, 840, 1360, 860, 14, true],
+      [1360, 860, 1480, 980, 14, true],
       // Forest trails around rocks & temples
       [1360, 860, 1420, 760, 14, true],   // To Cherry Rock & Aquarium Rock
       [1420, 760, 1620, 760, 14, true],
       [1750, 260, 1950, 240, 14, true],   // Trail around Kondapur Lake
+      [1440, 420, 1680, 320, 14, true],   // Nature path to Sai Baba Temple
+      [1680, 320, 1950, 240, 14, true],
       [240, 100, 440, 40, 14, true],       // Trail to SATG shooting track
       [1850, 1420, 1860, 1540, 14, true],  // Trail to Mushroom Rock
 

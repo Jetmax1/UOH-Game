@@ -29,6 +29,11 @@ export class Player {
     this.maxStamina = 100;
     this.isSprinting = false;
 
+    // 2.5D Z-Axis Elevation & Jumping Physics
+    this.z = 0;
+    this.vz = 0;
+    this.isJumping = false;
+
     this.currentInterior = null;
     this.nearbyInteractable = null;
 
@@ -55,6 +60,28 @@ export class Player {
   update(delta, inputManager, collisionChecker, particleSystem, surfaceModifierGetter = null) {
     if (this.exclamationTimer > 0) {
       this.exclamationTimer -= delta;
+    }
+
+    // 2.5D Jump Physics
+    if (inputManager.consumeJump && inputManager.consumeJump() && this.z === 0 && !this.currentInterior) {
+      this.vz = 140;
+      this.isJumping = true;
+      if (particleSystem) {
+        particleSystem.createFootstep(this.x + this.width / 2, this.y + this.height - 2);
+      }
+    }
+
+    if (this.z > 0 || this.vz !== 0) {
+      this.z += this.vz * delta;
+      this.vz -= 380 * delta; // Gravity
+      if (this.z <= 0) {
+        this.z = 0;
+        this.vz = 0;
+        this.isJumping = false;
+        if (particleSystem) {
+          particleSystem.createFootstep(this.x + this.width / 2, this.y + this.height - 2);
+        }
+      }
     }
 
     const moveVec = inputManager.getMovementVector();
@@ -126,7 +153,7 @@ export class Player {
       // Footstep dust puff
       this.footstepTimer += delta;
       const dustInterval = (this.isSprinting ? 0.10 : 0.20) / Math.max(0.5, surfaceMod);
-      if (this.footstepTimer > dustInterval && particleSystem) {
+      if (this.footstepTimer > dustInterval && particleSystem && this.z === 0) {
         this.footstepTimer = 0;
         particleSystem.createFootstep(this.x + this.width / 2, this.y + this.height - 2);
       }
@@ -136,35 +163,124 @@ export class Player {
     }
   }
 
-  draw(ctx, camera) {
+  drawShadow(ctx, camera, shadowOffset = { x: 0, y: 0 }) {
     const screenX = Math.round(this.x - camera.x);
     const screenY = Math.round(this.y - camera.y);
+
+    const shadowScale = Math.max(0.35, 1.0 - this.z / 50);
+    ctx.save();
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.35)';
+    ctx.beginPath();
+    ctx.ellipse(
+      screenX + 12 + shadowOffset.x * 0.4,
+      screenY + 26 + shadowOffset.y * 0.4,
+      8 * shadowScale,
+      3.5 * shadowScale,
+      0, 0, Math.PI * 2
+    );
+    ctx.fill();
+    ctx.restore();
+  }
+
+  draw(ctx, camera, isOccluded = false) {
+    const screenX = Math.round(this.x - camera.x);
+    const screenY = Math.round(this.y - camera.y);
+    const elevatedY = Math.round(screenY - this.z);
 
     ctx.save();
     ctx.imageSmoothingEnabled = false;
 
-    // GBA Oval Drop Shadow
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.35)';
-    ctx.beginPath();
-    ctx.ellipse(screenX + 12, screenY + 26, 8, 3.5, 0, 0, Math.PI * 2);
-    ctx.fill();
+    // Ground Shadow (if not rendered in global shadow pass)
+    this.drawShadow(ctx, camera);
+
+    // Occlusion X-Ray Silhouette Effect
+    if (isOccluded) {
+      ctx.globalAlpha = 0.55;
+    }
 
     // Draw GBA Trainer Pixel Sprite (Scaled up from 16x20 to 24x30 for crisp pixel aesthetics)
     const spriteCanvas = pixelEngine.getTrainerSprite(this.direction, this.walkFrame, this.isSprinting);
-    ctx.drawImage(spriteCanvas, 0, 0, 16, 20, screenX, screenY, 24, 30);
+    ctx.drawImage(spriteCanvas, 0, 0, 16, 20, screenX, elevatedY, 24, 30);
 
     // GBA "!" Exclamation Emote Pop
     if (this.exclamationTimer > 0) {
       const popBounce = Math.sin(this.exclamationTimer * 10) * 3;
       const bubble = pixelEngine.getExclamationBubble();
-      ctx.drawImage(bubble, 0, 0, 14, 16, screenX + 5, screenY - 22 - popBounce, 14, 16);
+      ctx.drawImage(bubble, 0, 0, 14, 16, screenX + 5, elevatedY - 22 - popBounce, 14, 16);
+    }
+
+    // Active Local Student Emote Pop
+    if (this.activeEmote) {
+      const bob = Math.sin(Date.now() / 120) * 3;
+      ctx.fillStyle = 'rgba(15, 23, 42, 0.92)';
+      ctx.beginPath();
+      ctx.arc(screenX + 12, elevatedY - 24 + bob, 10, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = '#facc15';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      ctx.font = '11px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(this.activeEmote.icon, screenX + 12, elevatedY - 23 + bob);
+    }
+
+    // Active Local Student Speech Bubble
+    if (this.speechBubble) {
+      this.drawSpeechBubble(ctx, screenX + 12, elevatedY - 28);
     }
 
     // Nearby Interaction Indicator
     if (this.nearbyInteractable && this.exclamationTimer <= 0) {
-      this.drawInteractBubble(ctx, screenX, screenY);
+      this.drawInteractBubble(ctx, screenX, elevatedY);
     }
 
+    ctx.restore();
+  }
+
+  showSpeech(text, duration = 3.5) {
+    this.speechBubble = text;
+    this.speechTimer = duration;
+  }
+
+  showEmote(emoteObj, duration = 2.4) {
+    this.activeEmote = emoteObj;
+    this.emoteTimer = duration;
+  }
+
+  drawSpeechBubble(ctx, centerX, topY) {
+    ctx.save();
+    ctx.font = '8px sans-serif';
+    const metrics = ctx.measureText(this.speechBubble);
+    const bw = Math.min(130, Math.max(40, metrics.width + 12));
+    const bh = 15;
+    const bx = Math.round(centerX - bw / 2);
+    const by = Math.round(topY - bh);
+
+    ctx.fillStyle = '#ffffff';
+    ctx.beginPath();
+    ctx.roundRect(bx, by, bw, bh, 4);
+    ctx.fill();
+
+    ctx.strokeStyle = '#1e293b';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    // Bubble pointer
+    ctx.fillStyle = '#ffffff';
+    ctx.beginPath();
+    ctx.moveTo(centerX - 3, topY);
+    ctx.lineTo(centerX + 3, topY);
+    ctx.lineTo(centerX, topY + 4);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.fillStyle = '#0f172a';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    const text = this.speechBubble.length > 22 ? this.speechBubble.slice(0, 20) + '...' : this.speechBubble;
+    ctx.fillText(text, centerX, by + bh / 2 + 0.5);
     ctx.restore();
   }
 
@@ -175,23 +291,31 @@ export class Player {
 
     let label = 'E';
     let action = '';
-    if (this.nearbyInteractable) {
-      if (this.nearbyInteractable.type === 'npc' || this.nearbyInteractable.type === 'interior_npc') {
+      if (this.nearbyInteractable.type === 'student') {
+        action = 'STUDENT';
+      } else if (this.nearbyInteractable.type === 'npc' || this.nearbyInteractable.type === 'interior_npc') {
         action = 'TALK';
       } else if (this.nearbyInteractable.type === 'bed') {
-        action = 'REST';
+        action = 'SLEEP';
       } else if (this.nearbyInteractable.type === 'quiz') {
         action = 'QUIZ';
+      } else if (this.nearbyInteractable.type === 'notice_board') {
+        action = 'NOTICE';
+      } else if (this.nearbyInteractable.type === 'book') {
+        action = 'READ';
+      } else if (this.nearbyInteractable.type === 'menu') {
+        action = 'MENU';
+      } else if (this.nearbyInteractable.type === 'examine') {
+        action = 'EXAMINE';
       } else if (this.nearbyInteractable.type === 'exit_door') {
         action = 'EXIT';
       } else if (this.nearbyInteractable.data?.hasInterior) {
         action = 'ENTER';
       } else if (this.nearbyInteractable.data?.isNightCanteen) {
-        action = 'EAT';
+        action = 'CANTEEN';
       } else {
         action = 'INFO';
       }
-    }
 
     const text = action ? `[E] ${action}` : '[E]';
     ctx.save();

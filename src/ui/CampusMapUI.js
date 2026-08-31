@@ -49,6 +49,11 @@ export class CampusMapUI {
               <div>
                 <h2 style="font-size: 13px; color: #f87171; margin-bottom: 4px;">🗺️ Regional Campus Radar Map</h2>
                 <p style="font-size: 8px; color: #94a3b8;">Discover all ${game.locations.length} registered landmarks across the campus</p>
+                ${game.currentInterior ? `
+                  <div style="margin-top: 4px; font-size: 8px; color: #fde047; background: #0f172a; border: 1px solid #f59e0b; padding: 2px 6px; display: inline-block;">
+                    📍 Current Location: CAMPUS ➔ ${curSec?.toUpperCase()} ➔ <strong>${game.currentInterior.name}</strong> (${game.currentInterior.floorLabel || '1F'})
+                  </div>
+                ` : ''}
               </div>
               <div>
                 <span class="chip" style="background: #1e293b; border: 2px solid #000; padding: 4px 8px; font-size: 8px; color: #fef08a;">
@@ -174,33 +179,53 @@ export class CampusMapUI {
       ctx.strokeRect(p.x * sx, p.y * sy, p.w * sx, p.h * sy);
     }
 
-    // 3. Roads Network
+    // 3. Roads Network (Multi-Pass Smooth Rendering)
+    const trails = [];
+    const paved = [];
     for (const [x1, y1, x2, y2, rw, isTrail] of secCfg.roads || []) {
-      if (isTrail) {
-        ctx.strokeStyle = '#8b6943';
-        ctx.lineWidth = Math.max(2, rw * sx * 0.8);
-        ctx.beginPath();
-        ctx.moveTo(x1 * sx, y1 * sy);
-        ctx.lineTo(x2 * sx, y2 * sy);
-        ctx.stroke();
-      } else {
-        // Road curb
-        ctx.strokeStyle = '#7c6848';
-        ctx.lineWidth = Math.max(3, (rw + 4) * sx);
-        ctx.lineCap = 'round';
-        ctx.beginPath();
-        ctx.moveTo(x1 * sx, y1 * sy);
-        ctx.lineTo(x2 * sx, y2 * sy);
-        ctx.stroke();
+      if (isTrail) trails.push({ x1: x1 * sx, y1: y1 * sy, x2: x2 * sx, y2: y2 * sy, rw: Math.max(2, rw * sx * 0.8) });
+      else paved.push({ x1: x1 * sx, y1: y1 * sy, x2: x2 * sx, y2: y2 * sy, rw: Math.max(2.5, rw * sx) });
+    }
 
-        // Asphalt surface
-        ctx.strokeStyle = '#334155';
-        ctx.lineWidth = Math.max(2, rw * sx);
-        ctx.beginPath();
-        ctx.moveTo(x1 * sx, y1 * sy);
-        ctx.lineTo(x2 * sx, y2 * sy);
-        ctx.stroke();
-      }
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+
+    // 3.1 Trails Pass
+    ctx.strokeStyle = '#855d38';
+    for (const t of trails) {
+      ctx.lineWidth = t.rw + 1.5;
+      ctx.beginPath();
+      ctx.moveTo(t.x1, t.y1);
+      ctx.lineTo(t.x2, t.y2);
+      ctx.stroke();
+    }
+    ctx.strokeStyle = '#c49a6c';
+    for (const t of trails) {
+      ctx.lineWidth = t.rw;
+      ctx.beginPath();
+      ctx.moveTo(t.x1, t.y1);
+      ctx.lineTo(t.x2, t.y2);
+      ctx.stroke();
+    }
+
+    // 3.2 Paved Road Curbs Pass
+    ctx.strokeStyle = '#7c6848';
+    for (const p of paved) {
+      ctx.lineWidth = p.rw + 2;
+      ctx.beginPath();
+      ctx.moveTo(p.x1, p.y1);
+      ctx.lineTo(p.x2, p.y2);
+      ctx.stroke();
+    }
+
+    // 3.3 Paved Asphalt Pass
+    ctx.strokeStyle = '#2d3748';
+    for (const p of paved) {
+      ctx.lineWidth = p.rw;
+      ctx.beginPath();
+      ctx.moveTo(p.x1, p.y1);
+      ctx.lineTo(p.x2, p.y2);
+      ctx.stroke();
     }
 
     // 4. Checkpoint Gates

@@ -5,10 +5,15 @@ export class InputManager {
   constructor() {
     this.keys = {};
     this.interactPressed = false;
+    this.jumpPressed = false;
     this.mapPressed = false;
     this.bookPressed = false;
     this.questPressed = false;
     this.pausePressed = false;
+    this.profilePressed = false;
+    this.clubsPressed = false;
+    this.socialPressed = false;
+    this.emotePressed = false;
     this.sprint = false;
 
     // Virtual Touch Joystick State
@@ -30,8 +35,28 @@ export class InputManager {
       this.keys[e.key.toLowerCase()] = true;
       this.keys[e.code] = true;
 
-      if (e.key === 'e' || e.key === 'E' || e.code === 'Space' || e.code === 'Enter') {
+      if (e.key === 'e' || e.key === 'E') {
         this.interactPressed = true;
+      }
+      if (e.code === 'Space') {
+        this.jumpPressed = true;
+        this.interactPressed = true;
+      }
+      if (e.key === 'h' || e.key === 'H') {
+        this.phonePressed = true;
+      }
+      if (e.key === 'p' || e.key === 'P') {
+        this.profilePressed = true;
+        this.phonePressed = true;
+      }
+      if (e.key === 'c' || e.key === 'C') {
+        this.clubsPressed = true;
+      }
+      if (e.key === 'f' || e.key === 'F') {
+        this.socialPressed = true;
+      }
+      if (e.key === 'y' || e.key === 'Y') {
+        this.emotePressed = true;
       }
       if (e.key === 'm' || e.key === 'M') {
         this.mapPressed = true;
@@ -246,6 +271,12 @@ export class InputManager {
     return res;
   }
 
+  consumeJump() {
+    const res = this.jumpPressed;
+    this.jumpPressed = false;
+    return res;
+  }
+
   consumeMap() {
     const res = this.mapPressed;
     this.mapPressed = false;
@@ -264,9 +295,39 @@ export class InputManager {
     return res;
   }
 
+  consumePhone() {
+    const res = this.phonePressed;
+    this.phonePressed = false;
+    return res;
+  }
+
   consumePause() {
     const res = this.pausePressed;
     this.pausePressed = false;
+    return res;
+  }
+
+  consumeProfile() {
+    const res = this.profilePressed;
+    this.profilePressed = false;
+    return res;
+  }
+
+  consumeClubs() {
+    const res = this.clubsPressed;
+    this.clubsPressed = false;
+    return res;
+  }
+
+  consumeSocial() {
+    const res = this.socialPressed;
+    this.socialPressed = false;
+    return res;
+  }
+
+  consumeEmote() {
+    const res = this.emotePressed;
+    this.emotePressed = false;
     return res;
   }
 
