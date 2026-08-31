@@ -621,7 +621,7 @@ html, body {
   width: 100vw;
   height: 100dvh;
   pointer-events: none;
-  z-index: 100;
+  z-index: 990;
   touch-action: none;
 }
 
@@ -639,7 +639,7 @@ html, body {
   height: 116px;
   pointer-events: auto;
   touch-action: none;
-  z-index: 101;
+  z-index: 1000;
 }
 
 .joystick-base {
@@ -691,7 +691,7 @@ html, body {
   align-items: flex-end;
   pointer-events: auto;
   touch-action: none;
-  z-index: 101;
+  z-index: 1000;
 }
 
 .mobile-top-row {
@@ -1180,7 +1180,17 @@ html, body {
 
   /* 2. Minimap on Mobile */
   #minimap-container {
-    display: none !important;
+    display: block !important;
+    position: fixed;
+    top: 52px;
+    right: 8px;
+    left: auto;
+    bottom: auto;
+    width: 120px;
+    z-index: 250;
+    scale: 0.85;
+    transform-origin: top right;
+    cursor: pointer;
   }
 
   /* 3. Play Screen / Welcome Card */
@@ -1874,9 +1884,16 @@ html, body {
 /* Responsive adjustment for chat on mobile */
 @media (max-width: 768px) {
   #campus-chat-dock {
-    width: calc(100vw - 32px);
-    left: 16px;
-    bottom: 70px;
+    width: 240px;
+    max-width: calc(100vw - 20px);
+    left: 10px;
+    bottom: 180px; /* Positioned safely above D-pad and mobile action buttons */
+    z-index: 220;
+  }
+
+  #campus-chat-dock.minimized {
+    width: auto;
+    height: 32px !important;
   }
 }
 

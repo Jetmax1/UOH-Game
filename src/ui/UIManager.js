@@ -200,8 +200,15 @@ export class UIManager {
 
   initMinimap() {
     this.minimapCanvas = document.getElementById('minimap-canvas');
+    const container = document.getElementById('minimap-container');
     if (this.minimapCanvas) {
       this.minimapCtx = this.minimapCanvas.getContext('2d');
+    }
+    if (container) {
+      container.addEventListener('click', () => {
+        soundManager.playBtnClick();
+        this.toggleCampusMap();
+      });
     }
   }
 
@@ -328,10 +335,12 @@ export class UIManager {
 
     // --- OUTDOOR RADAR MINIMAP ---
     const headerSpan = document.querySelector('#minimap-container .minimap-header span');
-    if (headerSpan) headerSpan.textContent = '📍 UoH Radar';
+    if (headerSpan && this.game.worldMap) {
+      headerSpan.textContent = `📍 ${this.game.worldMap.name || 'UoH Radar'}`;
+    }
 
-    const mapW = this.game.worldMap.width;
-    const mapH = this.game.worldMap.height;
+    const mapW = this.game.worldMap.width || 1700;
+    const mapH = this.game.worldMap.height || 1350;
 
     ctx.clearRect(0, 0, w, h);
 
@@ -343,19 +352,19 @@ export class UIManager {
     const sx = w / mapW;
     const sy = h / mapH;
 
-    // Draw Lakes on Minimap
+    // Draw Water Bodies on Minimap
     ctx.fillStyle = '#2563eb';
-    for (const lake of this.game.worldMap.waterBodies) {
+    for (const lake of this.game.worldMap.waterBodies || []) {
       ctx.beginPath();
-      ctx.ellipse(lake.x * sx, lake.y * sy, (lake.radiusX || 40) * sx, (lake.radiusY || 30) * sy, 0, 0, Math.PI * 2);
+      ctx.ellipse(lake.x * sx, lake.y * sy, Math.max(3, (lake.radiusX || 40) * sx), Math.max(3, (lake.radiusY || 30) * sy), 0, 0, Math.PI * 2);
       ctx.fill();
     }
 
-    // Draw Roads
+    // Draw Roads & Trails
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
-    for (const [x1, y1, x2, y2, rw, isTrail] of this.game.worldMap.roads) {
-      ctx.strokeStyle = isTrail ? '#b45309' : '#475569';
+    for (const [x1, y1, x2, y2, rw, isTrail] of this.game.worldMap.roads || []) {
+      ctx.strokeStyle = isTrail ? '#b45309' : '#64748b';
       ctx.lineWidth = isTrail ? 1.5 : 2.5;
       ctx.beginPath();
       ctx.moveTo(x1 * sx, y1 * sy);
@@ -363,18 +372,38 @@ export class UIManager {
       ctx.stroke();
     }
 
-    // Draw Discovered vs Undiscovered Buildings
-    for (const loc of this.game.locations) {
+    // Draw Gate Checkpoints
+    ctx.fillStyle = '#a855f7';
+    for (const cp of this.game.worldMap.checkpoints || []) {
+      ctx.fillRect(cp.x * sx, cp.y * sy, Math.max(4, cp.width * sx), Math.max(4, cp.height * sy));
+    }
+
+    // Draw Buildings for Current Section
+    for (const loc of this.game.worldMap.locations || []) {
       if (loc.isLake) continue;
       const isDisc = this.game.discoverySystem.isDiscovered(loc.id);
-      ctx.fillStyle = isDisc ? '#f59e0b' : 'rgba(255, 255, 255, 0.4)';
-      ctx.fillRect(loc.x * sx, loc.y * sy, Math.max(3, loc.width * sx), Math.max(3, loc.height * sy));
+      ctx.fillStyle = isDisc ? '#facc15' : 'rgba(255, 255, 255, 0.45)';
+      ctx.fillRect(loc.x * sx, loc.y * sy, Math.max(4, loc.width * sx), Math.max(4, loc.height * sy));
+    }
+
+    // Draw Remote Students (Blue Dots)
+    if (this.game.networkManager?.remotePlayers) {
+      ctx.fillStyle = '#38bdf8';
+      for (const [_, rp] of this.game.networkManager.remotePlayers) {
+        if (rp.section === this.game.worldMap.currentSection && !rp.interiorId) {
+          ctx.beginPath();
+          ctx.arc(rp.x * sx, rp.y * sy, 2.5, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
     }
 
     // Draw Player Radar Pin
+    const px = this.game.player.x * sx;
+    const py = this.game.player.y * sy;
     ctx.fillStyle = '#ef4444';
     ctx.beginPath();
-    ctx.arc(this.game.player.x * sx, this.game.player.y * sy, 3.5, 0, Math.PI * 2);
+    ctx.arc(px, py, 3.5, 0, Math.PI * 2);
     ctx.fill();
     ctx.strokeStyle = '#ffffff';
     ctx.lineWidth = 1;
