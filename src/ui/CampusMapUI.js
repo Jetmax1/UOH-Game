@@ -78,40 +78,17 @@ export class CampusMapUI {
                 <canvas id="full-map-canvas" width="600" height="480" style="max-width: 100%; height: auto; display: block; image-rendering: pixelated;"></canvas>
               </div>
 
+            <!-- Main Map Canvas & Sidebar Split -->
+            <div style="display: flex; flex-wrap: wrap; gap: 16px;">
+              <div style="flex: 1; min-width: 320px; background: #000; border: 3px solid #000; box-shadow: inset 0 0 10px rgba(0,0,0,0.8); display: flex; justify-content: center; align-items: center; position: relative;">
+                <canvas id="full-map-canvas" width="600" height="480" style="max-width: 100%; height: auto; display: block; image-rendering: pixelated; cursor: pointer;"></canvas>
+              </div>
+
               <!-- Sidebar Fast Travel Portals -->
               <div style="width: 320px; max-width: 100%; display: flex; flex-direction: column; gap: 8px;">
                 <h3 style="font-size: 9px; color: #facc15;">🚀 Fast Travel Portals</h3>
                 <div style="max-height: 420px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; padding-right: 4px;">
-                  <!-- Main / North Campus -->
-                  <button class="nes-btn is-success sec-main-btn" data-travel="37" style="text-align: left; font-size: 7px;">🏛️ Admission Office (#37)</button>
-                  <button class="nes-btn is-success sec-main-btn" data-travel="48" style="text-align: left; font-size: 7px;">📚 Social Sciences (#48)</button>
-                  <button class="nes-btn is-success sec-main-btn" data-travel="52" style="text-align: left; font-size: 7px;">📖 School of Humanities (#52)</button>
-                  <button class="nes-btn is-success sec-main-btn" data-travel="27" style="text-align: left; font-size: 7px;">🪨 The Masoom's Rock (#27)</button>
-                  <button class="nes-btn is-success sec-main-btn" data-travel="26" style="text-align: left; font-size: 7px;">🌊 Buffalo Lake (#26)</button>
-                  <!-- South Campus -->
-                  <button class="nes-btn is-primary sec-south-btn" data-travel="3" style="text-align: left; font-size: 7px;">🔬 Life Sciences (SLS) (#3)</button>
-                  <button class="nes-btn is-primary sec-south-btn" data-travel="2" style="text-align: left; font-size: 7px;">🧬 ASPIRE BioNEST (#2)</button>
-                  <button class="nes-btn is-primary sec-south-btn" data-travel="5" style="text-align: left; font-size: 7px;">🏫 Integrated Studies (CIS) (#5)</button>
-                  <button class="nes-btn is-primary sec-south-btn" data-travel="21" style="text-align: left; font-size: 7px;">🎭 Amphitheatre UoH (#21)</button>
-                  <button class="nes-btn is-primary sec-south-btn" data-travel="1" style="text-align: left; font-size: 7px;">🌊 Check Dam UoH (#1)</button>
-                  <button class="nes-btn is-primary sec-south-btn" data-travel="13" style="text-align: left; font-size: 7px;">🏠 MHK Hostel (Dorm) (#13)</button>
-                  <button class="nes-btn is-primary sec-south-btn" data-travel="9" style="text-align: left; font-size: 7px;">🛍️ South Shopping (#9)</button>
-                  <!-- West Campus -->
-                  <button class="nes-btn is-warning sec-west-btn" data-travel="30" style="text-align: left; font-size: 7px;">🏟️ Indoor Stadium & Gym (#30)</button>
-                  <button class="nes-btn is-warning sec-west-btn" data-travel="73" style="text-align: left; font-size: 7px;">⚙️ Central Workshop (#73)</button>
-                  <button class="nes-btn is-warning sec-west-btn" data-travel="75" style="text-align: left; font-size: 7px;">⛩️ Gate 3 IDC (#75)</button>
-                  <!-- East Campus -->
-                  <button class="nes-btn is-error sec-east-btn" data-travel="36" style="text-align: left; font-size: 7px;">🏛️ Admin Building (#36)</button>
-                  <button class="nes-btn is-error sec-east-btn" data-travel="51" style="text-align: left; font-size: 7px;">📚 IGM Library (#51)</button>
-                  <button class="nes-btn is-error sec-east-btn" data-travel="45" style="text-align: left; font-size: 7px;">💻 Computer Science (#45)</button>
-                  <button class="nes-btn is-error sec-east-btn" data-travel="59" style="text-align: left; font-size: 7px;">☕ Sukoon Canteen (#59)</button>
-                  <button class="nes-btn is-error sec-east-btn" data-travel="56" style="text-align: left; font-size: 7px;">🎭 SN School Main (#56)</button>
-                  <button class="nes-btn is-error sec-east-btn" data-travel="62" style="text-align: left; font-size: 7px;">📐 CR Rao AIMSCS (#62)</button>
-                  <button class="nes-btn is-error sec-east-btn" data-travel="92" style="text-align: left; font-size: 7px;">🏟️ Balayogi Athletics (#92)</button>
-                  <button class="nes-btn is-error sec-east-btn" data-travel="93" style="text-align: left; font-size: 7px;">🏊 Gachibowli Aquatics (#93)</button>
-                  <button class="nes-btn is-error sec-east-btn" data-travel="89" style="text-align: left; font-size: 7px;">🛕 Sai Baba Temple (#89)</button>
-                  <button class="nes-btn is-error sec-east-btn" data-travel="86" style="text-align: left; font-size: 7px;">🏛️ UoH Monument (#86)</button>
-                  <button class="nes-btn is-error sec-east-btn" data-travel="28" style="text-align: left; font-size: 7px;">🌊 Peacock Lake (#28)</button>
+                  ${this.getSidebarPortalsHtml(game)}
                 </div>
               </div>
             </div>
@@ -121,6 +98,28 @@ export class CampusMapUI {
     `;
 
     this.bindEvents(modal);
+  }
+
+  getSidebarPortalsHtml(game) {
+    const activeTab = this.selectedSectionTab;
+    const filterSec = activeTab === 'overview' ? game.worldMap.currentSection : activeTab;
+    const locs = game.locations.filter(l => !l.isLake && (filterSec === 'all' || l.section === filterSec));
+
+    if (locs.length === 0) {
+      return `<div style="font-size: 7px; color: #94a3b8; font-style: italic;">No fast travel portals registered in this zone.</div>`;
+    }
+
+    return locs.map(loc => {
+      const isDisc = game.discoverySystem.isDiscovered(loc.id);
+      const btnClass = loc.section === 'main' ? 'is-success' : (loc.section === 'south' ? 'is-primary' : (loc.section === 'west' ? 'is-warning' : 'is-error'));
+
+      return `
+        <button class="nes-btn ${btnClass}" data-travel="${loc.id}" style="text-align: left; font-size: 7px; display: flex; justify-content: space-between; align-items: center;">
+          <span>${loc.icon || '🏛️'} #${loc.id} ${loc.shortName || loc.name}</span>
+          ${isDisc ? '<span style="font-size: 6px; color: #facc15;">✓ Discovered</span>' : '<span style="font-size: 6px; color: #94a3b8;">🔒 Unknown</span>'}
+        </button>
+      `;
+    }).join('');
   }
 
   drawFullMap() {
@@ -465,5 +464,36 @@ export class CampusMapUI {
         this.toggle();
       });
     });
+
+    // Canvas Pin Clicks
+    const canvas = document.getElementById('full-map-canvas');
+    if (canvas && this.uiManager.game) {
+      canvas.addEventListener('click', (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const clickX = ((e.clientX - rect.left) / rect.width) * canvas.width;
+        const clickY = ((e.clientY - rect.top) / rect.height) * canvas.height;
+
+        const targetSectionId = this.selectedSectionTab === 'overview' ? this.uiManager.game.worldMap.currentSection : this.selectedSectionTab;
+        const secCfg = this.uiManager.game.worldMap.sectionConfigs[targetSectionId];
+        if (!secCfg) return;
+
+        const sx = canvas.width / secCfg.width;
+        const sy = canvas.height / secCfg.height;
+
+        const secLocs = this.uiManager.game.locations.filter(loc => loc.section === targetSectionId);
+        for (const loc of secLocs) {
+          if (loc.isLake) continue;
+          const pinX = loc.x * sx;
+          const pinY = loc.y * sy;
+          const dist = Math.hypot(clickX - pinX, clickY - pinY);
+          if (dist <= 18) {
+            soundManager.playDoorTransition();
+            this.uiManager.game.fastTravelTo(loc.id);
+            this.toggle();
+            break;
+          }
+        }
+      });
+    }
   }
 }
