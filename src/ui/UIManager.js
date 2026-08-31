@@ -129,6 +129,28 @@ export class UIManager {
   }
 
   bindHUDButtons() {
+    // Top Bar Phone & RPG Buttons
+    document.getElementById('btn-phone')?.addEventListener('click', () => {
+      soundManager.playBtnClick();
+      this.showPhoneModal();
+    });
+    document.getElementById('btn-profile')?.addEventListener('click', () => {
+      soundManager.playBtnClick();
+      this.showStudentProfile();
+    });
+    document.getElementById('btn-clubs')?.addEventListener('click', () => {
+      soundManager.playBtnClick();
+      this.showClubModal();
+    });
+    document.getElementById('btn-social')?.addEventListener('click', () => {
+      soundManager.playBtnClick();
+      this.showSocialModal();
+    });
+    document.getElementById('btn-emotes')?.addEventListener('click', () => {
+      soundManager.playBtnClick();
+      this.toggleEmoteBar();
+    });
+
     // Top Bar Buttons
     document.getElementById('btn-map')?.addEventListener('click', () => {
       soundManager.playBtnClick();
@@ -160,6 +182,10 @@ export class UIManager {
       this.toggleSettings();
     });
 
+    // Initialize Campus Chat & Emote Tray
+    this.initChatDock();
+    this.initEmoteTray();
+
     // Setup Mobile Touch Controls
     const dpad = document.getElementById('mobile-dpad');
     const interactBtn = document.getElementById('btn-mobile-interact');
@@ -186,18 +212,24 @@ export class UIManager {
     const scoreEl = document.getElementById('hud-score');
     if (scoreEl) scoreEl.textContent = this.game.discoverySystem.score.toLocaleString();
 
-    // 2. Clock & Time Period
+    // 2. Student Money (₹)
+    const moneyEl = document.getElementById('hud-money');
+    if (moneyEl && this.game.studentStats) {
+      moneyEl.textContent = `₹${this.game.studentStats.money.toLocaleString()}`;
+    }
+
+    // 3. Clock & Time Period
     const timeEl = document.getElementById('hud-time');
     const periodEl = document.getElementById('hud-period');
     const timeIconEl = document.getElementById('hud-time-icon');
     if (timeEl) timeEl.textContent = this.game.timeSystem.getFormattedTime();
-    if (periodEl) periodEl.textContent = `Day ${this.game.timeSystem.day} · ${this.game.timeSystem.getTimePeriodName()}`;
+    if (periodEl) periodEl.textContent = `Sem ${this.game.semesterSystem?.currentSemester || 1} Wk ${this.game.semesterSystem?.currentWeek || 1} · ${this.game.timeSystem.getTimePeriodName()}`;
     if (timeIconEl) {
       const mode = this.game.timeSystem.ambientMode;
       timeIconEl.textContent = mode === 'night' ? '🌙' : (mode === 'evening' ? '🌇' : '☀️');
     }
 
-    // 3. Active Quest Objective Ticker
+    // 4. Active Quest Objective Ticker
     const questObj = this.game.questSystem.getCurrentPrimaryObjective();
     const questTitleEl = document.getElementById('hud-quest-title');
     const questTextEl = document.getElementById('hud-quest-text');
@@ -206,23 +238,98 @@ export class UIManager {
     if (questTextEl) questTextEl.textContent = questObj.text;
     if (questProgEl) questProgEl.textContent = questObj.progress ? `[${questObj.progress}]` : '';
 
-    // 4. Stamina Bar
+    // 5. Energy Bar (⚡)
+    const energyFill = document.getElementById('energy-fill');
+    if (energyFill && this.game.studentStats) {
+      const ePct = (this.game.studentStats.energy / this.game.studentStats.maxEnergy) * 100;
+      energyFill.style.width = `${ePct}%`;
+    }
+
+    // 6. Sprint Stamina Bar
     const staminaFill = document.getElementById('stamina-fill');
     if (staminaFill) {
       const pct = (this.game.player.stamina / this.game.player.maxStamina) * 100;
       staminaFill.style.width = `${pct}%`;
     }
 
-    // 5. Render Minimap
+    // 7. Render Minimap
     this.renderMinimap();
   }
 
   renderMinimap() {
-    if (!this.minimapCtx || !this.game || this.game.currentInterior) return;
+    if (!this.minimapCtx || !this.game) return;
 
     const ctx = this.minimapCtx;
     const w = this.minimapCanvas.width;
     const h = this.minimapCanvas.height;
+
+    // --- INDOOR RADAR MINIMAP ---
+    if (this.game.currentInterior) {
+      const interior = this.game.currentInterior;
+      const headerSpan = document.querySelector('#minimap-container .minimap-header span');
+      if (headerSpan) {
+        headerSpan.textContent = `📍 Inside: ${interior.name.length > 15 ? interior.name.slice(0, 13) + '..' : interior.name}`;
+      }
+
+      ctx.clearRect(0, 0, w, h);
+
+      // Dark Room Backing
+      ctx.fillStyle = '#0f172a';
+      ctx.fillRect(0, 0, w, h);
+
+      const sx = (w - 20) / interior.width;
+      const sy = (h - 20) / interior.height;
+      const scale = Math.min(sx, sy);
+      const padX = (w - interior.width * scale) / 2;
+      const padY = (h - interior.height * scale) / 2;
+
+      // Floor Area
+      ctx.fillStyle = interior.floorType === 'checker' ? '#78350f' : (interior.floorType === 'parquet' ? '#b45309' : (interior.floorType === 'sports_wood' ? '#d97706' : '#334155'));
+      ctx.fillRect(padX, padY, interior.width * scale, interior.height * scale);
+      ctx.strokeStyle = interior.wallTrimColor || '#f59e0b';
+      ctx.lineWidth = 1.5;
+      ctx.strokeRect(padX, padY, interior.width * scale, interior.height * scale);
+
+      // Furniture
+      for (const obj of interior.objects) {
+        if (obj.type === 'plant' || obj.type === 'window') continue;
+        ctx.fillStyle = obj.color || '#64748b';
+        ctx.fillRect(padX + obj.x * scale, padY + obj.y * scale, Math.max(2, obj.w * scale), Math.max(2, obj.h * scale));
+      }
+
+      // Exit Door Threshold
+      const doorW = 80;
+      const doorX = (interior.width - doorW) / 2;
+      ctx.fillStyle = '#ef4444';
+      ctx.fillRect(padX + doorX * scale, padY + (interior.height - 12) * scale, doorW * scale, 12 * scale);
+
+      // NPCs
+      if (interior.npcs) {
+        for (const npc of interior.npcs) {
+          ctx.fillStyle = '#38bdf8';
+          ctx.beginPath();
+          ctx.arc(padX + (npc.x + 8) * scale, padY + (npc.y + 10) * scale, 3, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+
+      // Player Pin
+      const pScaleX = padX + (this.game.player.x + 12) * scale;
+      const pScaleY = padY + (this.game.player.y + 15) * scale;
+      ctx.fillStyle = '#ef4444';
+      ctx.beginPath();
+      ctx.arc(pScaleX, pScaleY, 3.5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+      return;
+    }
+
+    // --- OUTDOOR RADAR MINIMAP ---
+    const headerSpan = document.querySelector('#minimap-container .minimap-header span');
+    if (headerSpan) headerSpan.textContent = '📍 UoH Radar';
+
     const mapW = this.game.worldMap.width;
     const mapH = this.game.worldMap.height;
 
@@ -245,6 +352,8 @@ export class UIManager {
     }
 
     // Draw Roads
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
     for (const [x1, y1, x2, y2, rw, isTrail] of this.game.worldMap.roads) {
       ctx.strokeStyle = isTrail ? '#b45309' : '#475569';
       ctx.lineWidth = isTrail ? 1.5 : 2.5;
@@ -592,6 +701,224 @@ export class UIManager {
     this.settingsUI.toggle();
   }
 
+  showNoticeBoard(noticeData) {
+    const modal = document.getElementById('generic-modal');
+    const content = document.getElementById('generic-modal-content');
+    if (!modal || !content) return;
+
+    soundManager.playPageFlip();
+
+    const bulletsHtml = (noticeData.noticeText || []).map(t => `<li style="margin-bottom: 8px; line-height: 1.5; color: #f8fafc;">${t}</li>`).join('');
+
+    content.innerHTML = `
+      <div class="frame-wrp" style="max-width: 580px;">
+        <div class="frame-wrp-inner">
+          <button class="nes-btn is-error close-btn-position" id="btn-close-notice-modal">×</button>
+          <div class="frame pixel-corners" style="background: #0f172a; border-color: #f59e0b;">
+            <div style="display: flex; align-items: center; gap: 8px; border-bottom: 2px solid #334155; padding-bottom: 8px; margin-bottom: 12px;">
+              <span style="font-size: 20px;">📋</span>
+              <div>
+                <h3 style="font-size: 11px; color: #facc15; margin: 0;">${noticeData.noticeTitle || 'Official Notice Board'}</h3>
+                <span style="font-size: 7px; color: #94a3b8;">${noticeData.noticeSubtitle || 'Campus Circular'}</span>
+              </div>
+            </div>
+            <div style="background: rgba(30, 41, 59, 0.8); border: 2px solid #000; padding: 14px; margin-bottom: 16px; max-height: 280px; overflow-y: auto;">
+              <ul style="font-size: 8px; font-family: var(--body-font); list-style-type: none; padding: 0; margin: 0;">
+                ${bulletsHtml}
+              </ul>
+            </div>
+            <div style="text-align: right;">
+              <button class="nes-btn is-primary" id="btn-notice-ok">Close Circular</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    modal.classList.remove('hidden');
+
+    const closeHandler = () => {
+      soundManager.playMenuClose();
+      modal.classList.add('hidden');
+    };
+    document.getElementById('btn-close-notice-modal')?.addEventListener('click', closeHandler);
+    document.getElementById('btn-notice-ok')?.addEventListener('click', closeHandler);
+  }
+
+  showBookModal(bookData) {
+    const modal = document.getElementById('generic-modal');
+    const content = document.getElementById('generic-modal-content');
+    if (!modal || !content) return;
+
+    soundManager.playPageFlip();
+
+    content.innerHTML = `
+      <div class="frame-wrp" style="max-width: 580px;">
+        <div class="frame-wrp-inner">
+          <button class="nes-btn is-error close-btn-position" id="btn-close-book-modal">×</button>
+          <div class="frame pixel-corners" style="background: #1e1b4b; border-color: #818cf8;">
+            <div style="display: flex; align-items: center; gap: 8px; border-bottom: 2px solid #312e81; padding-bottom: 8px; margin-bottom: 12px;">
+              <span style="font-size: 20px;">📚</span>
+              <div>
+                <h3 style="font-size: 11px; color: #a5b4fc; margin: 0;">${bookData.bookTitle || 'Library Manuscript'}</h3>
+                <span style="font-size: 7px; color: #cbd5e1;">University Reference Volume</span>
+              </div>
+            </div>
+            <div style="background: #0f172a; border: 2px solid #000; padding: 14px; margin-bottom: 16px; max-height: 280px; overflow-y: auto;">
+              <p style="font-size: 8px; font-family: var(--body-font); line-height: 1.7; color: #f1f5f9; margin: 0;">
+                ${bookData.bookText || 'An ancient academic volume containing rich campus history and discoveries.'}
+              </p>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-size: 7px; color: #818cf8;">📖 Reading Volume</span>
+              <button class="nes-btn is-primary" id="btn-book-ok">Return Book to Shelf</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    modal.classList.remove('hidden');
+
+    const closeHandler = () => {
+      soundManager.playMenuClose();
+      modal.classList.add('hidden');
+    };
+    document.getElementById('btn-close-book-modal')?.addEventListener('click', closeHandler);
+    document.getElementById('btn-book-ok')?.addEventListener('click', closeHandler);
+  }
+
+  showCanteenMenuModal(menuData) {
+    const modal = document.getElementById('generic-modal');
+    const content = document.getElementById('generic-modal-content');
+    if (!modal || !content) return;
+
+    soundManager.playMenuOpen();
+
+    const itemsHtml = (menuData.menuItems || []).map((item, idx) => {
+      const priceNum = parseInt(item.price ? item.price.replace(/[^\d]/g, '') : '25', 10) || 25;
+      const energyGain = Math.round(priceNum * 0.75);
+
+      return `
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; background: #0f172a; border: 2px solid #000; padding: 10px; margin-bottom: 8px; border-radius: 4px;">
+          <div style="flex: 1;">
+            <strong style="font-size: 8px; color: #facc15; display: block; margin-bottom: 4px;">${item.name}</strong>
+            <span style="font-size: 7px; color: #94a3b8; font-family: var(--body-font);">${item.desc || 'Fresh campus food preparation.'}</span>
+            <div style="font-size: 6px; color: #38bdf8; margin-top: 4px; font-weight: bold;">⚡ Restores +${energyGain}% Energy</div>
+          </div>
+          <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 4px;">
+            <span class="chip" style="background: #16a34a; color: #fff; font-size: 8px; font-weight: bold;">₹${priceNum}</span>
+            <button class="nes-btn is-success btn-buy-food" data-item-name="${item.name}" data-price="${priceNum}" data-energy="${energyGain}" style="font-size: 6px; padding: 2px 6px;">BUY &amp; EAT</button>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    content.innerHTML = `
+      <div class="frame-wrp" style="max-width: 600px;">
+        <div class="frame-wrp-inner">
+          <button class="nes-btn is-error close-btn-position" id="btn-close-menu-modal">×</button>
+          <div class="frame pixel-corners" style="background: #451a03; border-color: #f59e0b;">
+            <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #78350f; padding-bottom: 8px; margin-bottom: 12px;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 20px;">☕</span>
+                <div>
+                  <h3 style="font-size: 11px; color: #fde047; margin: 0;">${menuData.menuTitle || 'Canteen Menu'}</h3>
+                  <span style="font-size: 7px; color: #fdba74;">${menuData.menuSubtitle || 'Fresh Food & Beverages'}</span>
+                </div>
+              </div>
+              <div style="font-size: 8px; color: #facc15; font-weight: bold;">Wallet: ₹${this.game?.studentStats?.money || 0}</div>
+            </div>
+            <div style="max-height: 290px; overflow-y: auto; margin-bottom: 16px; padding-right: 4px;">
+              ${itemsHtml}
+            </div>
+            <div style="text-align: right;">
+              <button class="nes-btn is-warning" id="btn-menu-ok">Close Menu</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    modal.classList.remove('hidden');
+
+    const closeHandler = () => {
+      soundManager.playMenuClose();
+      modal.classList.add('hidden');
+    };
+    document.getElementById('btn-close-menu-modal')?.addEventListener('click', closeHandler);
+    document.getElementById('btn-menu-ok')?.addEventListener('click', closeHandler);
+
+    content.querySelectorAll('.btn-buy-food').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const name = btn.dataset.itemName;
+        const price = parseInt(btn.dataset.price, 10);
+        const energy = parseInt(btn.dataset.energy, 10);
+
+        if (this.game?.studentStats) {
+          if (this.game.studentStats.canAfford(price)) {
+            this.game.studentStats.spendMoney(price, `Bought ${name}`);
+            this.game.studentStats.restoreEnergy(energy, `Ate ${name}`);
+            soundManager.playLevelUp();
+            this.showToast(`☕ Purchased & Ate ${name}! Restored +${energy}% Energy ⚡ (Spent ₹${price})`, 'success');
+            this.showCanteenMenuModal(menuData); // refresh wallet display
+          } else {
+            this.showToast(`❌ Insufficient funds! ${name} costs ₹${price} (You have ₹${this.game.studentStats.money})`, 'error');
+          }
+        }
+      });
+    });
+  }
+
+  showExamineModal(objData) {
+    const modal = document.getElementById('generic-modal');
+    const content = document.getElementById('generic-modal-content');
+    if (!modal || !content) return;
+
+    soundManager.playInteract();
+
+    const title = objData.examineTitle || objData.boardTitle || objData.label;
+    const text = objData.examineText || objData.boardText || 'An impressive piece of university infrastructure.';
+
+    content.innerHTML = `
+      <div class="frame-wrp" style="max-width: 520px;">
+        <div class="frame-wrp-inner">
+          <button class="nes-btn is-error close-btn-position" id="btn-close-examine-modal">×</button>
+          <div class="frame pixel-corners" style="background: #0f172a; border-color: #38bdf8;">
+            <div style="display: flex; align-items: center; gap: 8px; border-bottom: 2px solid #334155; padding-bottom: 8px; margin-bottom: 12px;">
+              <span style="font-size: 20px;">🔍</span>
+              <div>
+                <h3 style="font-size: 10px; color: #38bdf8; margin: 0;">${title}</h3>
+                <span style="font-size: 7px; color: #94a3b8;">Detailed Inspection</span>
+              </div>
+            </div>
+            <div style="background: #1e293b; border: 2px solid #000; padding: 12px; margin-bottom: 16px;">
+              <p style="font-size: 8px; font-family: var(--body-font); line-height: 1.6; color: #f8fafc; margin: 0;">
+                ${text}
+              </p>
+            </div>
+            <div style="text-align: right;">
+              <button class="nes-btn is-primary" id="btn-examine-ok">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    modal.classList.remove('hidden');
+
+    const closeHandler = () => {
+      soundManager.playMenuClose();
+      modal.classList.add('hidden');
+    };
+    document.getElementById('btn-close-examine-modal')?.addEventListener('click', closeHandler);
+    document.getElementById('btn-examine-ok')?.addEventListener('click', closeHandler);
+  }
+
+  showBuildingEntryBanner(buildingName, floorLabel = '1F') {
+    this.showToast(`🏛️ Entering: ${buildingName} (${floorLabel})`, 'discovery');
+  }
+
   showNPCDialog(npc) {
     this.dialogUI.show(npc);
   }
@@ -607,4 +934,885 @@ export class UIManager {
   showSouthPartyActivity() {
     this.nightActivitiesUI.showParty();
   }
+
+  // ==========================================================================
+  // MULTIPLAYER & UNIVERSITY RPG UI METHODS
+  // ==========================================================================
+
+  initChatDock() {
+    const dock = document.getElementById('campus-chat-dock');
+    const form = document.getElementById('chat-form');
+    const input = document.getElementById('chat-input');
+    const toggleBtn = document.getElementById('btn-toggle-chat');
+    const tabBtns = document.querySelectorAll('.chat-tab-btn');
+
+    if (!dock) return;
+
+    // Toggle Minimize
+    toggleBtn?.addEventListener('click', () => {
+      dock.classList.toggle('minimized');
+      toggleBtn.textContent = dock.classList.contains('minimized') ? '+' : '−';
+    });
+
+    // Channel Switching
+    tabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        tabBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const channel = btn.dataset.channel;
+        if (this.game?.chatSystem) {
+          this.game.chatSystem.setChannel(channel);
+          this.refreshChatMessages();
+        }
+      });
+    });
+
+    // Send Form
+    form?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (!input || !this.game?.chatSystem) return;
+      const text = input.value.trim();
+      if (!text) return;
+
+      const prog = this.game.progression;
+      const club = this.game.clubSystem?.getCurrentClubData();
+
+      const msg = this.game.chatSystem.sendMessage(prog.studentName, text, this.game.chatSystem.activeChannel, {
+        title: prog.activeTitle,
+        club: club ? club.shortName : ''
+      });
+
+      if (msg) {
+        this.game.networkManager.broadcastChat(text, this.game.chatSystem.activeChannel);
+        this.game.player.showSpeech(text);
+        input.value = '';
+        input.blur();
+      }
+    });
+
+    // Wire chat message receiver
+    if (this.game?.chatSystem) {
+      this.game.chatSystem.onMessageReceived = (msg) => {
+        this.appendChatMessage(msg);
+        soundManager.playChatBlip();
+      };
+    }
+  }
+
+  refreshChatMessages() {
+    const container = document.getElementById('chat-messages-container');
+    if (!container || !this.game?.chatSystem) return;
+
+    container.innerHTML = '';
+    const messages = this.game.chatSystem.getMessages(this.game.chatSystem.activeChannel);
+    for (const msg of messages) {
+      this.appendChatMessage(msg);
+    }
+  }
+
+  appendChatMessage(msg) {
+    const container = document.getElementById('chat-messages-container');
+    if (!container) return;
+
+    const el = document.createElement('div');
+    el.className = `chat-msg ${msg.isSystem ? 'system' : ''}`;
+
+    if (msg.isSystem) {
+      el.innerHTML = `<span class="msg-text">${msg.text}</span>`;
+    } else {
+      el.innerHTML = `
+        <span class="msg-time">[${msg.timestamp}]</span>
+        <strong class="msg-sender">${msg.sender}:</strong>
+        <span class="msg-text">${msg.text}</span>
+      `;
+    }
+
+    container.appendChild(el);
+    container.scrollTop = container.scrollHeight;
+  }
+
+  initEmoteTray() {
+    const tray = document.getElementById('emote-tray-bar');
+    if (!tray) return;
+
+    tray.querySelectorAll('.emote-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const emoteId = btn.dataset.emote;
+        if (this.game?.socialSystem) {
+          this.game.socialSystem.triggerEmote(emoteId);
+          tray.classList.add('hidden');
+        }
+      });
+    });
+  }
+
+  toggleEmoteBar() {
+    const tray = document.getElementById('emote-tray-bar');
+    if (tray) {
+      tray.classList.toggle('hidden');
+      soundManager.playBtnClick();
+    }
+  }
+
+  // 1. Official Student ID Card Modal
+  showStudentProfile(studentData = null) {
+    const modal = document.getElementById('generic-modal');
+    const content = document.getElementById('generic-modal-content');
+    if (!modal || !content) return;
+
+    soundManager.playMenuOpen();
+
+    const isLocal = !studentData;
+    const prog = isLocal ? this.game?.progression : studentData;
+    const club = isLocal ? this.game?.clubSystem?.getCurrentClubData() : { name: studentData.club || 'Independent', role: studentData.title || 'Student' };
+    const summary = isLocal ? prog.getProfileSummary(club) : {
+      studentName: studentData.name,
+      studentId: studentData.id || 'UOH-2024-STUDENT',
+      department: studentData.department || 'School of Computer Sciences',
+      year: '2nd Year',
+      level: studentData.level || 1,
+      xp: 450,
+      xpNeeded: 800,
+      reputation: studentData.reputation || 150,
+      activeTitle: studentData.title || 'Student',
+      unlockedTitles: [studentData.title || 'Student', 'Freshman', 'Campus Explorer'],
+      clubName: studentData.club || 'Independent Student',
+      clubRole: 'Active Member',
+      achievements: [
+        { name: 'Campus Explorer', icon: '🌲', description: 'Explored major campus landmarks' },
+        { name: 'Quiz Initiate', icon: '⚡', description: 'Participated in university quiz blitz' }
+      ]
+    };
+
+    const xpPct = Math.min(100, Math.round((summary.xp / summary.xpNeeded) * 100));
+
+    content.innerHTML = `
+      <div class="frame-wrp" style="max-width: 600px;">
+        <div class="frame-wrp-inner">
+          <button class="nes-btn is-error close-btn-position" id="btn-close-profile">×</button>
+          <div class="student-id-card pixel-corners">
+            <!-- Header -->
+            <div class="student-id-header">
+              <div class="student-id-seal">🏛️</div>
+              <div class="student-id-univ">
+                <h2>UNIVERSITY OF HYDERABAD</h2>
+                <span>OFFICIAL STUDENT IDENTIFICATION &amp; RPG IDENTITY</span>
+              </div>
+              <div style="text-align: right;">
+                <span style="font-size: 7px; color: #facc15; font-weight: bold;">⭐ ${summary.reputation} REP</span>
+              </div>
+            </div>
+
+            <!-- Body Profile -->
+            <div class="student-id-body">
+              <div class="student-avatar-box">
+                <div class="student-avatar-img">🎓</div>
+                <div style="font-size: 7px; font-weight: bold; color: #38bdf8;">LVL ${summary.level}</div>
+                <div class="student-id-num">${summary.studentId}</div>
+              </div>
+              <div>
+                <div class="student-details-grid">
+                  <div>
+                    <div class="student-prop-label">Full Name</div>
+                    <div class="student-prop-val">${summary.studentName}</div>
+                  </div>
+                  <div>
+                    <div class="student-prop-label">Active Title</div>
+                    <div class="student-prop-val" style="color: #facc15;">🏷️ ${summary.activeTitle}</div>
+                  </div>
+                  <div>
+                    <div class="student-prop-label">Department</div>
+                    <div class="student-prop-val">${summary.department}</div>
+                  </div>
+                  <div>
+                    <div class="student-prop-label">Registered Club</div>
+                    <div class="student-prop-val" style="color: #34d399;">🏛️ ${summary.clubName}</div>
+                  </div>
+                </div>
+
+                <!-- XP Bar -->
+                <div class="student-xp-bar-wrap">
+                  <div class="student-xp-header">
+                    <span style="color: #94a3b8;">Level Progression</span>
+                    <span style="color: #38bdf8; font-weight: bold;">${summary.xp} / ${summary.xpNeeded} XP (${xpPct}%)</span>
+                  </div>
+                  <div class="student-xp-track">
+                    <div class="student-xp-fill" style="width: ${xpPct}%;"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Achievements -->
+            <div style="border-top: 1px solid #334155; padding-top: 10px;">
+              <div style="font-size: 7px; color: #facc15; font-weight: bold; margin-bottom: 6px;">
+                🏆 UNLOCKED HONORS &amp; ACHIEVEMENTS (${summary.achievements.length})
+              </div>
+              <div class="student-achievements-list">
+                ${summary.achievements.length === 0 ? '<div style="font-size: 7px; color: #64748b;">No achievements unlocked yet. Explore campus landmarks and join events!</div>' : ''}
+                ${summary.achievements.map(a => `
+                  <div class="student-achieve-card">
+                    <span class="student-achieve-icon">${a.icon || '🏆'}</span>
+                    <div>
+                      <div class="student-achieve-name">${a.name}</div>
+                      <div style="font-size: 6px; color: #94a3b8;">${a.description}</div>
+                    </div>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+
+            <div style="margin-top: 14px; text-align: right;">
+              <button class="nes-btn is-primary" id="btn-profile-ok">Done</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    modal.classList.remove('hidden');
+    const close = () => {
+      soundManager.playMenuClose();
+      modal.classList.add('hidden');
+    };
+    document.getElementById('btn-close-profile')?.addEventListener('click', close);
+    document.getElementById('btn-profile-ok')?.addEventListener('click', close);
+  }
+
+  // 2. University Clubs Modal
+  showClubModal() {
+    const modal = document.getElementById('generic-modal');
+    const content = document.getElementById('generic-modal-content');
+    if (!modal || !content || !this.game?.clubSystem) return;
+
+    soundManager.playMenuOpen();
+
+    const clubs = this.game.clubSystem.getAllClubs();
+    const currentClub = this.game.clubSystem.getCurrentClubData();
+
+    content.innerHTML = `
+      <div class="frame-wrp" style="max-width: 680px;">
+        <div class="frame-wrp-inner">
+          <button class="nes-btn is-error close-btn-position" id="btn-close-club">×</button>
+          <div class="frame pixel-corners" style="background: #0f172a; border-color: #10b981;">
+            <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #334155; padding-bottom: 8px; margin-bottom: 12px;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 24px;">🏛️</span>
+                <div>
+                  <h3 style="font-size: 10px; color: #10b981; margin: 0;">UNIVERSITY CLUBS &amp; SOCIETIES</h3>
+                  <span style="font-size: 7px; color: #94a3b8;">Join a campus club, complete weekly missions, and earn ranks!</span>
+                </div>
+              </div>
+              ${currentClub ? `<div style="background: #065f46; border: 1px solid #10b981; padding: 4px 8px; font-size: 7px; color: #6ee7b7; font-weight: bold;">Registered: ${currentClub.shortName} (${currentClub.role})</div>` : ''}
+            </div>
+
+            <!-- Clubs List Grid -->
+            <div class="clubs-grid">
+              ${clubs.map(c => {
+                const isJoined = currentClub && currentClub.id === c.id;
+                return `
+                  <div class="club-card ${isJoined ? 'joined' : ''}">
+                    <div class="club-card-header">
+                      <span class="club-card-icon">${c.icon}</span>
+                      <div>
+                        <h4 class="club-card-title">${c.name}</h4>
+                        <span style="font-size: 6px; color: #94a3b8;">HQ: ${c.hqName}</span>
+                      </div>
+                    </div>
+                    <div class="club-card-desc">${c.description}</div>
+                    <div style="font-size: 6px; color: #facc15;">Lead: ${c.leadNpc}</div>
+                    <div>
+                      ${isJoined
+                        ? `<button class="nes-btn is-disabled" style="width: 100%; font-size: 7px;" disabled>✓ ACTIVE CLUB</button>`
+                        : `<button class="nes-btn is-success btn-join-club" data-club-id="${c.id}" style="width: 100%; font-size: 7px;">JOIN CLUB</button>`
+                      }
+                    </div>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+
+            <!-- Active Club Missions if Joined -->
+            ${currentClub ? `
+              <div class="club-missions-wrap">
+                <div style="font-size: 8px; color: #10b981; font-weight: bold; margin-bottom: 6px;">
+                  📋 WEEKLY CLUB MISSIONS (${currentClub.shortName})
+                </div>
+                ${currentClub.missions.map(m => `
+                  <div class="club-mission-item ${m.completed ? 'completed' : ''}">
+                    <div>
+                      <strong>${m.title}:</strong> ${m.desc}
+                    </div>
+                    <div>
+                      <span style="color: #facc15;">+${m.rewardXp} XP</span> · 
+                      <span style="color: ${m.completed ? '#34d399' : '#94a3b8'}; font-weight: bold;">
+                        [${m.currentCount}/${m.targetCount}] ${m.completed ? '✓ DONE' : ''}
+                      </span>
+                    </div>
+                  </div>
+                `).join('')}
+              </div>
+            ` : ''}
+
+            <div style="margin-top: 14px; text-align: right;">
+              <button class="nes-btn is-primary" id="btn-club-ok">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    modal.classList.remove('hidden');
+
+    const close = () => {
+      soundManager.playMenuClose();
+      modal.classList.add('hidden');
+    };
+    document.getElementById('btn-close-club')?.addEventListener('click', close);
+    document.getElementById('btn-club-ok')?.addEventListener('click', close);
+
+    content.querySelectorAll('.btn-join-club').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const clubId = btn.dataset.clubId;
+        this.game.clubSystem.joinClub(clubId);
+        this.showClubModal(); // Re-render
+      });
+    });
+  }
+
+  // 3. Social & Friends Modal
+  showSocialModal() {
+    const modal = document.getElementById('generic-modal');
+    const content = document.getElementById('generic-modal-content');
+    if (!modal || !content || !this.game?.socialSystem) return;
+
+    soundManager.playMenuOpen();
+
+    const friends = this.game.socialSystem.getFriends();
+    const party = this.game.socialSystem.getParty();
+
+    content.innerHTML = `
+      <div class="frame-wrp" style="max-width: 580px;">
+        <div class="frame-wrp-inner">
+          <button class="nes-btn is-error close-btn-position" id="btn-close-social">×</button>
+          <div class="frame pixel-corners" style="background: #0f172a; border-color: #f59e0b;">
+            <div style="display: flex; align-items: center; gap: 8px; border-bottom: 2px solid #334155; padding-bottom: 8px; margin-bottom: 12px;">
+              <span style="font-size: 24px;">👥</span>
+              <div>
+                <h3 style="font-size: 10px; color: #f59e0b; margin: 0;">CAMPUS FRIENDS &amp; PARTY SQUAD</h3>
+                <span style="font-size: 7px; color: #94a3b8;">Stay connected with fellow campus students and form squads!</span>
+              </div>
+            </div>
+
+            <!-- Party Status -->
+            <div style="background: #1e293b; border: 2px solid #334155; padding: 10px; border-radius: 4px; margin-bottom: 14px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                <span style="font-size: 8px; color: #38bdf8; font-weight: bold;">
+                  🤝 PARTY SQUAD: ${party.inParty ? party.partyName : 'Not in a Party'}
+                </span>
+                ${party.inParty ? `<button class="nes-btn is-error" id="btn-leave-party" style="font-size: 6px; padding: 2px 6px;">LEAVE SQUAD</button>` : ''}
+              </div>
+              <div style="font-size: 7px; color: #94a3b8; font-family: var(--body-font);">
+                ${party.inParty
+                  ? party.members.map(m => `• ${m.name} (Lvl ${m.level}) ${m.isLeader ? '👑 Leader' : ''}`).join('<br>')
+                  : 'Approach any campus student and press [E] to invite them to a squad!'}
+              </div>
+            </div>
+
+            <!-- Friends List -->
+            <div style="font-size: 8px; color: #facc15; font-weight: bold; margin-bottom: 8px;">
+              CAMPUS FRIENDS DIRECTORY (${friends.length})
+            </div>
+            <div class="friends-list">
+              ${friends.length === 0 ? '<div style="font-size: 7px; color: #64748b;">No friends added yet. Walk up to other students and select Add Friend!</div>' : ''}
+              ${friends.map(f => `
+                <div class="friend-item">
+                  <div class="friend-left">
+                    <div class="friend-online-dot ${f.isOnline ? 'online' : ''}"></div>
+                    <div>
+                      <div class="friend-info-name">${f.name} · Lvl ${f.level}</div>
+                      <div class="friend-info-sub">${f.title} · ${f.club} · Section: ${f.section.toUpperCase()}</div>
+                    </div>
+                  </div>
+                  <div class="friend-actions">
+                    <button class="nes-btn is-primary btn-friend-profile" data-fid="${f.id}" style="font-size: 6px; padding: 4px 6px;">PROFILE</button>
+                    <button class="nes-btn is-warning btn-friend-invite" data-fid="${f.id}" style="font-size: 6px; padding: 4px 6px;">INVITE</button>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+
+            <div style="margin-top: 14px; text-align: right;">
+              <button class="nes-btn is-primary" id="btn-social-ok">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    modal.classList.remove('hidden');
+
+    const close = () => {
+      soundManager.playMenuClose();
+      modal.classList.add('hidden');
+    };
+    document.getElementById('btn-close-social')?.addEventListener('click', close);
+    document.getElementById('btn-social-ok')?.addEventListener('click', close);
+
+    document.getElementById('btn-leave-party')?.addEventListener('click', () => {
+      this.game.socialSystem.leaveParty(this.game.networkManager.localId);
+      this.showSocialModal();
+    });
+
+    content.querySelectorAll('.btn-friend-invite').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const fid = btn.dataset.fid;
+        const target = friends.find(f => f.id === fid);
+        if (target) {
+          if (!this.game.socialSystem.party.inParty) {
+            this.game.socialSystem.createParty(this.game.progression.getProfileSummary());
+          }
+          this.game.socialSystem.inviteToParty(target);
+          this.showToast(`🤝 Invited ${target.name} to Party Squad!`, 'success');
+          this.showSocialModal();
+        }
+      });
+    });
+  }
+
+  // 4. Student Interaction Modal (Context Menu when pressing [E] on another student)
+  showStudentInteractionModal(student, actions) {
+    const modal = document.getElementById('generic-modal');
+    const content = document.getElementById('generic-modal-content');
+    if (!modal || !content) return;
+
+    soundManager.playMenuOpen();
+
+    content.innerHTML = `
+      <div class="frame-wrp" style="max-width: 440px;">
+        <div class="frame-wrp-inner">
+          <button class="nes-btn is-error close-btn-position" id="btn-close-student-interact">×</button>
+          <div class="frame pixel-corners" style="background: #0f172a; border-color: #38bdf8;">
+            <div style="display: flex; align-items: center; gap: 10px; border-bottom: 2px solid #334155; padding-bottom: 10px; margin-bottom: 12px;">
+              <div style="font-size: 28px; background: #1e293b; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; border: 2px solid #38bdf8; border-radius: 4px;">
+                🎓
+              </div>
+              <div>
+                <h3 style="font-size: 9px; color: #38bdf8; margin: 0 0 2px 0;">${student.name}</h3>
+                <span style="font-size: 7px; color: #facc15; font-weight: bold;">Lvl ${student.level} · ${student.title}</span>
+                <div style="font-size: 6px; color: #94a3b8;">${student.club} · ${student.department || 'School of Computer Sciences'}</div>
+              </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              <button class="nes-btn is-primary" id="btn-std-talk" style="font-size: 7px;">
+                💬 TALK / GREET STUDENT
+              </button>
+              <button class="nes-btn is-success" id="btn-std-profile" style="font-size: 7px;">
+                🎓 VIEW STUDENT ID PROFILE
+              </button>
+              <button class="nes-btn is-warning" id="btn-std-party" style="font-size: 7px;">
+                🤝 INVITE TO SQUAD / PARTY
+              </button>
+              <button class="nes-btn" id="btn-std-friend" style="font-size: 7px;">
+                👥 ADD TO FRIENDS LIST
+              </button>
+              <button class="nes-btn is-error" id="btn-std-challenge" style="font-size: 7px;">
+                ⚡ CHALLENGE TO CAMPUS TRIVIA
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    modal.classList.remove('hidden');
+
+    const close = () => {
+      soundManager.playMenuClose();
+      modal.classList.add('hidden');
+    };
+    document.getElementById('btn-close-student-interact')?.addEventListener('click', close);
+
+    document.getElementById('btn-std-talk')?.addEventListener('click', () => {
+      close();
+      if (actions.onTalk) actions.onTalk();
+    });
+    document.getElementById('btn-std-profile')?.addEventListener('click', () => {
+      close();
+      if (actions.onViewProfile) actions.onViewProfile();
+    });
+    document.getElementById('btn-std-party')?.addEventListener('click', () => {
+      close();
+      if (actions.onInviteParty) actions.onInviteParty();
+    });
+    document.getElementById('btn-std-friend')?.addEventListener('click', () => {
+      close();
+      if (actions.onAddFriend) actions.onAddFriend();
+    });
+    document.getElementById('btn-std-challenge')?.addEventListener('click', () => {
+      close();
+      if (actions.onChallenge) actions.onChallenge();
+    });
+  }
+
+  showStudentDialogue(student) {
+    const greetings = [
+      `Hey there! Exploring ${this.game?.worldMap.currentSection.toUpperCase()} Campus? The weather is fantastic today!`,
+      `Hi! Have you visited Sukoon Canteen or Masoom's Rock yet? Such classic UoH hangout spots.`,
+      `Greetings fellow scholar! Always great to meet active students on campus. Keep leveling up!`
+    ];
+    const pick = greetings[Math.floor(Math.random() * greetings.length)];
+
+    this.showNPCDialog({
+      name: student.name,
+      role: `Level ${student.level} · ${student.club}`,
+      avatar: '🎓',
+      dialogue: [pick]
+    });
+  }
+
+  // 5. Level Up Celebration Modal
+  showLevelUpModal(level, title) {
+    const modal = document.getElementById('generic-modal');
+    const content = document.getElementById('generic-modal-content');
+    if (!modal || !content) return;
+
+    content.innerHTML = `
+      <div class="frame-wrp" style="max-width: 460px;">
+        <div class="frame-wrp-inner">
+          <div class="frame pixel-corners" style="background: #020617; border-color: #facc15; text-align: center; box-shadow: 0 0 30px rgba(250, 204, 21, 0.4);">
+            <div style="font-size: 36px; margin-bottom: 6px; animation: pulseBanner 1s infinite;">🎉 🎓 ⭐</div>
+            <h2 style="font-size: 14px; color: #facc15; margin: 0 0 4px 0; text-shadow: 2px 2px #000;">LEVEL UP!</h2>
+            <div style="font-size: 10px; color: #38bdf8; font-weight: bold; margin-bottom: 8px;">
+              YOU ARE NOW LEVEL ${level}!
+            </div>
+            <div style="background: #0f172a; border: 2px solid #334155; padding: 10px; border-radius: 4px; margin-bottom: 14px;">
+              <div style="font-size: 6px; color: #94a3b8; text-transform: uppercase;">Promoted Rank Title</div>
+              <div style="font-size: 9px; color: #facc15; font-weight: bold; margin-top: 2px;">🏷️ ${title}</div>
+            </div>
+            <button class="nes-btn is-success" id="btn-level-up-close" style="font-size: 8px; width: 100%;">
+              CONTINUE ADVENTURE
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+
+    modal.classList.remove('hidden');
+    document.getElementById('btn-level-up-close')?.addEventListener('click', () => {
+      soundManager.playMenuClose();
+      modal.classList.add('hidden');
+    });
+  }
+
+  // 6. Live Event Banner
+  showEventBanner(event, timer) {
+    const banner = document.getElementById('campus-event-banner');
+    if (!banner) return;
+
+    banner.innerHTML = `
+      <span class="event-banner-icon">${event.icon}</span>
+      <div class="event-banner-info">
+        <span class="event-banner-title">SCHEDULED EVENT: ${event.title}</span>
+        <span class="event-banner-sub">${event.desc}</span>
+      </div>
+      <span class="event-banner-timer" id="event-countdown-display">${timer}s</span>
+    `;
+
+    banner.classList.remove('hidden');
+
+    const interval = setInterval(() => {
+      timer -= 1;
+      const el = document.getElementById('event-countdown-display');
+      if (el) el.textContent = `${Math.max(0, timer)}s`;
+      if (timer <= 0) {
+        clearInterval(interval);
+        banner.classList.add('hidden');
+      }
+    }, 1000);
+  }
+
+  showEventActiveUI(event, timer) {
+    const widget = document.getElementById('campus-event-widget');
+    if (!widget) return;
+
+    widget.innerHTML = `
+      <div class="event-widget-header">
+        <span class="event-widget-title">${event.icon} ${event.title}</span>
+        <span class="event-widget-time" id="event-active-timer">${Math.round(timer)}s</span>
+      </div>
+      <div class="event-widget-body" id="event-widget-desc">
+        ${event.type === 'hunt' ? 'Solve the clues across campus landmarks!' : ''}
+        ${event.type === 'quiz' ? 'Answer live trivia questions at Student Centre!' : ''}
+        ${event.type === 'sprint' ? 'Pass all checkpoint gates as fast as possible!' : ''}
+      </div>
+    `;
+
+    widget.classList.remove('hidden');
+  }
+
+  showEventResultsModal(event, leaderboard) {
+    const widget = document.getElementById('campus-event-widget');
+    if (widget) widget.classList.add('hidden');
+
+    const modal = document.getElementById('generic-modal');
+    const content = document.getElementById('generic-modal-content');
+    if (!modal || !content) return;
+
+    soundManager.playLevelUp();
+
+    content.innerHTML = `
+      <div class="frame-wrp" style="max-width: 480px;">
+        <div class="frame-wrp-inner">
+          <div class="frame pixel-corners" style="background: #0f172a; border-color: #facc15; text-align: center;">
+            <div style="font-size: 32px; margin-bottom: 4px;">🏆 🥇 🥈 🥉</div>
+            <h2 style="font-size: 11px; color: #facc15; margin: 0 0 4px 0;">EVENT LEADERBOARD</h2>
+            <div style="font-size: 8px; color: #94a3b8; margin-bottom: 12px;">${event.title} Podium Results</div>
+
+            <div style="display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px;">
+              ${leaderboard.map(entry => `
+                <div style="background: ${entry.rank === 1 ? '#422006' : '#1e293b'}; border: 1px solid ${entry.rank === 1 ? '#facc15' : '#334155'}; padding: 6px 12px; border-radius: 4px; display: flex; justify-content: space-between; align-items: center;">
+                  <div style="font-size: 7px; font-weight: bold; color: ${entry.rank === 1 ? '#facc15' : '#f8fafc'};">
+                    #${entry.rank} · ${entry.name} (${entry.title})
+                  </div>
+                  <div style="font-size: 8px; color: #38bdf8; font-weight: bold;">
+                    ${entry.score} PTS
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+
+            <button class="nes-btn is-primary" id="btn-event-res-close" style="font-size: 7px; width: 100%;">
+              CLAIM REWARDS &amp; CLOSE
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+
+    modal.classList.remove('hidden');
+    document.getElementById('btn-event-res-close')?.addEventListener('click', () => {
+      soundManager.playMenuClose();
+      modal.classList.add('hidden');
+    });
+  }
+
+  showAchievementToast(achievement) {
+    this.showToast(`🏆 Honor Unlocked: ${achievement.name}!`, 'discovery');
+  }
+
+  // ==========================================================================
+  // IN-GAME STUDENT SMARTPHONE ("UOH PHONE") UI
+  // ==========================================================================
+
+  showPhoneModal(initialApp = 'schedule') {
+    const modal = document.getElementById('generic-modal');
+    const content = document.getElementById('generic-modal-content');
+    if (!modal || !content || !this.game?.phoneSystem) return;
+
+    soundManager.playMenuOpen();
+    this.game.phoneSystem.setActiveApp(initialApp);
+
+    const apps = this.game.phoneSystem.getAppsList();
+    const timeStr = this.game.timeSystem.getFormattedTime();
+
+    content.innerHTML = `
+      <div class="frame-wrp" style="max-width: 480px;">
+        <div class="frame-wrp-inner">
+          <button class="nes-btn is-error close-btn-position" id="btn-close-phone">×</button>
+          <div class="phone-device-frame pixel-corners">
+            <!-- Top Status Bar -->
+            <div class="phone-status-bar">
+              <span style="font-size: 7px; color: #94a3b8; font-weight: bold;">UoH Mobile 5G</span>
+              <span style="font-size: 7px; color: #f8fafc; font-weight: bold;">${timeStr}</span>
+              <span style="font-size: 7px; color: #10b981;">⚡ 98%</span>
+            </div>
+
+            <!-- App Bar Grid Navigation -->
+            <div class="phone-apps-nav">
+              ${apps.map(a => `
+                <button class="phone-app-icon-btn ${this.game.phoneSystem.activeApp === a.id ? 'active' : ''}" data-app-id="${a.id}">
+                  <span style="font-size: 16px;">${a.icon}</span>
+                  <span style="font-size: 6px;">${a.name}</span>
+                </button>
+              `).join('')}
+            </div>
+
+            <!-- Active App View Container -->
+            <div class="phone-app-viewport" id="phone-app-viewport">
+              <!-- Rendered dynamically -->
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    modal.classList.remove('hidden');
+
+    const close = () => {
+      soundManager.playMenuClose();
+      modal.classList.add('hidden');
+    };
+    document.getElementById('btn-close-phone')?.addEventListener('click', close);
+
+    content.querySelectorAll('.phone-app-icon-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        soundManager.playBtnClick();
+        content.querySelectorAll('.phone-app-icon-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const appId = btn.dataset.appId;
+        this.game.phoneSystem.setActiveApp(appId);
+        this.renderPhoneApp(appId);
+      });
+    });
+
+    this.renderPhoneApp(this.game.phoneSystem.activeApp);
+  }
+
+  renderPhoneApp(appId) {
+    const viewport = document.getElementById('phone-app-viewport');
+    if (!viewport) return;
+
+    if (appId === 'schedule') {
+      const sched = this.game.scheduleSystem.getTodaySchedule();
+      const currentHour = this.game.timeSystem.hour;
+      const currentMin = this.game.timeSystem.minute;
+      const status = this.game.scheduleSystem.getCurrentAndNextActivity(currentHour, currentMin);
+
+      viewport.innerHTML = `
+        <div style="font-size: 8px; color: #38bdf8; font-weight: bold; margin-bottom: 8px;">
+          📅 DAILY CLASS TIMETABLE &amp; ROUTINE
+        </div>
+        <div style="background: #020617; border: 1px solid #38bdf8; padding: 8px; border-radius: 4px; margin-bottom: 10px;">
+          <div style="font-size: 6px; color: #38bdf8; text-transform: uppercase;">CURRENT SCHEDULED ACTIVITY</div>
+          <div style="font-size: 9px; font-weight: bold; color: #facc15; margin-top: 2px;">
+            ${status.current.title}
+          </div>
+          <div style="font-size: 7px; color: #cbd5e1; margin-top: 2px;">📍 ${status.current.location}</div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 6px; max-height: 200px; overflow-y: auto;">
+          ${sched.map(s => {
+            const isCurrent = s.time === status.current.time;
+            return `
+              <div style="background: ${isCurrent ? '#0c4a6e' : '#1e293b'}; border: 1px solid ${isCurrent ? '#38bdf8' : '#334155'}; padding: 6px 10px; border-radius: 4px; display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                  <div style="font-size: 7px; font-weight: bold; color: ${isCurrent ? '#facc15' : '#f8fafc'};">${s.time} — ${s.title}</div>
+                  <div style="font-size: 6px; color: #94a3b8;">📍 ${s.location}</div>
+                </div>
+                ${s.targetLocId ? `<button class="nes-btn is-primary btn-nav-class" data-loc-id="${s.targetLocId}" style="font-size: 6px; padding: 2px 6px;">GO</button>` : ''}
+              </div>
+            `;
+          }).join('')}
+        </div>
+      `;
+
+      viewport.querySelectorAll('.btn-nav-class').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const locId = parseInt(btn.dataset.locId, 10);
+          document.getElementById('generic-modal')?.classList.add('hidden');
+          this.game.fastTravelTo(locId);
+        });
+      });
+    } else if (appId === 'academics') {
+      const summary = this.game.academicSystem.getAcademicSummary();
+      viewport.innerHTML = `
+        <div style="font-size: 8px; color: #10b981; font-weight: bold; margin-bottom: 8px;">
+          📊 ACADEMIC TRANSCRIPT &amp; CGPA
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 10px;">
+          <div style="background: #020617; border: 1px solid #10b981; padding: 8px; border-radius: 4px; text-align: center;">
+            <div style="font-size: 6px; color: #94a3b8;">CUMULATIVE CGPA</div>
+            <div style="font-size: 16px; font-weight: bold; color: #10b981;">${summary.cgpa} / 10.0</div>
+          </div>
+          <div style="background: #020617; border: 1px solid #38bdf8; padding: 8px; border-radius: 4px; text-align: center;">
+            <div style="font-size: 6px; color: #94a3b8;">ATTENDANCE RATE</div>
+            <div style="font-size: 16px; font-weight: bold; color: #38bdf8;">${summary.attendancePct}%</div>
+            <div style="font-size: 6px; color: #64748b;">${summary.attendedCount}/${summary.totalCount} Attended</div>
+          </div>
+        </div>
+
+        <div style="font-size: 7px; color: #facc15; font-weight: bold; margin-bottom: 6px;">REGISTERED COURSES (${summary.departmentCode})</div>
+        <div style="display: flex; flex-direction: column; gap: 6px; max-height: 180px; overflow-y: auto;">
+          ${summary.courses.map(c => `
+            <div style="background: #1e293b; border: 1px solid #334155; padding: 6px 10px; border-radius: 4px; display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <div style="font-size: 7px; font-weight: bold; color: #f8fafc;">${c.code}: ${c.name}</div>
+                <div style="font-size: 6px; color: #94a3b8;">Prof: ${c.prof} · ${c.credits} Credits</div>
+              </div>
+              <div style="text-align: right;">
+                <span style="font-size: 10px; font-weight: bold; color: #facc15;">${c.progress.grade}</span>
+                <div style="font-size: 6px; color: #34d399;">Score: ${c.progress.score}%</div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    } else if (appId === 'social') {
+      const posts = this.game.socialFeedSystem.getPosts();
+      viewport.innerHTML = `
+        <div style="font-size: 8px; color: #f59e0b; font-weight: bold; margin-bottom: 8px;">
+          💬 UOH CAMPUS SOCIAL FEED
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 8px; max-height: 220px; overflow-y: auto;">
+          ${posts.map(p => `
+            <div style="background: #1e293b; border: 1px solid #334155; padding: 8px; border-radius: 4px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                <div style="display: flex; align-items: center; gap: 6px;">
+                  <span style="font-size: 14px;">${p.avatar}</span>
+                  <div>
+                    <strong style="font-size: 7px; color: #38bdf8;">${p.author}</strong>
+                    <span style="font-size: 6px; color: #64748b;">${p.handle} · ${p.time}</span>
+                  </div>
+                </div>
+                <span style="font-size: 6px; background: #0f172a; padding: 2px 4px; color: #facc15; border-radius: 2px;">${p.club}</span>
+              </div>
+              <p style="font-size: 7px; font-family: var(--body-font); line-height: 1.4; color: #f8fafc; margin: 0 0 6px 0;">${p.content}</p>
+              <div style="text-align: right;">
+                <button class="nes-btn btn-like-post" data-post-id="${p.id}" style="font-size: 6px; padding: 2px 6px;">❤️ ${p.likes}</button>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+
+      viewport.querySelectorAll('.btn-like-post').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const pid = btn.dataset.postId;
+          const newLikes = this.game.socialFeedSystem.likePost(pid);
+          btn.textContent = `❤️ ${newLikes}`;
+        });
+      });
+    } else if (appId === 'news') {
+      viewport.innerHTML = `
+        <div style="font-size: 8px; color: #ef4444; font-weight: bold; margin-bottom: 8px;">
+          📰 OFFICIAL UOH CAMPUS NEWS &amp; NOTICES
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <div style="background: #1e293b; border: 1px solid #ef4444; padding: 8px; border-radius: 4px;">
+            <div style="font-size: 8px; font-weight: bold; color: #fca5a5;">🏛️ Annual University Athletic Meet</div>
+            <div style="font-size: 6px; color: #94a3b8; margin: 2px 0 4px 0;">GMC Balayogi Sports Complex &amp; Stadium (#92/#93)</div>
+            <p style="font-size: 7px; font-family: var(--body-font); color: #cbd5e1; margin: 0;">Sprint races, volleyball tournaments, and badminton finals open for student registrations.</p>
+          </div>
+          <div style="background: #1e293b; border: 1px solid #3b82f6; padding: 8px; border-radius: 4px;">
+            <div style="font-size: 8px; font-weight: bold; color: #93c5fd;">💻 SCIS AI &amp; Robotics Research Expo</div>
+            <div style="font-size: 6px; color: #94a3b8; margin: 2px 0 4px 0;">School of Computer Sciences (#45)</div>
+            <p style="font-size: 7px; font-family: var(--body-font); color: #cbd5e1; margin: 0;">Exhibition of student autonomous e-shuttles and neural network models.</p>
+          </div>
+        </div>
+      `;
+    } else if (appId === 'profile') {
+      this.showStudentProfile();
+    } else if (appId === 'clubs') {
+      this.showClubModal();
+    } else if (appId === 'map') {
+      document.getElementById('generic-modal')?.classList.add('hidden');
+      this.toggleCampusMap();
+    } else if (appId === 'settings') {
+      document.getElementById('generic-modal')?.classList.add('hidden');
+      this.toggleSettings();
+    }
+  }
 }
+

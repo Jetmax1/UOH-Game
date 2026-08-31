@@ -11,6 +11,8 @@ export class SaveSystem {
       const payload = {
         version: 1,
         timestamp: Date.now(),
+        currentSection: gameData.currentSection || 'main',
+        lastExteriorCoords: gameData.lastExteriorCoords || null,
         player: {
           x: gameData.player.x,
           y: gameData.player.y,
@@ -23,7 +25,13 @@ export class SaveSystem {
         },
         discovery: gameData.discoverySystem.getState(),
         quests: gameData.questSystem.getState(),
-        quizProgress: gameData.quizProgress || {}
+        quizProgress: gameData.quizProgress || {},
+        progression: gameData.progression ? gameData.progression.serialize() : null,
+        clubs: gameData.clubSystem ? gameData.clubSystem.serialize() : null,
+        social: gameData.socialSystem ? gameData.socialSystem.serialize() : null,
+        studentStats: gameData.studentStats ? gameData.studentStats.serialize() : null,
+        academic: gameData.academicSystem ? gameData.academicSystem.serialize() : null,
+        semester: gameData.semesterSystem ? gameData.semesterSystem.serialize() : null
       };
 
       localStorage.setItem(this.storageKey, JSON.stringify(payload));

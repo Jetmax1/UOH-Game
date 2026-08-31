@@ -1279,3 +1279,671 @@ html, body {
     padding: 8px 10px;
   }
 }
+
+/* ==========================================================================
+   MULTIPLAYER UNIVERSITY RPG STYLES
+   ========================================================================== */
+
+/* 1. Campus Live Event Broadcast Banner */
+#campus-event-banner {
+  position: fixed;
+  top: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, #b91c1c, #7f1d1d);
+  border: 3px solid #fef08a;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6), 0 0 15px rgba(239, 68, 68, 0.5);
+  color: #ffffff;
+  padding: 10px 20px;
+  z-index: 280;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: 90vw;
+  animation: pulseBanner 2s infinite ease-in-out;
+}
+
+@keyframes pulseBanner {
+  0%, 100% { transform: translateX(-50%) scale(1); }
+  50% { transform: translateX(-50%) scale(1.02); }
+}
+
+.event-banner-icon {
+  font-size: 24px;
+}
+
+.event-banner-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.event-banner-title {
+  font-size: 9px;
+  color: #fef08a;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.event-banner-sub {
+  font-size: 7px;
+  font-family: var(--body-font);
+  color: #f8fafc;
+}
+
+.event-banner-timer {
+  background: #0f172a;
+  border: 2px solid #fef08a;
+  color: #fef08a;
+  font-size: 10px;
+  padding: 4px 8px;
+  font-weight: bold;
+}
+
+/* 2. Campus Live Event Active HUD Widget */
+#campus-event-widget {
+  position: fixed;
+  top: 65px;
+  right: 16px;
+  background: rgba(15, 23, 42, 0.94);
+  border: 2px solid #f59e0b;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+  color: #ffffff;
+  padding: 10px 14px;
+  z-index: 270;
+  max-width: 280px;
+}
+
+.event-widget-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #334155;
+  padding-bottom: 6px;
+  margin-bottom: 6px;
+}
+
+.event-widget-title {
+  font-size: 8px;
+  color: #fbbf24;
+}
+
+.event-widget-time {
+  font-size: 8px;
+  color: #ef4444;
+}
+
+.event-widget-body {
+  font-size: 7px;
+  font-family: var(--body-font);
+  line-height: 1.4;
+  color: #e2e8f0;
+}
+
+/* 3. Collapsible Campus Chat Dock (Bottom-Left) */
+#campus-chat-dock {
+  position: fixed;
+  bottom: 16px;
+  left: 16px;
+  width: 320px;
+  background: rgba(15, 23, 42, 0.92);
+  backdrop-filter: blur(8px);
+  border: 2px solid #334155;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+  z-index: 260;
+  display: flex;
+  flex-direction: column;
+  transition: height 0.2s ease, width 0.2s ease;
+}
+
+#campus-chat-dock.minimized {
+  height: 34px !important;
+  overflow: hidden;
+}
+
+#campus-chat-dock.minimized .chat-messages-wrap,
+#campus-chat-dock.minimized .chat-input-form {
+  display: none !important;
+}
+
+.chat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #090d16;
+  border-bottom: 2px solid #1e293b;
+  padding: 4px 8px;
+}
+
+.chat-tabs {
+  display: flex;
+  gap: 4px;
+}
+
+.chat-tab-btn {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 6px;
+  padding: 4px 6px;
+  cursor: pointer;
+  border-radius: 2px;
+}
+
+.chat-tab-btn:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.chat-tab-btn.active {
+  color: #38bdf8;
+  background: #1e293b;
+  border-bottom: 2px solid #38bdf8;
+}
+
+.chat-toggle-btn {
+  background: #1e293b;
+  border: 1px solid #334155;
+  color: #cbd5e1;
+  font-size: 10px;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.chat-messages-wrap {
+  height: 140px;
+  overflow-y: auto;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-family: var(--body-font);
+  font-size: 8px;
+  background: rgba(10, 15, 30, 0.6);
+}
+
+.chat-msg {
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.chat-msg.system {
+  color: #facc15;
+  font-style: italic;
+  font-size: 7px;
+  border-left: 2px solid #facc15;
+  padding-left: 6px;
+}
+
+.msg-time {
+  color: #64748b;
+  font-size: 6px;
+  margin-right: 4px;
+  font-family: monospace;
+}
+
+.msg-sender {
+  font-weight: 700;
+  color: #38bdf8;
+  margin-right: 4px;
+}
+
+.msg-text {
+  color: #f1f5f9;
+}
+
+.chat-input-form {
+  display: flex;
+  background: #090d16;
+  border-top: 1px solid #1e293b;
+  padding: 4px;
+}
+
+#chat-input {
+  flex: 1;
+  background: #1e293b;
+  border: 1px solid #334155;
+  color: #ffffff;
+  padding: 6px 8px;
+  font-size: 8px;
+  font-family: var(--body-font);
+  outline: none;
+}
+
+#chat-input:focus {
+  border-color: #38bdf8;
+}
+
+.chat-send-btn {
+  background: #2563eb;
+  border: none;
+  color: #ffffff;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 6px;
+  padding: 0 10px;
+  cursor: pointer;
+}
+
+.chat-send-btn:hover {
+  background: #1d4ed8;
+}
+
+/* 4. Quick Emote Tray Bar (Floating) */
+#emote-tray-bar {
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(15, 23, 42, 0.95);
+  border: 2px solid #facc15;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7);
+  padding: 8px 12px;
+  z-index: 290;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+}
+
+.emote-tray-title {
+  font-size: 6px;
+  color: #facc15;
+}
+
+.emote-buttons-grid {
+  display: flex;
+  gap: 8px;
+}
+
+.emote-btn {
+  background: #1e293b;
+  border: 2px solid #334155;
+  font-size: 18px;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: transform 0.1s ease, background 0.1s ease;
+}
+
+.emote-btn:hover {
+  transform: scale(1.15);
+  background: #3b82f6;
+  border-color: #ffffff;
+}
+
+/* 5. University Student Profile ID Card Modal */
+.student-id-card {
+  background: linear-gradient(135deg, #1e293b, #0f172a);
+  border: 3px solid #38bdf8;
+  border-radius: 8px;
+  padding: 16px;
+  color: #ffffff;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+}
+
+.student-id-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 2px solid #334155;
+  padding-bottom: 12px;
+  margin-bottom: 14px;
+}
+
+.student-id-seal {
+  font-size: 32px;
+  background: #0284c7;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.student-id-univ {
+  flex: 1;
+}
+
+.student-id-univ h2 {
+  font-size: 10px;
+  color: #38bdf8;
+  margin: 0 0 2px 0;
+  letter-spacing: 0.5px;
+}
+
+.student-id-univ span {
+  font-size: 7px;
+  color: #94a3b8;
+  font-family: var(--body-font);
+}
+
+.student-id-body {
+  display: grid;
+  grid-template-columns: 90px 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.student-avatar-box {
+  background: #020617;
+  border: 2px solid #38bdf8;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  border-radius: 4px;
+}
+
+.student-avatar-img {
+  font-size: 40px;
+  margin-bottom: 4px;
+}
+
+.student-id-num {
+  font-size: 6px;
+  color: #94a3b8;
+  font-family: monospace;
+}
+
+.student-details-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  font-size: 8px;
+  font-family: var(--body-font);
+}
+
+.student-prop-label {
+  font-size: 6px;
+  color: #64748b;
+  text-transform: uppercase;
+}
+
+.student-prop-val {
+  font-size: 8px;
+  font-weight: bold;
+  color: #f8fafc;
+}
+
+.student-xp-bar-wrap {
+  margin: 12px 0;
+  background: #090d16;
+  border: 1px solid #334155;
+  border-radius: 4px;
+  padding: 8px;
+}
+
+.student-xp-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 7px;
+  margin-bottom: 4px;
+}
+
+.student-xp-track {
+  height: 8px;
+  background: #1e293b;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.student-xp-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #38bdf8, #3b82f6);
+  border-radius: 4px;
+}
+
+.student-achievements-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 8px;
+  max-height: 140px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.student-achieve-card {
+  background: #0f172a;
+  border: 1px solid #334155;
+  padding: 6px;
+  border-radius: 4px;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.student-achieve-icon {
+  font-size: 16px;
+}
+
+.student-achieve-name {
+  font-size: 7px;
+  font-weight: bold;
+  color: #facc15;
+}
+
+/* 6. University Clubs Modal */
+.clubs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 12px;
+  margin: 14px 0;
+}
+
+.club-card {
+  background: #1e293b;
+  border: 2px solid #334155;
+  padding: 12px;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+
+.club-card:hover {
+  transform: translateY(-2px);
+  border-color: #38bdf8;
+}
+
+.club-card.joined {
+  border-color: #10b981;
+  background: #064e3b;
+}
+
+.club-card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.club-card-icon {
+  font-size: 24px;
+}
+
+.club-card-title {
+  font-size: 8px;
+  color: #38bdf8;
+  margin: 0;
+}
+
+.club-card-desc {
+  font-size: 7px;
+  font-family: var(--body-font);
+  color: #cbd5e1;
+  line-height: 1.4;
+  flex: 1;
+}
+
+.club-missions-wrap {
+  background: #0f172a;
+  border: 1px solid #334155;
+  padding: 8px;
+  border-radius: 4px;
+  margin-top: 10px;
+}
+
+.club-mission-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 7px;
+  font-family: var(--body-font);
+  padding: 4px 0;
+  border-bottom: 1px solid #1e293b;
+}
+
+.club-mission-item.completed {
+  color: #34d399;
+  text-decoration: line-through;
+}
+
+/* 7. Social & Friends Modal */
+.social-tabs-wrap {
+  display: flex;
+  gap: 8px;
+  border-bottom: 2px solid #334155;
+  padding-bottom: 8px;
+  margin-bottom: 12px;
+}
+
+.friends-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+.friend-item {
+  background: #1e293b;
+  border: 1px solid #334155;
+  padding: 8px 12px;
+  border-radius: 4px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.friend-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.friend-online-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #94a3b8;
+}
+
+.friend-online-dot.online {
+  background: #22c55e;
+  box-shadow: 0 0 6px #22c55e;
+}
+
+.friend-info-name {
+  font-size: 8px;
+  font-weight: bold;
+}
+
+.friend-info-sub {
+  font-size: 6px;
+  color: #94a3b8;
+  font-family: var(--body-font);
+}
+
+.friend-actions {
+  display: flex;
+  gap: 6px;
+}
+
+/* Responsive adjustment for chat on mobile */
+@media (max-width: 768px) {
+  #campus-chat-dock {
+    width: calc(100vw - 32px);
+    left: 16px;
+    bottom: 70px;
+  }
+}
+
+/* 8. Student Phone Device Frame ("UOH Phone") */
+.phone-device-frame {
+  background: #020617;
+  border: 4px solid #334155;
+  border-radius: 12px;
+  padding: 12px;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.8), 0 0 20px rgba(56, 189, 248, 0.2);
+  color: #ffffff;
+}
+
+.phone-status-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #1e293b;
+  padding-bottom: 6px;
+  margin-bottom: 10px;
+}
+
+.phone-apps-nav {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  margin-bottom: 10px;
+  background: #0f172a;
+  border: 1px solid #334155;
+  padding: 6px;
+  border-radius: 6px;
+}
+
+.phone-app-icon-btn {
+  background: #1e293b;
+  border: 1px solid #334155;
+  color: #cbd5e1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 2px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: 'Press Start 2P', monospace;
+  transition: transform 0.1s ease, background 0.1s ease;
+}
+
+.phone-app-icon-btn:hover {
+  transform: scale(1.05);
+  background: #3b82f6;
+  color: #ffffff;
+}
+
+.phone-app-icon-btn.active {
+  background: #0284c7;
+  border-color: #38bdf8;
+  color: #ffffff;
+  box-shadow: 0 0 8px rgba(56, 189, 248, 0.5);
+}
+
+.phone-app-viewport {
+  background: #0f172a;
+  border: 1px solid #1e293b;
+  border-radius: 6px;
+  padding: 10px;
+  min-height: 240px;
+}
+
+
