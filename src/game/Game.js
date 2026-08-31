@@ -428,6 +428,49 @@ export class Game {
     requestAnimationFrame(fadeOutStep);
   }
 
+  fastTravelTo(locationId) {
+    const loc = this.locations.find(l => l.id === locationId);
+    if (!loc) {
+      console.warn(`Location #${locationId} not found for fast travel.`);
+      return false;
+    }
+
+    soundManager.playDoorTransition();
+
+    // 1. If inside an interior, exit back to exterior first
+    if (this.currentInterior) {
+      this.exitInterior();
+    }
+
+    // 2. Target section & spawn coordinates
+    const targetSection = loc.section || 'main';
+    const spawnX = Math.round(loc.x + loc.width / 2 - this.player.width / 2);
+    const spawnY = Math.round(loc.y + loc.height + 24);
+
+    // 3. Switch section if different
+    if (this.worldMap.currentSection !== targetSection) {
+      this.worldMap.setSection(targetSection);
+    }
+
+    // 4. Set player position
+    this.player.x = Math.max(20, Math.min(spawnX, this.worldMap.width - 40));
+    this.player.y = Math.max(20, Math.min(spawnY, this.worldMap.height - 40));
+    this.player.direction = 'down';
+
+    // 5. Update camera
+    this.camera.x = Math.max(0, Math.min(this.player.x + this.player.width / 2 - this.camera.width / 2, this.worldMap.width - this.camera.width));
+    this.camera.y = Math.max(0, Math.min(this.player.y + this.player.height / 2 - this.camera.height / 2, this.worldMap.height - this.camera.height));
+
+    // 6. Discover location if undiscovered
+    this.discoverySystem.discoverLocation(loc.id);
+
+    // 7. Inform user
+    this.uiManager.showToast(`🚀 Fast traveled to #${loc.id} ${loc.shortName || loc.name}!`, 'success');
+    this.autoSave();
+
+    return true;
+  }
+
   updateAudioAmbience() {
     if (this.currentInterior) {
       soundManager.setAmbientMode(this.currentInterior.ambientAudio || 'office');
