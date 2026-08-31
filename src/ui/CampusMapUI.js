@@ -74,20 +74,14 @@ export class CampusMapUI {
 
             <!-- Main Map Canvas & Sidebar Split -->
             <div style="display: flex; flex-wrap: wrap; gap: 16px;">
-              <div style="flex: 1; min-width: 320px; background: #000; border: 3px solid #000; box-shadow: inset 0 0 10px rgba(0,0,0,0.8); display: flex; justify-content: center; align-items: center;">
-                <canvas id="full-map-canvas" width="600" height="480" style="max-width: 100%; height: auto; display: block; image-rendering: pixelated;"></canvas>
-              </div>
-
-            <!-- Main Map Canvas & Sidebar Split -->
-            <div style="display: flex; flex-wrap: wrap; gap: 16px;">
               <div style="flex: 1; min-width: 320px; background: #000; border: 3px solid #000; box-shadow: inset 0 0 10px rgba(0,0,0,0.8); display: flex; justify-content: center; align-items: center; position: relative;">
-                <canvas id="full-map-canvas" width="600" height="480" style="max-width: 100%; height: auto; display: block; image-rendering: pixelated; cursor: pointer;"></canvas>
+                <canvas id="full-map-canvas" width="600" height="420" style="max-width: 100%; height: auto; display: block; image-rendering: pixelated; cursor: pointer;"></canvas>
               </div>
 
               <!-- Sidebar Fast Travel Portals -->
-              <div style="width: 320px; max-width: 100%; display: flex; flex-direction: column; gap: 8px;">
+              <div style="width: 300px; max-width: 100%; display: flex; flex-direction: column; gap: 8px;">
                 <h3 style="font-size: 9px; color: #facc15;">🚀 Fast Travel Portals</h3>
-                <div style="max-height: 420px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; padding-right: 4px;">
+                <div style="max-height: 380px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; padding-right: 4px;">
                   ${this.getSidebarPortalsHtml(game)}
                 </div>
               </div>
