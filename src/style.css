@@ -513,15 +513,29 @@ html, body {
 
 .ticker-content {
   flex: 1;
+  min-width: 0;
   font-size: 8px;
   color: #f8fafc;
+  line-height: 1.5;
+  overflow: hidden;
+}
+
+/* Quest name on its own small line, the actual objective gets up to two lines */
+.ticker-content strong {
+  display: block;
+  color: #60a5fa;
+  font-size: 6px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.ticker-content strong {
-  color: #60a5fa;
+.ticker-content #hud-quest-text {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .ticker-prog {
@@ -533,6 +547,26 @@ html, body {
   display: flex;
   align-items: center;
   gap: 8px;
+}
+
+/* Desktop: keep room for the objective; let the button row wrap instead of squeezing it */
+@media (min-width: 769px) {
+  .hud-center {
+    min-width: 280px;
+  }
+
+  .hud-right {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    row-gap: 4px;
+    min-width: 0;
+  }
+
+  .hud-actions-group {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    min-width: 0;
+  }
 }
 
 .stamina-wrapper {

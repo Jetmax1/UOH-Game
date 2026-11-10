@@ -244,6 +244,8 @@ export class UIManager {
     if (questTitleEl) questTitleEl.textContent = questObj.title;
     if (questTextEl) questTextEl.textContent = questObj.text;
     if (questProgEl) questProgEl.textContent = questObj.progress ? `[${questObj.progress}]` : '';
+    const tickerEl = document.getElementById('hud-quest-ticker');
+    if (tickerEl) tickerEl.title = `${questObj.title}: ${questObj.text}`;
 
     // 5. Energy Bar (⚡)
     const energyFill = document.getElementById('energy-fill');
@@ -980,7 +982,9 @@ export class UIManager {
     // Toggle Minimize
     toggleBtn?.addEventListener('click', () => {
       dock.classList.toggle('minimized');
-      toggleBtn.textContent = dock.classList.contains('minimized') ? '+' : '−';
+      const isMin = dock.classList.contains('minimized');
+      toggleBtn.textContent = isMin ? '+' : '−';
+      toggleBtn.title = isMin ? 'Expand Chat' : 'Minimize Chat';
     });
 
     // Channel Switching

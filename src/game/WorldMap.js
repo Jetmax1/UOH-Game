@@ -1,6 +1,7 @@
 import { pixelEngine } from './PixelArtEngine.js';
 import { sectionConfigs, masterWorldConfig } from '../data/map/worldData.js';
 import { navigationEngine } from './NavigationEngine.js';
+import { labelAlpha } from './LabelFocus.js';
 
 /**
  * Pokémon FireRed GBA 4-Section Campus World Map System
@@ -866,6 +867,7 @@ export class WorldMap {
       ctx.textAlign = 'center';
       ctx.shadowColor = '#000000';
       ctx.shadowBlur = 3;
+      ctx.globalAlpha *= labelAlpha(v.x, v.y, 40, 80);
       ctx.fillText(v.name, sx + (v.direction === 'left' || v.direction === 'right' ? 18 : 11), sy - 4);
       ctx.restore();
     }
@@ -1699,6 +1701,7 @@ export class WorldMap {
     ctx.textAlign = 'center';
     ctx.shadowColor = '#000000';
     ctx.shadowBlur = 3;
+    ctx.globalAlpha *= labelAlpha(npc.x + 8, npc.y, 60, 120);
     ctx.fillText(npc.name, sx + 8, sy - 4);
     ctx.shadowBlur = 0;
     ctx.restore();
@@ -1748,6 +1751,7 @@ export class WorldMap {
     ctx.textAlign = 'center';
     ctx.shadowColor = '#000000';
     ctx.shadowBlur = 3;
+    ctx.globalAlpha *= labelAlpha(v.x, v.y, 40, 80);
     ctx.fillText(v.name, sx + (v.direction === 'left' || v.direction === 'right' ? 18 : 11), sy - 4);
     ctx.restore();
   }
@@ -1816,6 +1820,8 @@ export class WorldMap {
   drawBuildingBadge(ctx, sx, sy, loc) {
     const name = loc.shortName || loc.name;
     ctx.save();
+    // Distant badges dim so nearby buildings, NPCs and players stay readable
+    ctx.globalAlpha *= labelAlpha(loc.x + loc.width / 2, loc.y, 140, 260, 0.35);
     ctx.font = 'bold 7px "Press Start 2P", monospace, sans-serif';
 
     const textMetrics = ctx.measureText(name);

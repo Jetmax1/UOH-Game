@@ -1,4 +1,5 @@
 import { pixelEngine } from '../game/PixelArtEngine.js';
+import { labelAlpha } from '../game/LabelFocus.js';
 
 /**
  * RemotePlayer: Networked Student Entity with 60fps Positional Interpolation,
@@ -193,7 +194,10 @@ export class RemotePlayer {
   }
 
   drawNameplate(ctx, centerX, topY) {
+    const alpha = labelAlpha(this.x, this.y, 40, 90);
+    if (alpha <= 0) return;
     ctx.save();
+    ctx.globalAlpha *= alpha;
     const titleText = `Lvl ${this.level} · ${this.name}`;
     ctx.font = 'bold 7px sans-serif';
     const nameMetrics = ctx.measureText(titleText);

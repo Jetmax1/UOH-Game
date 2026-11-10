@@ -8,6 +8,7 @@ import { SaveSystem } from './SaveSystem.js';
 import { InputManager } from './InputManager.js';
 import { ParticleSystem } from './ParticleSystem.js';
 import { soundManager } from './AudioSynth.js';
+import { setLabelFocus } from './LabelFocus.js';
 
 // Multiplayer & University RPG Subsystems
 import { UniversityProgression } from '../multiplayer/UniversityProgression.js';
@@ -133,7 +134,12 @@ export class Game {
     // Wire Progression Callbacks
     this.progression.onLevelUp = (lvl, title) => {
       soundManager.playLevelUp();
-      this.uiManager.showLevelUpModal(lvl, title);
+      // Early levels come fast; a blocking modal right after Start is disruptive, so toast them.
+      if (lvl < 5) {
+        this.uiManager.showToast(`🎉 Level Up! You are now Level ${lvl} · ${title}`, 'success');
+      } else {
+        this.uiManager.showLevelUpModal(lvl, title);
+      }
       this.particles.createStarBurst(this.player.x, this.player.y);
       this.chatSystem.addSystemMessage(`🎉 Congratulations! You reached Level ${lvl} (${title})!`);
       this.autoSave();
@@ -335,6 +341,7 @@ export class Game {
 
     // 8. Camera Follow (Smooth Centering on Player)
     if (!this.currentInterior) {
+      setLabelFocus(this.player.x + this.player.width / 2, this.player.y + this.player.height / 2);
       const targetCamX = this.player.x + this.player.width / 2 - this.camera.width / 2;
       const targetCamY = this.player.y + this.player.height / 2 - this.camera.height / 2 - (this.player.z || 0) * 0.3;
 
